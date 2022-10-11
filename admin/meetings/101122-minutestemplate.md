@@ -1,10 +1,10 @@
 # CSE 110 Group 20 Meeting Minutes
 ## Meeting Information
-**Meeting Date**: MM/DD/YYYY
-**Meeting Location**: meeting_location
-**Meeting Purpose**: meeting_purpose
-**Meeting Start Time**: HH:MM
-**Meeting End Time**: HH:MM
+**Meeting Date**: MM/DD/YYYY <br>
+**Meeting Location**: meeting_location <br>
+**Meeting Purpose**: meeting_purpose <br>
+**Meeting Start Time**: HH:MM <br>
+**Meeting End Time**: HH:MM <br>
 
 ## Attendance
 Present:
