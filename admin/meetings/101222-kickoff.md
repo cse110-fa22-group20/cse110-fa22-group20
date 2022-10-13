@@ -2,7 +2,7 @@
 ## Meeting Information
 **Meeting Date**: 10/12/2022 <br>
 **Meeting Location**: AVL Library <br>
-**Meeting Purpose**: meeting_purpose <br>
+**Meeting Purpose**: kickoff <br>
 **Meeting Start Time**: 2:00 pm <br>
 **Meeting End Time**: 3:00 pm <br>
 
@@ -53,5 +53,4 @@ Absent:
 	- 2.5 minutes max
 	
 ### Unresolved Business
-- Item 1
-- Item 2
+- N/A
