@@ -7,8 +7,8 @@
   - github_url
   - blurb
 - Jiaying Yang
-  - github_url
-  - blurb
+  - https://github.com/Jiy014
+  - A Junior in CS & Applied Math with special interest in NLP.
 - Joseph Mikhail
   - github_url
   - blurb
