@@ -16,7 +16,7 @@
   - https://ricefrog.github.io/CSE110-UserPage/
   - A childlike innovator who flirts heavily with ideas that enable mankind to take the next leap in human evolution.
 - Mariel Chua
-  - https://marielchua.github.io/GitHub-Pages/
+  - https://marielchua.github.io/Lab0-1/
   - A third year CS major interested in game development and loves Kirby
 - Navid Boloorian
   - github_url
