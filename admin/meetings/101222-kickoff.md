@@ -16,6 +16,7 @@ Present:
 - Navid Boloorian
 - Roland Wen
 - Ryan Vanny
+- Zixian Wang
 
 Absent:
 - Benjamin Kim
