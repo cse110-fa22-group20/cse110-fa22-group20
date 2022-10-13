@@ -13,8 +13,8 @@
   - github_url
   - blurb
 - Koa Calloway
-  - github_url
-  - blurb
+  - https://ricefrog.github.io/CSE110-UserPage/
+  - A childlike innovator who flirts heavily with ideas that enable mankind to take the next leap in human evolution.
 - Mariel Chua
   - github_url
   - blurb
