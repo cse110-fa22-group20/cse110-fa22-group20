@@ -22,8 +22,8 @@
   - github_url
   - blurb
 - Roland Wen
-  - github_url
-  - blurb
+  - https://roland-wen.github.io/CSE110-Lab0/
+  - A third year CE student who is interested in computer vision
 - Ryan Vanny
   - github_url
   - blurb
