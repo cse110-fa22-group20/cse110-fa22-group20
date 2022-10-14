@@ -25,5 +25,5 @@
   - https://roland-wen.github.io/CSE110-Lab0/
   - A third year CE student who is interested in computer vision
 - Ryan Vanny
-  - github_url
-  - blurb
+  - https://obarquinho.github.io/cse110/
+  - I enjoy software engineering. Software engineering is my passion. I do not regret pursuing this.
