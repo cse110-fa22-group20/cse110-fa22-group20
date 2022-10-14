@@ -32,5 +32,5 @@ Members must adhere to all responsibilities stated below according to their role
 - If issues cannot be resolved internally, both parties should consult the team leaders (Navid Boloorian and Ari Brin) for assistance.
 - If members are not finishing assigned tasks in a timely manner without a reasonable excuse, they will be given a formal warning by the team leaders. If problems persist, the issue will be brought to course staff.
 
-By signing this document, I agree to adhere to the rules above to the best of my ability.
-**_________________**
+By signing below, I agree to adhere to the rules above to the best of my ability.<br>
+**_____________________________________________**
