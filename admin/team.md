@@ -19,8 +19,8 @@
   - https://marielchua.github.io/Lab0-1/
   - A third year CS major interested in game development and loves Kirby
 - Navid Boloorian
-  - github_url
-  - blurb
+  - https://nboloori.github.io/cse-110-lab-1/
+  - Just a guy trying to be funny. Also do CS stuff I guess.
 - Roland Wen
   - https://roland-wen.github.io/CSE110-Lab0/
   - A third year CE student who is interested in computer vision
