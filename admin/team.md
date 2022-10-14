@@ -1,7 +1,7 @@
 # We are George.
 ## Our Team
 - Ari Brin
-  - [github_url](https://aribrin.github.io/)
+  - https://aribrin.github.io
   - A Junior CS major and wolrdle player.
 - Benjamin Kim
   - github_url
