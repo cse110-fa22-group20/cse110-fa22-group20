@@ -27,3 +27,6 @@
 - Ryan Vanny
   - https://obarquinho.github.io/cse110/
   - I enjoy software engineering. Software engineering is my passion. I do not regret pursuing this.
+- Zixian Wang
+  - github_url
+  - blurb
