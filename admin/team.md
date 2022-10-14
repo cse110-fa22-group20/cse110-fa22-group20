@@ -2,7 +2,7 @@
 ## Our Team
 - Ari Brin
   - https://aribrin.github.io
-  - A Junior CS major and wolrdle player.
+  - A Junior CS major and medium decent wolrdle player.
 - Benjamin Kim
   - github_url
   - blurb
