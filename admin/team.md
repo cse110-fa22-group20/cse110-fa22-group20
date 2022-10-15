@@ -4,8 +4,8 @@
   - https://aribrin.github.io
   - A Junior CS major and medium decent wolrdle player.
 - Benjamin Kim
-  - github_url
-  - blurb
+  - https://7bean.github.io/CSE110-lab0/
+  - fourth year Cognitive Science major and tries to be good at video games.
 - Jiaying Yang
   - https://github.com/Jiy014
   - A Junior in CS & Applied Math with special interest in NLP.
