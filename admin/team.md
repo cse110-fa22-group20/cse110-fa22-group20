@@ -1,5 +1,5 @@
 # We are George.
-We're all about curiousity, innovation, curiosity, respect, loyalty, innovation, teamwork, and responsibility. 
+We're all about curiousity, innovation, respect, loyalty, innovation, teamwork, and responsibility. 
 ## Our Team
 - Ari Brin
   - https://aribrin.github.io
