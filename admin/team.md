@@ -1,4 +1,5 @@
 # We are George.
+We're all about curiousity, innovation, respect, loyalty, innovation, teamwork, and responsibility. 
 ## Our Team
 - Ari Brin
   - https://aribrin.github.io
@@ -28,5 +29,5 @@
   - https://obarquinho.github.io/cse110/
   - I enjoy software engineering. Software engineering is my passion. I do not regret pursuing this.
 - Zixian Wang
-  - github_url
-  - blurb
+  - https://github.com/coffee-drinker
+  - Second year CS major. Very new to computer and all sort of git, terminal. Excited to learn about all of them. 
