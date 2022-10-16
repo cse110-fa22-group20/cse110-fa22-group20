@@ -10,8 +10,8 @@
   - https://github.com/Jiy014
   - A Junior in CS & Applied Math with special interest in NLP.
 - Joseph Mikhail
-  - github_url
-  - blurb
+  - https://github.com/jsmikhai/lab1/blob/master/index.md
+  - I love music and I appreciate a good laugh.
 - Koa Calloway
   - https://ricefrog.github.io/CSE110-UserPage/
   - A childlike innovator who flirts heavily with ideas that enable mankind to take the next leap in human evolution.
