@@ -1,4 +1,5 @@
 # We are George.
+![Team George Logo](branding/logo.png "Logo")
 We're all about curiousity, innovation, respect, loyalty, innovation, teamwork, and responsibility. 
 ## Our Team
 - Ari Brin
