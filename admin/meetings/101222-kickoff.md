@@ -22,7 +22,6 @@ Absent:
 - Benjamin Kim
 
 ## Agenda
-
 ### New Business
 - Branding
 	- video
@@ -52,6 +51,5 @@ Absent:
 - Video
 	- team introduction
 	- 2.5 minutes max
-	
 ### Unresolved Business
 - N/A
