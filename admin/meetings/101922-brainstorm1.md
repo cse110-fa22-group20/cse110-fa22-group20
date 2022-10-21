@@ -3,8 +3,8 @@
 **Meeting Date**: 10/19/2022 <br>
 **Meeting Location**: WongAvery Library <br>
 **Meeting Purpose**: Brainstorming <br>
-**Meeting Start Time**: HH:MM <br>
-**Meeting End Time**: HH:MM <br>
+**Meeting Start Time**: 14:00 <br>
+**Meeting End Time**: 15:00 <br>
 
 ## Attendance
 Present:
@@ -61,6 +61,10 @@ Absent:
       - Make your own user page
       - Votes: 2
     - Flow chart builder
+- Chose roles
+  - Ben is going to do design
+  - Mariel is going to do QA
+  - Rest are developers
+  - Mariel, Koa, Zixian, and Ryan would like a chance to rotate through roles
 ### Unresolved Business
-- Item 1
-- Item 2
+- N/A

@@ -3,8 +3,8 @@
 **Meeting Date**: 10/12/2022 <br>
 **Meeting Location**: AVL Library <br>
 **Meeting Purpose**: kickoff <br>
-**Meeting Start Time**: 2:00 pm <br>
-**Meeting End Time**: 3:00 pm <br>
+**Meeting Start Time**: 14:00 <br>
+**Meeting End Time**: 15:00 <br>
 
 ## Attendance
 Present:
