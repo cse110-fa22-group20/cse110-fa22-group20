@@ -46,10 +46,10 @@ We want to provide a space where users are free to express themselves in the for
 - Posts will be added to the main page and users will be redirected there once submitted
 
 #### Wireframes
-![Main page](mainpagewireframe.jpg)
+![Main page](../interface/wireframes/mainpagewireframe.jpg)
 - User's main page 
 - Order of posts top to bottom is determined by the user
-![Add post](addpostwireframe.jpg)
+![Add post](../interface/wireframes/addpostwireframe.jpg)
 - Add post flow
 - Users can add images with captions or just text
 
