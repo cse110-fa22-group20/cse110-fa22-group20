@@ -194,4 +194,4 @@ const deletePost = (id) => {
     return success;
 }
 
-// export { addPost, updatePost, getPost, getAllPosts, deletePost };
+export { addPost, updatePost, getPost, getAllPosts, deletePost };
