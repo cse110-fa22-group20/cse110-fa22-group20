@@ -10,7 +10,9 @@ const indexedDB =
     window.msIndexedDB ||
     window.shimIndexedDB;
 
-const request = indexedDB.open("UnpluggdDatabase", 1);
+// integer is the version number for the database
+// changing it will trigger onupgradeneeded
+const request = indexedDB.open("UnpluggdDatabase", 0);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
@@ -23,11 +25,14 @@ request.onupgradeneeded = () => {
 
     // create a table/collection to store posts
     // keyPath is the primary key and will be auto incremented
-    const postsStore = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+
+    // create a table/collection to store user details
+    const details = db.createObjectStore("details", {keyPath: "name"});
 
     // createIndex allows for searching by a "column" name
     // in this case, sorting/searching by "type" is enabled
-    postsStore.createIndex("type", ["type"], {unique: false});
+    posts.createIndex("type", ["type"], {unique: false});
 }
 
 
@@ -75,7 +80,7 @@ const addPost = (post) => {
 }
 
 /** 
- * Update post with the given id in the posts table.
+ * Update post in the posts table.
  * 
  * id = integer
  * post = {
@@ -198,4 +203,127 @@ const deletePost = (id) => {
     return success;
 }
 
-export { addPost, updatePost, getPost, getAllPosts, deletePost };
+/** 
+ * Adds user details to the details table.
+ * 
+ * details = {
+ *     name: string,
+ *     image: string,
+ *     description: string,
+ *     primaryColor: string,
+ *     secondaryColor: string,
+ * }
+ * 
+ * return true if successful, false otherwise
+ */
+ const addDetails = (detailsObj) => {
+    const db = request.result;
+    const transaction = db.transaction("details", "readwrite");
+    const details = transaction.objectStore("details");
+
+    let success = false;
+    let query = details.add(detailsObj);
+
+    query.onsuccess = () => {
+        console.log(); // fill in later
+        success = true;
+    }
+
+    query.onerror = (event) => {
+        console.log("An error occured with IndexedDB");
+        console.log(event);
+        success = false;
+    }
+
+    return success;
+}
+
+/** 
+ * Update user details in the details table.
+ * 
+ * details = {
+ *     name: string,
+ *     image: string,
+ *     description: string,
+ *     primaryColor: string,
+ *     secondaryColor: string,
+ * }
+ * 
+ * return true if successful, false otherwise
+ */
+const updateDetails = (detailsObj) => {
+    const db = request.result;
+    const transaction = db.transaction("details", "readwrite");
+    const details = transaction.objectStore("details");
+
+    let success = false;
+    let query = details.put(detailsObj);
+
+    query.onsuccess = () => {
+        console.log(); // fill in later
+        success = true;
+    }
+
+    query.onerror = (event) => {
+        console.log("An error occured with IndexedDB");
+        console.log(event);
+        success = false;
+    }
+
+    return success;
+}
+
+/** 
+ * Get user details from the details table.
+ * 
+ * return a single details JSON object
+ */
+const getDetails = () => {
+    const db = request.result;
+    const transaction = db.transaction("details", "readwrite");
+    const details = transaction.objectStore("details");
+
+    let detailsObj = null;
+
+    // since there is only one item we can just call getAll()
+    let query = details.getAll();
+
+    query.onsuccess = () => {
+        detailsObj = query.result[0];
+    }
+
+    query.onerror = (event) => {
+        console.log("An error occured with IndexedDB");
+        console.log(event);
+    }
+
+    return detailsObj;
+}
+
+/** 
+ * Delete users details from details table.
+ * 
+ * return true if successful, false otherwise
+ */
+const deleteDetails = () => {
+    const db = request.result;
+    const transaction = db.transaction("details", "readwrite");
+    const details = transaction.objectStore("details");
+
+    let success = false;
+    let query = details.clear();
+
+    query.onsuccess = () => {
+        success = true;
+    }
+
+    query.onerror = (event) => {
+        console.log("An error occured with IndexedDB");
+        console.log(event);
+        success = false;
+    }
+
+    return success;
+}
+
+export { addPost, updatePost, getPost, getAllPosts, deletePost, addDetails, updateDetails, getDetails, deleteDetails };
