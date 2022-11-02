@@ -13,11 +13,11 @@
 - Chosen option: JSON in IndexedDB
     - Representation
       - ``` 
-            {
-                name: string,
-                image: string,
-                description: string,
-                primaryColor: string, 
-                secondaryColor: string,
-            }
+        {
+            name: string,
+            image: string,
+            description: string,
+            primaryColor: string, 
+            secondaryColor: string,
+        }
         ```

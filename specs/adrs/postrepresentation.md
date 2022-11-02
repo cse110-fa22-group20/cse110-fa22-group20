@@ -17,19 +17,19 @@
     - Use IndexedDB because LocalStorage is limited to 5MB of storage
     - Representation
       - ``` 
-            {
-                id: integer, // id used for reordering
-                type: text or post,
-                content: 
-                    // text post
-                    string,
-                    // image post
-                    [
-                        {
-                            id: integer,
-                            image: string,
-                            caption: string,
-                        }
-                    ],
-            } 
+        {
+            id: integer, // id used for reordering
+            type: text or post,
+            content: 
+                // text post
+                string,
+                // image post
+                [
+                    {
+                        id: integer,
+                        image: string,
+                        caption: string,
+                    }
+                ],
+        } 
         ```
