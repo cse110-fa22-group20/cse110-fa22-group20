@@ -19,7 +19,7 @@
       - ``` 
         {
             id: integer, // id used for reordering
-            type: text or post,
+            type: text or image,
             content: 
                 // text post
                 string,
