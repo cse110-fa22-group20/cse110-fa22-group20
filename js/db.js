@@ -1,4 +1,8 @@
-// account for older browsers
+/**
+ * File stores all the functions used to interact with IndexedDB. 
+ */
+
+// make sure to enable indexedDB for older browsers
 const indexedDB = 
     window.indexedDB ||
     window.mozIndexedDB ||
