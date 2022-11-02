@@ -1,7 +1,7 @@
 # Use JSON in IndexedDB for post representation
 ## Context and Problem Statement
 
-- We need to decide how we are going to represent posts in local storage
+- We need to decide how we are going to represent posts in IndexedDB
 
 ## Considered Options
 

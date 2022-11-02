@@ -1,4 +1,4 @@
-# Use JSON file download to save local storage
+# Use JSON file download to save IndexedDB
 ## Context and Problem Statement
 
 - We need to find out a way to save local storage so the webpage works across multiple browsers on the same device
