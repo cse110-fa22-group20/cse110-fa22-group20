@@ -1,0 +1,20 @@
+/**
+ * File that stores all the globally-applicable styles.
+ */
+
+:root 
+{
+    /**
+     * Variable names for colors used throughout the site.
+     *
+     * Ex: background-color: var(--george-blue); 
+     */
+    --george-blue: #87ceeb;
+    --background-grey: #f4f4f4;
+    --remove-red: #d22b2b;
+}
+
+*
+{
+    font-family: 'Poppins', 'Helvetica';
+}
