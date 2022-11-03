@@ -1,10 +1,18 @@
+main
+{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
 div.welcome-text
 {
     display: flex;
     width: 58.61vw;
     height: 13.09vh;
-    margin-left: 20.69vw;
-    margin-top: 15.95vh;
     flex-direction: column;
     align-items: center; /* center vertically */
     justify-content: center; /* center horizontally */
@@ -28,4 +36,45 @@ div.welcome-text p
     word-wrap: break-word;
     text-align: center;
     margin: 0;
+}
+
+form.user-input #user-name, #user-description
+{
+    color: #898989;
+    width: 250px;
+    background-color: #F4F4F4;
+    border-radius: 5px;
+    resize: none;
+}
+
+button
+{
+    background: #87CEEB;
+    margin: 0;
+}
+
+div.user-info
+{
+    display: flex;
+    width: 40;
+    height: 40vh;
+    /*margin-left: 30vw;*/
+    justify-content: space-between;
+}
+
+#user-image
+{
+    justify-content: space-around;
+    border-radius: 50%;
+}
+
+.user-input
+{
+    display: flex;
+    width: 30vw;
+    height: 40vh;
+    margin-left: 10%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
 }
