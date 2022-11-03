@@ -53,7 +53,7 @@ Absent:
   - Function names: camelCase 
     - ex: myFunctionName
   - Variable names: camelCase ^
-  - Class names : camelcase but first letter is always capitalized 
+  - Class names : PascalCase
     - ex: MyClassName   
   - HTML style
     - classes: lowercase dashed  
