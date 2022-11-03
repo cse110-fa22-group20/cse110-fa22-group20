@@ -1,0 +1,31 @@
+div.welcome-text
+{
+    display: flex;
+    width: 58.61vw;
+    height: 13.09vh;
+    margin-left: 20.69vw;
+    margin-top: 15.95vh;
+    flex-direction: column;
+    align-items: center; /* center vertically */
+    justify-content: center; /* center horizontally */
+}
+
+div.welcome-text h2
+{
+    font-weight: 400;
+    font-size: 5.88vh;
+    line-height: 10.96vh;
+    word-wrap: break-word;
+    text-align: center;
+    margin: 0;
+}
+
+div.welcome-text p
+{
+    font-weight: 400;
+    font-size: 3.44vh;
+    line-height: 3.93vh;
+    word-wrap: break-word;
+    text-align: center;
+    margin: 0;
+}
