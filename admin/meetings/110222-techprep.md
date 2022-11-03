@@ -2,7 +2,7 @@
 ## Meeting Information
 **Meeting Date**: 11/02/2022 <br>
 **Meeting Location**: Wong Avery <br>
-**Meeting Purpose**: Finalize/review Design/Implementation Plans <br>
+**Meeting Purpose**: Finalize/Review Design/Implementation Plans <br>
 **Meeting Start Time**: 2:00 <br>
 **Meeting End Time**: 3:00 <br>
 
