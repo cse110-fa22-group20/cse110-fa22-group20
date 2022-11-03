@@ -16,22 +16,25 @@
         <!--scripts-->
     </head>
     <body>
-        <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
-        <div class="welcome-text">
-            <h2>Welcome to Unpluggd!</h2>
-            <p>To get started, input the name of your page, upload an image, and add
-            a description of its contents.</p>
-        </div>
-        <div class="profile-picture">
-            <input type="image" name="user-image" id="user-image" src="../img/blank-profile-pic.png" width="120px" height="120px" />
-        </div>
-        <div class="user-info">
-            <textarea name="user-name" id="user-name" cols="30" rows="1">Name (personal, company, etc.)</textarea>
-            <textarea name="user-description" id="user-description" cols="30" rows="3">Description</textarea>
-        </div>
-        <div class="buttons">
-            <button type="submit" id="go-button">Let's go!</button>
-            <button type="submit" id="upload-page-button">Upload an existing page</button>
-        </div>
+        <header>
+            <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
+        </header>
+        <main>
+            <div class="welcome-text">
+                <h2>Welcome to Unpluggd!</h2>
+                <p>To get started, input the name of your page, upload an image, and add
+                a description of its contents.</p>
+            </div>
+            <div class="user-info">
+                <input type="image" name="user-image" id="user-image" src="../img/blank-profile-pic.png" width="120px" height="120px" />
+                <form class="user-input">
+                    <input type="text" name="user-name" id="user-name" cols="30" rows="1" placeholder="Name (personal, company, etc.)" minlength=1></textarea>
+                    <textarea name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
+                    <button type="submit" id="go-button">Let's go!</button>
+                    <p>Or</p>
+                    <button type="submit" id="upload-page-button">Upload an existing page</button>
+                </form>
+            </div>
+        </main>
     </body>
 </html>
