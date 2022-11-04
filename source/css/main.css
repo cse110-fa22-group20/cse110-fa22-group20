@@ -86,8 +86,8 @@ Adding image post styles
 
     /* offset to avoid image overlap  */
     /* note: offset is not -55px because the border radius of post makes it look off */
-    left: -45px;
-    width: 55px;
+    left: -35px;
+    width: 45px;
     background-color: var(--george-blue);
     display: flex;
     height: 100%;
