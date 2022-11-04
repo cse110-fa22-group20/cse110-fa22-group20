@@ -1,10 +1,18 @@
 
 
+#page-wrapper
+{
+    /* Center content on page */
+    display: grid;
+    justify-content: center;
+}
+
 /* 
 Adding image post styles
  */
 
-.image-post {
+.image-post 
+{
 
     /* Size  */
     width: 800px;
@@ -12,8 +20,8 @@ Adding image post styles
     /* Center elements: */
     /* margin-left: auto; */
     /* margin-right: auto; */
-    justify-content: center;
     display: flex;
+    justify-content: center;
     align-items: center;
 
     /* Colors */
@@ -22,12 +30,15 @@ Adding image post styles
     /* Border style*/
     border-radius: 10px;
 
-    /* Gaps between images */
-    /* margin: 10px 0 10px 0; */
+    padding: 10px;
     
 }
 
-img {
-    /* margin: 10px 10px 10px 10px; */
-    padding: 10px;
+.image-post-content 
+{
+    /* spacing between images in post */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
