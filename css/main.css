@@ -1,5 +1,6 @@
-
-
+/* 
+Overall style to the page 
+*/
 #page-wrapper
 {
     /* Center content on page */
@@ -7,13 +8,12 @@
     justify-content: center;
 }
 
+
 /* 
 Adding image post styles
  */
-
 .image-post 
 {
-
     /* Size  */
     width: 800px;
 
@@ -41,4 +41,13 @@ Adding image post styles
     align-items: center;
     justify-content: center;
     gap: 10px;
+}
+
+.draggable {
+    left: 6.25%;
+    right: 92.99%;
+    top: 55.08%;
+    bottom: 43.26%;
+    
+    background: #a74141;
 }
