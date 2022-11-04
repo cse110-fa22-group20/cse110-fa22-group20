@@ -24,7 +24,7 @@ section.user-details
 
 #page-buttons
 {
-    position: absolute; 
+    position: fixed; 
     bottom: 15px;
     right: 20px;
     display: flex;
