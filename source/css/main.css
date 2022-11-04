@@ -1,6 +1,35 @@
+
 /* 
 Overall style to the page 
 */
+
+section.user-details
+{
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: nowrap;
+
+    margin: auto;
+    max-width: 650px;
+    max-height: 350px;
+}
+
+#page-buttons
+{
+    position: absolute; 
+    bottom: 15px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+
+    /* added id: 'save-button'
+    it shouldn't display outside of editing mode */
+}
+
+
 #page-wrapper
 {
     /* Center content on page */
@@ -42,6 +71,7 @@ Adding image post styles
     justify-content: center;
     gap: 10px;
 }
+
 
 .draggable {
     left: 6.25%;
