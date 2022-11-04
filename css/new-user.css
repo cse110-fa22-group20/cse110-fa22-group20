@@ -1,187 +1,108 @@
-main
+main 
 {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-section.welcome-text
-{
-    display: flex;
-    width: 58.61vw;
-    height: 13.09vh;
-    flex-direction: column;
-    align-items: center; /* center vertically */
-    justify-content: center; /* center horizontally */
-    margin-bottom: 3em;
-}
-
-section.welcome-text h2
-{
-    font-weight: 400;
-    font-size: 5.88vh;
-    line-height: 10.96vh;
-    word-wrap: break-word;
-    text-align: center;
-    margin: 0;
-}
-
-section.welcome-text p
-{
-    font-weight: 400;
-    font-size: 3.44vh;
-    line-height: 3.93vh;
-    word-wrap: break-word;
-    text-align: center;
-    margin: 0;
-}
-
-section.user-info
-{
-    margin-top: 2em;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* center vertically */
-    justify-content: center; /* center horizontally */
-}
-
-form.user-input #user-name, #user-description
-{
-    color: #898989;
-    width: 250px;
-    background-color: #F4F4F4;
-    border-radius: 5px;
-    resize: none;
-}
-
-button
-{
-    background: #87CEEB;
-    margin: 0;
-}
-
-div.user-info
-{
-    display: flex;
-    width: 40;
-    height: 40vh;
-    /*margin-left: 30vw;*/
-    justify-content: space-between;
-}
-
-#user-image
-{
-    justify-content: space-around;
-    border-radius: 50%;
-}
-
-#user-inputs 
-{
-    display: flex;
-    flex-direction: column;
-    font-size: medium;
-}
-
-#user-inputs input[type="text"]
-{
-    background-color: var(--background-grey);
-    border: none;
-    padding: 0.75em;
-    margin-bottom: 0.75em;
-    width: 80%;
-    border-radius: 10px;
-    outline: none;
-    color: grey;
-}
-
-#user-inputs input[type="text"]:focus
-{
-    -webkit-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -moz-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-}
-
-#user-inputs textarea
-{
-    background-color: var(--background-grey);
-    border: none;
-    padding: 0.75em;
-    margin-bottom: 0.75em;
-    width: 80%;
-    border-radius: 10px;
-    outline: none;
-    color: grey;
-}
-
-#user-inputs textarea:focus
-{
-    -webkit-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -moz-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-}
-
-#pfp-placeholder 
-{
-    border-radius: 50%;
-    justify-content: space-around;
-    height: 10em;
-    width: 10em;
-    object-fit: cover;
-    -webkit-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.35);
-    -moz-box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.35);
-    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.35);
-    margin-right: 2.5em;
-}
-
-#user-inputs div p 
-{
-    margin: 0;
-    margin-left: 0.5em;
-}
-
-#user-inputs div button
-{
-    border: none;
-    border-radius: 15px;
-    padding: 0.5em;
-    transition: 0.25s;
-}
-
-#user-inputs div button:hover 
-{
-    cursor: pointer;
-    padding-left: 1em;
-    padding-right: 1em;
-    -webkit-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -moz-box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-    -box-shadow: 5px 3px 7px -3px rgba(227,157,227,0.78);
-}
-
-.user-form 
-{
-    width: 100%;
-}
-
-#input-container
-{
-    display: flex;
-    flex-direction: row;
-    margin-left: 5em;
-    margin-right: 5em;
-    width: 80%;
+    height: calc(100vh - 60px);
+    display: grid;
     justify-content: center;
+    align-items: center;
+}
+
+.welcome-text 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.welcome-text h2, p
+{
+    margin: 0px;
 }
 
 .content-wrapper 
 {
-    height: 80%;
-    width: 70%;
+    position: relative;
     display: flex;
+    /* Position elements on top of one another */
     flex-direction: column;
-    align-items: center; /* center vertically */
-    justify-content: center; /* center horizontally */
+    background-color: white;
+    max-width:  800px;
+}
+
+.user-form 
+{
+    display: grid;
+    grid-template-columns: 120px auto;
+    gap: 20px;
+    justify-content: center;
+}
+
+input, button, textarea {
+    border: 0px;
+    resize: none;
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+input, textarea {
+    width: 100%;
+    background-color: var(--background-grey);
+}
+
+button {
+    text-align: left;
+    max-width: 200px;
+    background-color: var(--george-blue);
+}
+
+/* Hide file inputs so they can be styled through labels*/
+#user-image, #existing-page {
+    display: none;
+}
+
+#user-inputs {
+    display: grid;
+    gap: 5px;
+    max-width: 500px;
+}
+
+/* Used to customize file upload */
+#user-image-label {
+    height: 120px;
+    width: 120px;
+    border-radius: 60px;
+    background-image: url("../assets/blank-profile-pic.svg");
+    background-repeat: no-repeat;
+    background-size: 120px;
+}
+
+#user-inputs p {
+    margin-bottom: 5px;
+}
+
+#existing-page-label {
+    background-color: var(--george-blue);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Stack profile above form on narrower screens */
+@media only screen and (max-width: 620px) {
+    .welcome-text 
+    {
+        margin-bottom: 10px;
+    }
+
+    .user-form 
+    {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
 }
