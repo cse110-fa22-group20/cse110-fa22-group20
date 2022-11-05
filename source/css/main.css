@@ -100,7 +100,7 @@ Adding image post styles
 /* change cursor to grab when hovering over the drag icon */
 .drag-icon-container:hover 
 {
-    cursor: grab;
+    cursor: move;
 }
 
 .drag-icon-container img 
@@ -108,16 +108,26 @@ Adding image post styles
     height: 25px;
 }
 
-.delete-icon
-{
-    /* position delete icon at the top right of the post div */
+.delete-icon-container
+{ 
+    /* position the drag div at the left of the post */
     position: absolute;
-    top: 10px;
-    right: 10px;
+
+    /* offset to avoid image overlap  */
+    /* note: offset is not -55px because the border radius of post makes it look off */
+    right: -35px;
+    width: 45px;
+    background-color: var(--remove-red);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 /* change cursor to pointer when hovering over the delete icon */
-.delete-icon:hover
+.delete-icon-container:hover
 {
     cursor: pointer;
 }
