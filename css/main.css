@@ -89,6 +89,9 @@ Adding image post styles
     left: -35px;
     width: 45px;
     background-color: var(--george-blue);
+    background-image: url("../icons/draggable.svg");
+    background-repeat: no-repeat;
+    background-position: center;
     display: flex;
     height: 100%;
     justify-content: center;
@@ -103,11 +106,6 @@ Adding image post styles
     cursor: move;
 }
 
-.drag-icon-container img 
-{
-    height: 25px;
-}
-
 .delete-icon-container
 { 
     /* position the drag div at the left of the post */
@@ -118,6 +116,9 @@ Adding image post styles
     right: -35px;
     width: 45px;
     background-color: var(--remove-red);
+    background-image: url("../icons/delete.svg");
+    background-repeat: no-repeat;
+    background-position: center;
     display: flex;
     height: 100%;
     justify-content: center;
