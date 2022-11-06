@@ -60,18 +60,24 @@ Overall style to the page
 #post-type-selector
 {
     display: grid;
-    
-    /*Sizing specifications*/
-    padding: 10px;
-    gap: 10px;
-    width: 90vw;
 
-    border-radius: 10px;
+    border-radius: 5px;
     border-style: dashed; 
+    border-width: 2px;
     
     /*grey*/
-    background-color: #F4F4F4; 
-    font-size: 40px;
+    background-color: var(--background-grey); 
+}
+
+.post-type-button
+{
+    padding: 5px;
+}
+
+.post-type-button:hover
+{
+    cursor: pointer;
+    background-color: var(--hover-grey);
 }
 
 #add-text-post
@@ -80,8 +86,9 @@ Overall style to the page
     justify-content: center;/*center text in grid*/
     grid-column: 1/2; /*keeps it on the left hand column*/
     border-right-style: dashed; /*creates middle dashed line*/
-    
+    border-width: 2px;
 }
+
 #add-image-post
 {
     display:flex;
