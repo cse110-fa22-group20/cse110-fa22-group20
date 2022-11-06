@@ -24,6 +24,7 @@ section.user-details
 
 #page-buttons
 {
+    /* background:url(./specs/Icons/Add_button.png) no-repeat; */
     position: fixed; 
     bottom: 15px;
     right: 20px;
@@ -34,6 +35,30 @@ section.user-details
     it shouldn't display outside of editing mode */
 }
 
+/* .page-buttons:active  /* use Dot here
+{   
+    background:url(./specs/Icons/Add_button.png) no-repeat;
+} */
+
+
+.fixed-button {
+    
+    background-color: var(--george-blue);/* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 20px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    text-align: center;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 4px 4px;
+  }
+  
+  /* Darker background on mouse-over */
+.fixed-button:hover {
+    background-color: rgb(79, 182, 223);
+}
 
 #page-wrapper
 {
