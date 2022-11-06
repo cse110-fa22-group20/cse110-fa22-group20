@@ -64,6 +64,9 @@ Overall style to the page
     border-radius: 5px;
     border-style: dashed; 
     border-width: 2px;
+
+    /* accounts for 10px of padding on each side of posts*/
+    width: 820px;
     
     /*grey*/
     background-color: var(--background-grey); 
