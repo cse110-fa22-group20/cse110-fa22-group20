@@ -146,7 +146,7 @@ Adding image post styles
     left: -35px;
     width: 45px;
     background-color: var(--george-blue);
-    background-image: url("../icons/draggable.svg");
+    background-image: url("../assets/draggable.svg");
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
@@ -173,7 +173,7 @@ Adding image post styles
     right: -35px;
     width: 45px;
     background-color: var(--remove-red);
-    background-image: url("../icons/delete.svg");
+    background-image: url("../assets/delete.svg");
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
