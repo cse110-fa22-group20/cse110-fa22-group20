@@ -55,23 +55,47 @@ Overall style to the page
 } */
 
 
-.fixed-button {
-    
+.fixed-button 
+{
     background-color: var(--george-blue);/* Blue background */
     border: none; /* Remove borders */
     color: white; /* White text */
-    padding: 20px; /* Some padding */
-    font-size: 16px; /* Set a font size */
-    cursor: pointer; /* Mouse pointer on hover */
+    font-size: 10px; /* Set a font size */
     text-align: center;
     border-radius: 50%;
-    display: inline-block;
     margin: 4px 4px;
-  }
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: black;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
   
   /* Darker background on mouse-over */
-.fixed-button:hover {
+.fixed-button:hover 
+{
+    cursor: pointer; /* Mouse pointer on hover */
     background-color: rgb(79, 182, 223);
+}
+
+#edit-button 
+{
+    background-image: url("../assets/edit.svg");
+}
+
+#add-button 
+{
+    background-image: url("../assets/add.svg");
+}
+
+#save-button 
+{
+    background-image: url("../assets/save.svg");
 }
 
 #page-wrapper
