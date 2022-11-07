@@ -3,17 +3,31 @@
 Overall style to the page 
 */
 
-section.user-details
+#user-details
 {
-    text-align: center;
-    align-items: center;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: nowrap;
+    flex-direction: row;    
+    width: 800px;
+    padding: 20px;
+    gap: 20px;
+}
 
-    margin: auto;
-    max-width: 800px;
+#user-details img 
+{
+    border-radius: 60px;
+}
+
+#user-details div 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 660px;
+}
+
+#user-details div > h2, p
+{
+    margin: 0;
 }
 
 #posts-wrapper
@@ -67,6 +81,49 @@ section.user-details
     justify-content: center;
 }
 
+/*Acts as grid for add-text-post and add-image-post*/
+#post-type-selector
+{
+    display: grid;
+
+    border-radius: 5px;
+    border-style: dashed; 
+    border-width: 2px;
+
+    /* accounts for 10px of padding on each side of posts*/
+    width: 820px;
+    
+    /*grey*/
+    background-color: var(--background-grey); 
+}
+
+.post-type-button
+{
+    padding: 10px;
+}
+
+.post-type-button:hover
+{
+    cursor: pointer;
+    background-color: var(--hover-grey);
+}
+
+#add-text-post
+{
+    display:flex;
+    justify-content: center;/*center text in grid*/
+    grid-column: 1/2; /*keeps it on the left hand column*/
+    border-right-style: dashed; /*creates middle dashed line*/
+    border-width: 2px;
+}
+
+#add-image-post
+{
+    display:flex;
+    justify-content: center;/*center text in grid*/
+    grid-column: 2/2;/*keeps it on the right hand collumn*/
+}
+
 
 /* 
 Adding image post styles
@@ -114,6 +171,9 @@ Adding image post styles
     left: -35px;
     width: 45px;
     background-color: var(--george-blue);
+    background-image: url("../assets/draggable.svg");
+    background-repeat: no-repeat;
+    background-position: center;
     display: flex;
     height: 100%;
     justify-content: center;
@@ -125,24 +185,32 @@ Adding image post styles
 /* change cursor to grab when hovering over the drag icon */
 .drag-icon-container:hover 
 {
-    cursor: grab;
+    cursor: move;
 }
 
-.drag-icon-container img 
-{
-    height: 25px;
-}
-
-.delete-icon
-{
-    /* position delete icon at the top right of the post div */
+.delete-icon-container
+{ 
+    /* position the drag div at the left of the post */
     position: absolute;
-    top: 10px;
-    right: 10px;
+
+    /* offset to avoid image overlap  */
+    /* note: offset is not -55px because the border radius of post makes it look off */
+    right: -35px;
+    width: 45px;
+    background-color: var(--remove-red);
+    background-image: url("../assets/delete.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 /* change cursor to pointer when hovering over the delete icon */
-.delete-icon:hover
+.delete-icon-container:hover
 {
     cursor: pointer;
 }
