@@ -7,3 +7,8 @@
     align-items: center; /* center vertically */
     justify-content: center; /* center horizontally */
 }
+
+#navigation-bar h1 
+{
+    font-weight: bold;
+}
