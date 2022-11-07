@@ -1,0 +1,51 @@
+name: HTML/CSS Validate & JS Unit Test
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Use cache to speed up
+
+      - name: Cache node modules
+        id: cache-yarn
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.yarn` on Linux/macOS
+          path: ~/.yarn
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install jest
+        run: yarn add --dev jest
+
+      # Validate HTML/CSS in src/
+      - name: HTMLCheck
+        run: uname -a
+      - name: HTML5Validator
+        uses: Cyb3r-Jak3/html5validator-action@v7.1.1
+        with:
+            root: src/
+            log_level: INFO
+            css: true
+
+      # Run unit tests with jest
+      - name: JSCheck
+        # Must pass HTMLCheck before testing js
+        run: yarn test
