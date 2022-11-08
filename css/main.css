@@ -2,6 +2,11 @@
 /* 
 Overall style to the page 
 */
+body 
+{
+    /* spacing at bottom of the page */
+    margin-bottom: 20px;
+}
 
 #user-details
 {
@@ -33,6 +38,7 @@ Overall style to the page
 #posts-wrapper
 {
     display: grid;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -160,8 +166,6 @@ Adding image post styles
     width: 800px;
 
     /* Center elements: */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -175,13 +179,24 @@ Adding image post styles
     padding: 10px;
 }
 
+.content 
+{
+    max-width: 780px;
+}
+
 .image-post-content 
 {
     /* spacing between images in post */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    /* 
+        auto-fill fits as many columns as possible in the designated space
+        meaning that the repeat function is called for as many columns as possible
+        this allows for the number of columns to shrink and grow as the width of the
+        window increases and decreases
+    */
+    grid-template-columns: repeat(auto-fill, 100px);
     gap: 10px;
+    justify-content: center;
 }
 
 
@@ -238,3 +253,28 @@ Adding image post styles
 {
     cursor: pointer;
 }
+
+@media screen and (max-width: 900px) {
+    .post
+    {
+        /* 110px accounts for scrollbar and negatively positioned delete/drag*/
+        width: calc(100vw - 110px);
+        justify-self: center;
+    }
+
+    #post-type-selector 
+    {
+        /* 25px accounts for scrollbar and padding */
+        width: calc(100vw - 25px);
+    }
+
+    #user-details
+    {
+        width: calc(100vw - 60px);
+    }
+
+    .content 
+    {
+        max-width: calc(100% - 40px);
+    }
+  }
