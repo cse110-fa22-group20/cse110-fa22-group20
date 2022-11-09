@@ -1,0 +1,280 @@
+
+/* 
+Overall style to the page 
+*/
+body 
+{
+    /* spacing at bottom of the page */
+    margin-bottom: 20px;
+}
+
+#user-details
+{
+    display: flex;
+    flex-direction: row;    
+    width: 800px;
+    padding: 20px;
+    gap: 20px;
+}
+
+#user-details img 
+{
+    border-radius: 60px;
+}
+
+#user-details div 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 660px;
+}
+
+#user-details div > h2, p
+{
+    margin: 0;
+}
+
+#posts-wrapper
+{
+    display: grid;
+    justify-content: center;
+    gap: 20px;
+}
+
+#page-buttons
+{
+    /* background:url(./specs/Icons/Add_button.png) no-repeat; */
+    position: fixed; 
+    bottom: 15px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+
+    /* added id: 'save-button'
+    it shouldn't display outside of editing mode */
+}
+
+/* .page-buttons:active  /* use Dot here
+{   
+    background:url(./specs/Icons/Add_button.png) no-repeat;
+} */
+
+
+.fixed-button 
+{
+    background-color: var(--george-blue);/* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    font-size: 10px; /* Set a font size */
+    text-align: center;
+    border-radius: 50%;
+    margin: 4px 4px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: black;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+  
+  /* Darker background on mouse-over */
+.fixed-button:hover 
+{
+    cursor: pointer; /* Mouse pointer on hover */
+    background-color: rgb(79, 182, 223);
+}
+
+#edit-button 
+{
+    background-image: url("../assets/edit.svg");
+}
+
+#add-button 
+{
+    background-image: url("../assets/add.svg");
+}
+
+#save-button 
+{
+    background-image: url("../assets/save.svg");
+}
+
+#page-wrapper
+{
+    /* Center content on page */
+    display: grid;
+    justify-content: center;
+}
+
+/*Acts as grid for add-text-post and add-image-post*/
+#post-type-selector
+{
+    display: grid;
+
+    border-radius: 5px;
+    border-style: dashed; 
+    border-width: 2px;
+
+    /* accounts for 10px of padding on each side of posts*/
+    width: 820px;
+    
+    /*grey*/
+    background-color: var(--background-grey); 
+}
+
+.post-type-button
+{
+    padding: 10px;
+}
+
+.post-type-button:hover
+{
+    cursor: pointer;
+    background-color: var(--hover-grey);
+}
+
+#add-text-post
+{
+    display:flex;
+    justify-content: center;/*center text in grid*/
+    grid-column: 1/2; /*keeps it on the left hand column*/
+    border-right-style: dashed; /*creates middle dashed line*/
+    border-width: 2px;
+}
+
+#add-image-post
+{
+    display:flex;
+    justify-content: center;/*center text in grid*/
+    grid-column: 2/2;/*keeps it on the right hand collumn*/
+}
+
+
+/* 
+Adding image post styles
+ */
+.post 
+{
+    position: relative;
+
+    /* Size  */
+    width: 800px;
+
+    /* Center elements: */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Colors */
+    background-color: #F4F4F4; 
+
+    /* Border style*/
+    border-radius: 10px;
+
+    padding: 10px;
+}
+
+.content 
+{
+    max-width: 780px;
+}
+
+.image-post-content 
+{
+    /* spacing between images in post */
+    display: grid;
+    /* 
+        auto-fill fits as many columns as possible in the designated space
+        meaning that the repeat function is called for as many columns as possible
+        this allows for the number of columns to shrink and grow as the width of the
+        window increases and decreases
+    */
+    grid-template-columns: repeat(auto-fill, 100px);
+    gap: 10px;
+    justify-content: center;
+}
+
+
+.drag-icon-container 
+{
+    /* position the drag div at the left of the post */
+    position: absolute;
+
+    /* offset to avoid image overlap  */
+    /* note: offset is not -55px because the border radius of post makes it look off */
+    left: -35px;
+    width: 45px;
+    background-color: var(--george-blue);
+    background-image: url("../assets/draggable.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/* change cursor to grab when hovering over the drag icon */
+.drag-icon-container:hover 
+{
+    cursor: move;
+}
+
+.delete-icon-container
+{ 
+    /* position the drag div at the left of the post */
+    position: absolute;
+
+    /* offset to avoid image overlap  */
+    /* note: offset is not -55px because the border radius of post makes it look off */
+    right: -35px;
+    width: 45px;
+    background-color: var(--remove-red);
+    background-image: url("../assets/delete.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* change cursor to pointer when hovering over the delete icon */
+.delete-icon-container:hover
+{
+    cursor: pointer;
+}
+
+@media screen and (max-width: 900px) {
+    .post
+    {
+        /* 110px accounts for scrollbar and negatively positioned delete/drag*/
+        width: calc(100vw - 110px);
+        justify-self: center;
+    }
+
+    #post-type-selector 
+    {
+        /* 25px accounts for scrollbar and padding */
+        width: calc(100vw - 25px);
+    }
+
+    #user-details
+    {
+        width: calc(100vw - 60px);
+    }
+
+    .content 
+    {
+        max-width: calc(100% - 40px);
+    }
+  }
