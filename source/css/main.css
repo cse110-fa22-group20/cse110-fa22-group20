@@ -8,16 +8,6 @@ body
     margin-bottom: 20px;
 }
 
-.popup-background
-{
-    display: none;
-}
-
-.popup
-{
-    display: none;
-}
-
 #user-details
 {
     display: flex;
@@ -124,7 +114,7 @@ body
 /*Acts as grid for add-text-post and add-image-post*/
 #post-type-selector
 {
-    display: none;
+    display: grid;
 
     border-radius: 5px;
     border-style: dashed; 
@@ -264,9 +254,9 @@ Adding image post styles
     cursor: pointer;
 }
 
-.visible
+.hidden
 {
-    display: grid !important;
+    display: none !important;
 }
 
 @media screen and (max-width: 900px) {
