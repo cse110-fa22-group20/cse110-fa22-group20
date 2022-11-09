@@ -66,7 +66,7 @@ Absent:
   - located at: org -> project
   - tasks are issues
   - week one is a good time to expiriment with how to approach issues (individual vs small groups)
-  - push to before final push to main       
+  - push to before final push to main
 
 ### Unresolved Business
 - I'm hungry
