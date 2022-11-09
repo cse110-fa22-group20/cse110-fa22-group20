@@ -11,10 +11,44 @@
         <!--stylsheets-->
         <link href="../css/global.css" rel="stylesheet">
         <link href="../css/navbar.css" rel="stylesheet">
+        <link href="../css/new-user.css" rel="stylesheet">
 
         <!--scripts-->
     </head>
     <body>
-        <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
+        <header>
+            <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
+        </header>
+        <main>
+            <div class="content-wrapper">
+                <section class="welcome-text">
+                    <h2>Welcome to Unpluggd!</h2>
+                    <p>To get started, input the name of your page, upload an image, and add
+                    a description of its contents.</p>
+                </section>
+                <section class="user-info">
+                    <form class="user-form">
+                        <!--clicking label will show file upload so they can be used as a way to style input-->
+                        <label id="user-image-label">
+                            <input type="file" name="user-image" id="user-image"/>
+                        </label>
+                        <div id="user-inputs">
+                            <input type="text" name="user-name" id="user-name" cols="30" rows="1" placeholder="Name (personal, company, etc.)" minlength=1></textarea>
+                            <textarea name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
+                            <!--this div is in place for grid positioning, can be removed-->
+                            <div>
+                                <button type="submit" id="go-button">Let's go!</button>
+                                <p>Or</p>
+                                <!--same idea as #user-image-label-->
+                                <label id="existing-page-label">
+                                    Upload an existing page    
+                                    <input type="file" name="existing-page" id="existing-page"/>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
     </body>
 </html>
