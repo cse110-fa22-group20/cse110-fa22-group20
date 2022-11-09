@@ -10,7 +10,7 @@ function init() {
         // gets the display of the post type selector
         // if it's visible, hide it
         // if it's hidden, make it visible
-        if(getComputedStyle(postTypeSelector).display == 'none') postTypeSelector.classList.add('visible');
-        else postTypeSelector.classList.remove('visible');
+        if(getComputedStyle(postTypeSelector).display === 'none') postTypeSelector.classList.remove('hidden');
+        else postTypeSelector.classList.add('hidden');
     }
 }
