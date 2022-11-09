@@ -275,6 +275,6 @@ Adding image post styles
 
     .content 
     {
-        max-width: calc(100% - 40px);
+        width: calc(100% - 40px);
     }
   }
