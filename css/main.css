@@ -8,6 +8,16 @@ body
     margin-bottom: 20px;
 }
 
+.popup-background
+{
+    display: none;
+}
+
+.popup
+{
+    display: none;
+}
+
 #user-details
 {
     display: flex;
@@ -114,7 +124,7 @@ body
 /*Acts as grid for add-text-post and add-image-post*/
 #post-type-selector
 {
-    display: grid;
+    display: none;
 
     border-radius: 5px;
     border-style: dashed; 
@@ -252,6 +262,11 @@ Adding image post styles
 .delete-icon-container:hover
 {
     cursor: pointer;
+}
+
+.visible
+{
+    display: grid !important;
 }
 
 @media screen and (max-width: 900px) {
