@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!--scripts-->
+        <script src="../js/main.js"></script>
     </head>
     <body>
         <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
@@ -73,25 +74,22 @@
                 <button id="add-button" class="fixed-button"><p>Add</p></button>
                 <button id="save-button" class="fixed-button"><p>Save</p></button>
             </div>
-            <div class="popup-background">
-                <div id="image-post-popup" class="popup">
-                    <h2>Add image post</h2>
-                    <form>
-                        <label id="add-image-label">
-                            <input id="add-image" type="file">
-                        </label>
-                        <input type="submit" value="post">
-                    </form>
-                </div>
+            <div class="popup-background"></div>
+            <div id="image-post-popup" class="popup">
+                <h2>Add image post</h2>
+                <form>
+                    <label id="add-image-label">
+                        <input id="add-image" type="file">
+                    </label>
+                    <input type="submit" value="post">
+                </form>
             </div>
-            <div class="popup-background">
-                <div id="text-post-popup" class="popup">
-                    <h2>Add text post</h2>
-                    <form>
-                        <textarea></textarea>
-                        <input type="submit" value="post">
-                    </form>
-                </div>
+            <div id="text-post-popup" class="popup">
+                <h2>Add text post</h2>
+                <form>
+                    <textarea></textarea>
+                    <input type="submit" value="post">
+                </form>
             </div>
         </div>
     </body>
