@@ -12,7 +12,7 @@ const indexedDB =
 
 // integer is the version number for the database
 // changing it will trigger onupgradeneeded
-const request = indexedDB.open("UnpluggdDatabase", 0);
+const request = indexedDB.open("UnpluggdDatabase", 1);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
