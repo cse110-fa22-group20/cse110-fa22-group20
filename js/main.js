@@ -135,7 +135,7 @@ async function init() {
     let retrievedPosts = await getAllPosts();
     const state = {
         postIDCounter: retrievedPosts.length,
-        posts: await getAllPosts(),
+        posts: retrievedPosts,
     };
 
     console.log(`${JSON.stringify(state)}`);
