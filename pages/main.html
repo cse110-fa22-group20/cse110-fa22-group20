@@ -17,7 +17,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!--scripts-->
-        <script src="../js/main.js"></script>
+        <script type="module" src="../js/main.js"></script>
     </head>
     <body>
         <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
@@ -86,8 +86,8 @@
             </div>
             <div id="text-post-popup" class="popup hidden">
                 <h2>Add text post</h2>
-                <form>
-                    <textarea></textarea>
+                <form id="text-post-form">
+                    <textarea name="text-content" form="text-post-form"></textarea>
                     <input type="submit" value="post">
                 </form>
             </div>
