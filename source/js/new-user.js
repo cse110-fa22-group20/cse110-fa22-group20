@@ -28,11 +28,20 @@
  */
 const checkUserExist = async () => {
     return new Promise(async (res, rej) => {
+        // check if an user object exists in db
         const userObj = await getDetails();
-        if(userObj === null) rej(false);
-        
+        if(typeof(userObj) !== "object") {
+            rej(false);
+            return;
+        }
+
+        // check to make sure it's valid
         const validProfile = checkProfile(userObj);
-        if(validProfile === false) rej(false);
+        if(validProfile === false) {
+            rej(false);
+            return;
+        }
+
         res(true);
     });
 }
@@ -41,17 +50,17 @@ const checkUserExist = async () => {
  * Takes in an object and check whether the profileObj is in the form of
  * profileObj = {
  *     name: string,
- *     image: string,
+ *     image: string(base64),
  *     description: string,
- *     primaryColor: string,
- *     secondaryColor: string,
+ *     primaryColor: string(temporary object),
+ *     secondaryColor: string(temporary object),
  * }
  */
 const checkProfile = (profileObj) => {
     if(typeof(profileObj) !== "object") return false;
 
     const KEYS = ["name", "image", "description", "primaryColor", "secondaryColor"];
-    const TYPES = ["string", "object", "string", "object", "object"];
+    const TYPES = ["string", "string", "string", "object", "object"];
     for(let i = 0; i < KEYS.length; i++) {
         // this key doesn't even exist in profileObj
         if(!(KEYS[i] in profileObj)) return false;
@@ -60,19 +69,20 @@ const checkProfile = (profileObj) => {
         if(typeof(profileObj[KEYS[i]]) != TYPES[i]) return false;
     }
 
+    // name must have a positive length
     if(profileObj["name"].length <= 0) return false;
-    
 
     return true;
 }
 
 /**
- * Update the profile picture when it's being uploaded
+ * Updates the profile picture when it's being uploaded
  */
 const updateImage = () => {
     const imageInput = document.querySelector("#user-image");
     const imageArea = document.querySelector("#user-image-label");
 
+    // update profile picture
     const image = imageInput.files[0];
     imageArea.style.backgroundImage = `url(${URL.createObjectURL(image)})`;
 }
@@ -85,17 +95,11 @@ const updateImage = () => {
  const uploadProfile = async () => {
     const form = document.querySelector("form.user-form");
 
-    const profileObj = getFormData(form);
-    if(checkProfile(profileObj) === false) {
-        console.log("Invalid profile object");
-        return false;
-    }
+    const profileObj = await getFormData(form);
+    if(checkProfile(profileObj) === false) return false;
 
-    const success = await addDetails(profileObj);
-    if(success === false) {
-        console.log("Add details failed");
-        return false;
-    }
+    const successAdd = await addDetails(profileObj);
+    if(successAdd === false) return false;
 
     // redirect to main.html
     window.location.href = "./main.html";
@@ -114,20 +118,29 @@ const updateImage = () => {
  * }
  * !No error checking!
  */
- const getFormData = (form) => {
-    const formData = new FormData(form);
-    const profileObj = {};
+ const getFormData = async (form) => {
+    return new Promise((res, rej) => {
+        const formData = new FormData(form);
+        const profileObj = {};
 
-    // populate profileObj
-    profileObj["name"] = formData.get("user-name");
-    // profileObj["image"] = formData.get("user-image");
-    profileObj["description"] = formData.get("user-description");
-    profileObj["primaryColor"] = null;
-    profileObj["secondaryColor"] = null;
+        // populate profileObj
+        profileObj["name"] = formData.get("user-name");
+        profileObj["description"] = formData.get("user-description");
+        profileObj["primaryColor"] = null;
+        profileObj["secondaryColor"] = null;
 
+        const imageInput = document.querySelector("#user-image");
+        const image = imageInput.files[0];
+        const reader = new FileReader();
+        
+        reader.addEventListener("load", () => {
+            profileObj["image"] = reader.result;
+            res(profileObj);
+            return profileObj;
+        });
 
-
-    return profileObj;
+        reader.readAsDataURL(image);
+    });
  }
 
- export { checkUserExist, checkProfile, getFormData };
+ export { checkUserExist, checkProfile, updateImage, getFormData };
