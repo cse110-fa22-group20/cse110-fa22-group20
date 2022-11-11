@@ -16,6 +16,9 @@
         console.log("new user");
     });
 
+    const imageInput = document.querySelector("#user-image");
+    imageInput.addEventListener("change", updateImage);
+
     const submitButton = document.querySelector("#go-button");
     submitButton.addEventListener("click", uploadProfile);
  }
@@ -56,8 +59,22 @@ const checkProfile = (profileObj) => {
         // the corresponding value has a wrong type
         if(typeof(profileObj[KEYS[i]]) != TYPES[i]) return false;
     }
+
+    if(profileObj["name"].length <= 0) return false;
     
+
     return true;
+}
+
+/**
+ * Update the profile picture when it's being uploaded
+ */
+const updateImage = () => {
+    const imageInput = document.querySelector("#user-image");
+    const imageArea = document.querySelector("#user-image-label");
+
+    const image = imageInput.files[0];
+    imageArea.style.backgroundImage = `url(${URL.createObjectURL(image)})`;
 }
 
  /**
@@ -103,10 +120,12 @@ const checkProfile = (profileObj) => {
 
     // populate profileObj
     profileObj["name"] = formData.get("user-name");
-    profileObj["image"] = formData.get("user-image");
+    // profileObj["image"] = formData.get("user-image");
     profileObj["description"] = formData.get("user-description");
     profileObj["primaryColor"] = null;
     profileObj["secondaryColor"] = null;
+
+
 
     return profileObj;
  }
