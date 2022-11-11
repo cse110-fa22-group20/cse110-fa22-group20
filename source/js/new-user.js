@@ -2,27 +2,36 @@
  * File stores all the functions that make the new-user form functional
  * Also redirect to main.html if an user object already exists in db
  */
- import { addDetails, getDetails } from './db.js';
+ import { addDetails, dbReady, getDetails } from './db.js';
 
  window.addEventListener('DOMContentLoaded', init);
 
  // ensures that page as loaded before running anything
- function init() {
-    const userExist = checkUserExist();
-    if(userExist === true) {
-        // TODO 1: redirect to main.html
-    }
+ async function init() {
+    await dbReady();
+    checkUserExist().then(userExist =>{
+        // redirect to main.html if an user object exists
+        window.location.href = "./main.html";
+    }).catch(userExist => {
+        console.log("new user");
+    });
 
     const submitButton = document.querySelector("#go-button");
-    submitButton.onclick = uploadProfile;
+    submitButton.addEventListener("click", uploadProfile);
  }
  
 /**
  * Returns whether a valid user object exists in db
  */
-const checkUserExist = () => {
-    // TODO 2
-    return true;
+const checkUserExist = async () => {
+    return new Promise(async (res, rej) => {
+        const userObj = await getDetails();
+        if(userObj === null) rej(false);
+        
+        const validProfile = checkProfile(userObj);
+        if(validProfile === false) rej(false);
+        res(true);
+    });
 }
 
 /**
@@ -36,7 +45,18 @@ const checkUserExist = () => {
  * }
  */
 const checkProfile = (profileObj) => {
-    // TODO 3
+    if(typeof(profileObj) !== "object") return false;
+
+    const KEYS = ["name", "image", "description", "primaryColor", "secondaryColor"];
+    const TYPES = ["string", "object", "string", "object", "object"];
+    for(let i = 0; i < KEYS.length; i++) {
+        // this key doesn't even exist in profileObj
+        if(!(KEYS[i] in profileObj)) return false;
+
+        // the corresponding value has a wrong type
+        if(typeof(profileObj[KEYS[i]]) != TYPES[i]) return false;
+    }
+    
     return true;
 }
 
@@ -45,39 +65,50 @@ const checkProfile = (profileObj) => {
   * 
   * returns whether the action was successful
   */
- const uploadProfile = () => {
-    // TODO 4: grab form from html
-    const formData = getFormData(form);
+ const uploadProfile = async () => {
+    const form = document.querySelector("form.user-form");
 
-    // parse formData into an obj
-    const profileObj = parseFormData(formData);
+    const profileObj = getFormData(form);
     if(checkProfile(profileObj) === false) {
-        // TODO 5: handle invalid profile
+        console.log("Invalid profile object");
         return false;
     }
 
-    const success = addDetails(profileObj);
+    const success = await addDetails(profileObj);
     if(success === false) {
-        // TODO 6: handle db error
+        console.log("Add details failed");
         return false;
     }
+
+    // redirect to main.html
+    window.location.href = "./main.html";
     return true;
  }
 
  /**
-  * Returns the data gathered from the form
-  * !No error checking!
-  */
+ * Gets data gathered from the form
+ * Returns an object of the form
+ * profileObj = {
+ *     name: string,
+ *     image: string,
+ *     description: string,
+ *     primaryColor: string,
+ *     secondaryColor: string
+ * }
+ * !No error checking!
+ */
  const getFormData = (form) => {
-    // TODO 7
+    const formData = new FormData(form);
+    const profileObj = {};
+
+    // populate profileObj
+    profileObj["name"] = formData.get("user-name");
+    profileObj["image"] = formData.get("user-image");
+    profileObj["description"] = formData.get("user-description");
+    profileObj["primaryColor"] = null;
+    profileObj["secondaryColor"] = null;
+
+    return profileObj;
  }
 
- /**
-  * Gets an formdata and parse it into an object
-  * !No error checking!
-  */
- const parseFormData = (formData) => {
-    // TODO 8
- }
-
- export { checkUserExist, checkProfile, getDetails, parseFormData };
+ export { checkUserExist, checkProfile, getFormData };
