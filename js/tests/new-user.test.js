@@ -1,4 +1,3 @@
-import { checkUserExist, checkProfile, updateImage, getFormData } from './new-user.js';
 const checkUserExist = require("../new-user.js").checkUserExist;
 const checkProfile = require("../new-user.js").checkProfile;
 const updateImage = require("../new-user.js").updateImage;
