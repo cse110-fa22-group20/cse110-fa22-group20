@@ -2,7 +2,9 @@
  * File stores all the functions that make the new-user form functional
  * Also redirect to main.html if an user object already exists in db
  */
- import { addDetails, dbReady, getDetails } from './db.js';
+ const addDetails = require("./db.js").addDetails;
+ const dbReady = require("./db.js").dbReady;
+ const getDetails = require("./db.js").getDetails;
 
  window.addEventListener('DOMContentLoaded', init);
 
