@@ -143,4 +143,9 @@ const updateImage = () => {
     });
  }
 
- export { checkUserExist, checkProfile, updateImage, getFormData };
+module.export = { 
+    "checkUserExist": checkUserExist, 
+    "checkProfile": checkProfile, 
+    "updateImage": updateImage, 
+    "getFormData": getFormData
+};
