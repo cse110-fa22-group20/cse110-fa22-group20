@@ -341,15 +341,15 @@ const deleteDetails = () => {
     return success;
 }
 
-export { 
-    dbReady,
-    addPost, 
-    updatePost, 
-    getPost, 
-    getAllPosts, 
-    deletePost, 
-    addDetails, 
-    updateDetails, 
-    getDetails, 
-    deleteDetails,
+module.export = { 
+    "dbReady": dbReady,
+    "addPost": addPost, 
+    "updatePost": updatePost, 
+    "getPost": getPost, 
+    "getAllPosts": getAllPosts, 
+    "deletePost": deletePost, 
+    "addDetails": addDetails, 
+    "updateDetails": updateDetails, 
+    "getDetails": getDetails, 
+    "deleteDetails": deleteDetails,
 };
