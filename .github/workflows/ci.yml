@@ -35,13 +35,13 @@ jobs:
       - name: Install jest
         run: yarn add --dev jest
 
-      # Validate HTML/CSS in src/
+      # Validate HTML/CSS in source/
       - name: HTMLCheck
         run: uname -a
       - name: HTML5Validator
         uses: Cyb3r-Jak3/html5validator-action@v7.1.1
         with:
-            root: src/
+            root: source/
             log_level: INFO
             css: true
 
