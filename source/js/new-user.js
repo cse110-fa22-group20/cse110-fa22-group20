@@ -2,14 +2,33 @@
  * File stores all the functions that make the new-user form functional
  * Also redirect to main.html if an user object already exists in db
  */
- const addDetails = require("./db.js").addDetails;
- const dbReady = require("./db.js").dbReady;
- const getDetails = require("./db.js").getDetails;
+const testing = false;
+var addDetails = null, dbReady = null, getDetails = null;
+const loadModules = async () => {
+    return new Promise((res, rej) => {
+        if(!testing) {
+            import('./db.js').then(exports => {
+                addDetails = exports.addDetails;
+                dbReady = exports.dbReady;
+                getDetails = exports.getDetails;
+                res();
+                return;
+            });
+        } else {
+            const addDetails = require("./db.js").addDetails;
+            const dbReady = require("./db.js").dbReady;
+            const getDetails = require("./db.js").getDetails;
+            res();
+            return;
+        }
+    });
+}
 
  window.addEventListener('DOMContentLoaded', init);
 
  // ensures that page as loaded before running anything
  async function init() {
+    await loadModules();
     await dbReady();
     checkUserExist().then(userExist =>{
         // redirect to main.html if an user object exists
@@ -149,7 +168,9 @@ const updateImage = () => {
     });
  }
 
- exports.checkUserExist = checkUserExist;
- exports.checkProfile = checkProfile;
- exports.updateImage = updateImage;
- exports.getFormData = getFormData;
+ if(testing) {
+    exports.checkUserExist = checkUserExist;
+    exports.checkProfile = checkProfile;
+    exports.updateImage = updateImage;
+    exports.getFormData = getFormData;
+ }
