@@ -34,6 +34,7 @@ jobs:
             ${{ runner.os }}-
       - name: Install jest
         run: yarn add --dev jest
+             yarn add -D jest-environment-jsdom
 
       # Validate HTML/CSS in source/
       - name: HTMLCheck
