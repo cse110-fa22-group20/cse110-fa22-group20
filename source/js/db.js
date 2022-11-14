@@ -48,7 +48,7 @@ const dbReady = () => {
         while (request.readyState !== 'done') {
             await delay(200);
         }
-        res();
+        res(true);
     });
 };
 
@@ -341,15 +341,13 @@ const deleteDetails = () => {
     return success;
 }
 
-module.export = { 
-    "dbReady": dbReady,
-    "addPost": addPost, 
-    "updatePost": updatePost, 
-    "getPost": getPost, 
-    "getAllPosts": getAllPosts, 
-    "deletePost": deletePost, 
-    "addDetails": addDetails, 
-    "updateDetails": updateDetails, 
-    "getDetails": getDetails, 
-    "deleteDetails": deleteDetails,
-};
+exports.dbReady = dbReady;
+exports.addPost = addPost;
+exports.updatePost = updatePost;
+exports.getPost = getPost;
+exports.getAllPosts = getAllPosts;
+exports.deletePost = deletePost;
+exports.addDetails = addDetails;
+exports.updateDetails = updateDetails;
+exports.getDetails = getDetails;
+exports.deleteDetails = deleteDetails;
