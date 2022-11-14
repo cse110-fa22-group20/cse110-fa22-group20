@@ -147,14 +147,14 @@ body
 }
 
 /* Add styles to the form container */
-.form-container {
+.text-form-container {
     /* max-width: 500px; */
     width: 400px;
     height: 200px;
     padding: 10px;
     background-color: white;
     border-radius: 6px;
-    top: -60px;
+    top: -200px;
     left: 150px;
     padding: 0px 50px;
     align-items: center;
@@ -165,7 +165,7 @@ body
   }
   
 /* input fields */
-.form-container input[type=text], .form-container input[type=password] {
+.text-form-container input[type=text], .text-form-container input[type=password] {
     width: 90%;
     padding: 30px;
     margin: -15px 0 20px 0;
@@ -178,7 +178,7 @@ body
 }
 
 /* Set a style for the submit button */
-.form-container .btn {
+.text-form-container .btn {
     background-color: var(--george-blue);
     color: black;
     padding: 30x 30px;
