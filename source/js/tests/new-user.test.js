@@ -2,15 +2,9 @@
  * @jest-environment jsdom
  */
 require("fake-indexeddb/auto");
-const checkUserExist = require("../new-user.js").checkUserExist;
-const checkProfile = require("../new-user.js").checkProfile;
-const updateImage = require("../new-user.js").updateImage;
-const getFormData = require("../new-user.js").getFormData;
+const newUser = require("../new-user.js");
 
 // just a dummy test
 test("Dummy test", () => {
-    const profileObj = {
-        name: "A"
-    };
-    expect(checkProfile(profileObj)).toBe(false);
+    expect(newUser.checkProfile(null)).toBe(false);
 });
