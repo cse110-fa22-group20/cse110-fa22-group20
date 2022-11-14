@@ -76,12 +76,22 @@
             </div>
             <div class="popup-background hidden"></div>
             <div id="image-post-popup" class="popup hidden">
-                <h2>Add image post</h2>
-                <form>
-                    <label id="add-image-label">
-                        <input id="add-image" type="file">
+                <button id="close-image-popup" class="close-popup"></button>
+                <form id="image-post-form" class="image-form-container">
+                    <h2>Add image post</h2>
+                    <label id="add-image-post-info"> 
+                        <label id="add-image-label">
+                            <input id="add-image" type="file">
+                        </label>
+                        <label id="add-image-caption-label"> 
+                            <!-- <input id="add-image-picture" type="file"> -->
+                            <!-- <input id="add-caption" type="text" value="Add caption"> -->
+                            <textarea id="add-caption" rows="10" placeholder="Add caption"></textarea>
+                        </label>
                     </label>
-                    <input type="submit" value="post">
+                    <input type="button" id="add-another-image" value="Add another image"> 
+                    <!-- <input id="delete-image" type="submit" value="delete"> -->
+                    <input id="post-image" type="submit" value="Post">
                 </form>
             </div>
             <div id="text-post-popup" class="popup hidden">
@@ -91,6 +101,7 @@
                     <input type="submit" value="post">
                 </form>
             </div>
+            
         </div>
     </body>
 </html>

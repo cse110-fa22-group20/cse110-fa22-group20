@@ -254,6 +254,161 @@ Adding image post styles
     cursor: pointer;
 }
 
+.popup-background 
+{
+    z-index:1;
+    position:fixed;
+    background: rgba(0,0,0,0.3);
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adding styles to overall image-post-form popup */
+#image-post-popup
+{
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 300px;
+    justify-self: center;
+    /* justify-content: center; */
+    /* justify-items: center; */
+    /* align-items: center; */
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+    top: 30%;
+    text-align: center;
+    position: absolute;
+    border: 5px;
+    border-color: black;
+}
+
+#image-post-popup #close-image-popup
+{
+    width: 10px;
+    height: 13px;
+    right: 10px;
+    top: 10px;
+    position: absolute;
+    background: url("../assets/x.svg");
+    /* border-bottom: 1px; */
+    /* border-top: 1px; */
+    /* border-left: 1px; */
+    /* border-right: 1px; */
+    border: none;
+    /* padding: auto; */
+}
+
+#image-post-popup #close-image-popup:hover
+{
+    cursor: pointer;
+}
+
+#image-post-popup #add-image-label
+{
+    position: relative;
+    left: 10px;
+    height: 105px;
+    width: 100px;
+    border-radius: 10px;
+    background-image: url("../assets/add.svg");
+    background-repeat: no-repeat;
+    background-size: 70px;
+    background-position-x: 15px;
+    background-position-y: 17px;
+    background-color: whitesmoke;
+    border-color: black;
+    /* border: 10px; */
+    cursor: pointer;
+    
+    /* background-color: black; */
+}
+
+#image-post-popup #add-image-label:hover
+{
+    background-color: rgb(230, 228, 228);
+}
+
+#image-post-popup #add-image
+{
+    display: none;
+    
+}
+
+
+
+
+/* Adding styles to adding image and caption portion of image-post-form popup*/
+#image-post-form #add-image-post-info
+{
+    display: flex;
+    flex-direction: row;
+}
+
+#image-post-form #add-caption
+{
+    position: relative;
+    left: 30px;
+    width: 250px;
+    height: 100px;
+    border-radius: 10px;
+    text-align: start;
+    background-color: whitesmoke;
+    border: 2px;
+    
+}
+
+/* Adding styles to add more image button */
+#image-post-form #add-another-image
+{
+    display: block;
+    width: 400px;
+    position: relative;
+    top: 5%;
+    /* bottom: -100px; */
+    border-radius: 6px;
+    border: 0px;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    /* color: red; */
+    background-color: var(--george-blue);
+}
+
+#image-post-form #add-another-image:hover
+{
+    background-color: rgb(79, 182, 223);
+    cursor: pointer;
+}
+
+/* Adding styles to image post's post button*/
+#image-post-form #post-image
+{
+    position: relative;
+    bottom: -50px;
+    border-radius: 6px;
+    border: 0ch;
+    padding: 3px;
+    padding-left: 25px;
+    padding-right: 25px;
+    /* color: red; */
+    background-color: var(--george-blue);
+    font-size:larger;
+    /* font-weight: 200; */
+}
+
+#image-post-form #post-image:hover
+{
+    background-color: rgb(79, 182, 223);
+    cursor: pointer;
+}
+
+
 .hidden
 {
     display: none !important;
