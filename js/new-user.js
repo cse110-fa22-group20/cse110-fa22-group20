@@ -65,10 +65,14 @@ const checkProfile = (profileObj) => {
     const TYPES = ["string", "string", "string", "object", "object"];
     for(let i = 0; i < KEYS.length; i++) {
         // this key doesn't even exist in profileObj
-        if(!(KEYS[i] in profileObj)) return false;
+        try {
+            if(!(KEYS[i] in profileObj)) return false;
 
-        // the corresponding value has a wrong type
-        if(typeof(profileObj[KEYS[i]]) != TYPES[i]) return false;
+            // the corresponding value has a wrong type
+            if(typeof(profileObj[KEYS[i]]) != TYPES[i]) return false;
+        } catch (error) {
+            return false;
+        }
     }
 
     // name must have a positive length
@@ -145,9 +149,7 @@ const updateImage = () => {
     });
  }
 
-module.export = { 
-    "checkUserExist": checkUserExist, 
-    "checkProfile": checkProfile, 
-    "updateImage": updateImage, 
-    "getFormData": getFormData
-};
+ exports.checkUserExist = checkUserExist;
+ exports.checkProfile = checkProfile;
+ exports.updateImage = updateImage;
+ exports.getFormData = getFormData;
