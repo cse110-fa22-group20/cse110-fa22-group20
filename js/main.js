@@ -1,4 +1,24 @@
-import { dbReady, addPost, getAllPosts } from './db.js';
+const testing = false;
+var dbReady = null, addPost = null, getAllPosts = null;
+const loadModules = async () => {
+    return new Promise((res, rej) => {
+        if(!testing) {
+            import('./db.js').then(exports => {
+                dbReady = exports.dbReady;
+                addPost = exports.addPost;
+                getAllPosts = exports.getAllPosts;
+                res();
+                return;
+            });
+        } else {
+            const dbReady = require("./db.js").dbReady;
+            const addPost = require("./db.js").addPost;
+            const getAllPosts = require("./db.js").getAllPosts;
+            res();
+            return;
+        }
+    });
+}
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -124,6 +144,7 @@ const appendPost = (postObj) => {
 
 // ensures that page as loaded before running anything
 async function init() {
+    await loadModules();
     const addPostButton = document.querySelector('#add-button');
     const addTextPostButton  = document.querySelector('#add-text-post');
     const textPostForm  = document.querySelector('#text-post-popup form');
@@ -138,13 +159,12 @@ async function init() {
         posts: retrievedPosts,
     };
 
-    console.log(`${JSON.stringify(state)}`);
+    //console.log(`${JSON.stringify(state)}`);
 
     populatePosts(state);
 
     addPostButton.onclick = () => {
         const postTypeSelector = document.querySelector('#post-type-selector');
-        
         toggleVisibility(postTypeSelector);
     };
 
@@ -156,9 +176,12 @@ async function init() {
     textPostForm.addEventListener('submit', (event) => {
         textPostFormSubmit(event, state).then((res) => {
             const index = !state.postIDCounter ? 0: state.postIDCounter-1;
-            console.log(state);
-            console.log(index);
             appendPost(state.posts[index]);
         });
     });
+}
+
+if (testing) {
+    exports.createTextPostObject = createTextPostObject;
+    exports.populatePosts = populatePosts;
 }
