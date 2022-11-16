@@ -341,6 +341,20 @@ const deleteDetails = () => {
     return success;
 }
 
+if (testing) {
+    exports.dbReady = dbReady;
+    exports.addPost = addPost;
+    exports.updatePost = updatePost;
+    exports.getPost = getPost;
+    exports.getAllPosts = getAllPosts;
+    exports.deletePost = deletePost;
+    exports.addDetails = addDetails;
+    exports.updateDetails = updateDetails;
+    exports.getDetails = getDetails;
+    exports.deleteDetails = deleteDetails;
+}
+
+// 12 lines
 export { 
     dbReady,
     addPost, 
