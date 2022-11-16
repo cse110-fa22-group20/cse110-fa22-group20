@@ -2,8 +2,6 @@
  * File stores all the functions used to interact with IndexedDB. 
  */
 
-const testing = false;
-
 // make sure to enable indexedDB for older browsers
 const indexedDB = 
     window.indexedDB ||
@@ -355,15 +353,3 @@ export {
     getDetails, 
     deleteDetails,
 };
-if(testing) {
-    exports.dbReady = dbReady;
-    exports.addPost = addPost;
-    exports.updatePost = updatePost;
-    exports.getPost = getPost;
-    exports.getAllPosts = getAllPosts;
-    exports.deletePost = deletePost;
-    exports.addDetails = addDetails;
-    exports.updateDetails = updateDetails;
-    exports.getDetails = getDetails;
-    exports.deleteDetails = deleteDetails;
-}
