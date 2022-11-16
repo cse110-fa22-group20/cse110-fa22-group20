@@ -3,6 +3,7 @@
  */
 require("fake-indexeddb/auto");
 const newUser = require("../new-user.js");
+const db = reqire("../db.js");
 
 describe("checkProfile tests", () => {
     test("valid profileObj", () => {
@@ -24,7 +25,7 @@ describe("checkProfile tests", () => {
         };
         expect(newUser.checkProfile(undefined)).toBe(false);
     });
-    test("profileObj without a name length of 9 is invalid", () => {
+    test("profileObj without a name length of 0 is invalid", () => {
         const profileObj = {
             name: "",
             image: "image",
@@ -42,3 +43,23 @@ describe("checkProfile tests", () => {
     });
 });
 
+describe("checkUserExist tests", async () => {
+    test("initially, user does not exist", () => {
+        expect(newUser.checkUserExist()).toBe(false);
+    });
+
+    // add user to db
+    await db.dbReady();
+    const profileObj = {
+        name: "name",
+        image: "image",
+        description: "test",
+        primaryColor: null,
+        secondaryColor: null
+    };
+    await db.addDetails(profileObj);
+
+    test("user should exist now", () => {
+        expect(newUser.checkUserExist()).toBe(true);
+    });
+});
