@@ -61,7 +61,7 @@ const textPostFormSubmit = (event, state) => {
             state.posts.push(newPost);
             res(true);
         }
-        rej(false);
+        rej(true);
     });
 }
 

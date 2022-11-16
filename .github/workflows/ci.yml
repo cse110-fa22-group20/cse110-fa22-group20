@@ -52,6 +52,6 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          cat ./source/js/main.js | sed -z 's/false/true/' > temp
-          mv temp ./source/js/main.js
+          cd ./source/scripts
+          ./testPrep.sh
           yarn test
