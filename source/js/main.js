@@ -21,9 +21,9 @@ const loadModules = async () => {
 }
 
 const state = {
-postIDCounter: 0,
-posts: [],
-editMode: false,
+    postIDCounter: 0,
+    posts: [],
+    editMode: false,
 };
 
 window.addEventListener('DOMContentLoaded', init);
@@ -139,10 +139,10 @@ const applyEditListener= (innerText) => {
         if (state.editMode) {
             const textBox = document.createElement('textarea');
             const submit = document.createElement('button');
+            const id = Number(post.getAttribute('id').substring(1));
 
             textBox.innerText = e.target.innerText;
             submit.innerText = "Submit";
-
 
             post.appendChild(textBox);
             post.appendChild(submit);
@@ -152,6 +152,7 @@ const applyEditListener= (innerText) => {
                 const staticText = textBox.value;
                 console.log(staticText);
                 e.target.innerText = staticText;
+                state.posts[id].content = staticText;
                 toggleVisibility(e.target);
                 post.removeChild(textBox);
                 post.removeChild(submit);
@@ -278,6 +279,7 @@ async function init() {
     editModeButton.addEventListener('click', async () => {
         if (state.editMode) {
             await removeDragAndDeleteFromAll();
+            console.log(state);
         } else {
             await addDragAndDeleteToAll();
         }
