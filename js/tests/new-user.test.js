@@ -44,8 +44,9 @@ describe("checkProfile tests", () => {
 });
 
 describe("checkUserExist tests", () => {
-    test("initially, user does not exist", () => {
-        expect(newUser.checkUserExist()).toBe(false);
+    test("initially, user does not exist", async() => {
+        await newUser.loadModules();
+        await expect(newUser.checkUserExist()).rejects.toBe(false);
     });
 
     test("user should exist now", async () => {
@@ -59,6 +60,6 @@ describe("checkUserExist tests", () => {
             secondaryColor: null
         };
         await db.addDetails(profileObj);
-        expect(newUser.checkUserExist()).toBe(true);
+        await expect(newUser.checkUserExist()).resolves.toBe(true);
     });
 });

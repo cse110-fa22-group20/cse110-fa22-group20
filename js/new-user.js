@@ -15,9 +15,9 @@ const loadModules = async () => {
                 return;
             });
         } else {
-            const addDetails = require("./db.js").addDetails;
-            const dbReady = require("./db.js").dbReady;
-            const getDetails = require("./db.js").getDetails;
+            const addDetails = require("./tests/db-for-test").addDetails;
+            const dbReady = require("./tests/db-for-test").dbReady;
+            const getDetails = require("./tests/db-for-test").getDetails;
             res();
             return;
         }
@@ -169,6 +169,7 @@ const getFormData = async (form) => {
 }
 
 if(testing) {
+    exports.loadModules = loadModules;
     exports.checkUserExist = checkUserExist;
     exports.checkProfile = checkProfile;
     exports.updateImage = updateImage;
