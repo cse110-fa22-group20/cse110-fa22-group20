@@ -125,7 +125,7 @@ const populatePosts = (state) => {
 */
 const insertPost = (postObj, beforeIndex) => {
     const postContainer = document.querySelector('#posts-wrapper');
-    const posts = document.getElementsByClassName('.post');
+    const posts = document.querySelectorAll('.post');
     let beforeElement = null;
     if (beforeIndex < 0 || beforeIndex > posts.length-1) {
         beforeElement = document.querySelector('#post-type-selector');
@@ -140,6 +140,14 @@ const insertPost = (postObj, beforeIndex) => {
 */
 const appendPost = (postObj) => {
     insertPost(postObj, -1);
+}
+
+/*
+    Prepend a new post to the DOM.
+    Stub used for making sure insertPost works as expected.
+*/
+const prependPost = (postObj) => {
+    insertPost(postObj, 0);
 }
 
 // ensures that page as loaded before running anything
@@ -177,6 +185,7 @@ async function init() {
         textPostFormSubmit(event, state).then((res) => {
             const index = !state.postIDCounter ? 0: state.postIDCounter-1;
             appendPost(state.posts[index]);
+            //prependPost(state.posts[index]);
         });
     });
 }
@@ -184,4 +193,6 @@ async function init() {
 if (testing) {
     exports.createTextPostObject = createTextPostObject;
     exports.populatePosts = populatePosts;
+    exports.appendPost = appendPost;
+    exports.insertPost = insertPost;
 }
