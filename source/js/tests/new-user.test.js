@@ -42,24 +42,3 @@ describe("checkProfile tests", () => {
         expect(newUser.checkProfile(undefined)).toBe(false);
     });
 });
-
-describe("checkUserExist tests", () => {
-    test("initially, user does not exist", async() => {
-        await newUser.loadModules();
-        await expect(newUser.checkUserExist()).rejects.toBe(false);
-    });
-
-    test("user should exist now", async () => {
-        // add user to db
-        await db.dbReady();
-        const profileObj = {
-            name: "name",
-            image: "image",
-            description: "test",
-            primaryColor: null,
-            secondaryColor: null
-        };
-        await db.addDetails(profileObj);
-        await expect(newUser.checkUserExist()).resolves.toBe(true);
-    });
-});
