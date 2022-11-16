@@ -24,10 +24,10 @@ const loadModules = async () => {
     });
 }
 
- window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('DOMContentLoaded', init);
 
- // ensures that page as loaded before running anything
- async function init() {
+// ensures that page as loaded before running anything
+async function init() {
     await loadModules();
     await dbReady();
     checkUserExist().then(userExist =>{
@@ -42,7 +42,7 @@ const loadModules = async () => {
 
     const submitButton = document.querySelector("#go-button");
     submitButton.addEventListener("click", uploadProfile);
- }
+}
  
 /**
  * Returns whether a valid user object exists in db
@@ -112,12 +112,12 @@ const updateImage = () => {
     imageArea.style.backgroundImage = `url(${URL.createObjectURL(image)})`;
 }
 
- /**
+/**
   * Uploads the user profile when submit is clicked
   * 
   * returns whether the action was successful
   */
- const uploadProfile = async () => {
+const uploadProfile = async () => {
     const form = document.querySelector("form.user-form");
 
     const profileObj = await getFormData(form);
@@ -129,9 +129,9 @@ const updateImage = () => {
     // redirect to main.html
     window.location.href = "./main.html";
     return true;
- }
+}
 
- /**
+/**
  * Gets data gathered from the form
  * Returns an object of the form
  * profileObj = {
@@ -143,7 +143,7 @@ const updateImage = () => {
  * }
  * !No error checking!
  */
- const getFormData = async (form) => {
+const getFormData = async (form) => {
     return new Promise((res, rej) => {
         const formData = new FormData(form);
         const profileObj = {};
@@ -166,11 +166,11 @@ const updateImage = () => {
 
         reader.readAsDataURL(image);
     });
- }
+}
 
- if(testing) {
+if(testing) {
     exports.checkUserExist = checkUserExist;
     exports.checkProfile = checkProfile;
     exports.updateImage = updateImage;
     exports.getFormData = getFormData;
- }
+}
