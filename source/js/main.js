@@ -245,6 +245,9 @@ async function init() {
     const addTextPostButton  = document.querySelector('#add-text-post');
     const textPostForm  = document.querySelector('#text-post-popup form');
     const editModeButton = document.querySelector('#edit-button');
+    const saveButton = document.querySelector('#save-button');
+
+    toggleVisibility(saveButton);
 
     //deleteDummyPosts();
     await dbReady();
@@ -277,13 +280,19 @@ async function init() {
     });
 
     editModeButton.addEventListener('click', async () => {
-        if (state.editMode) {
-            await removeDragAndDeleteFromAll();
-            console.log(state);
-        } else {
-            await addDragAndDeleteToAll();
-        }
-        editModeButton.innerText = !state.editMode ? "Done" : "Edit";
+        await addDragAndDeleteToAll();
+        toggleVisibility(saveButton);
+        toggleVisibility(editModeButton);
+        state.editMode = !state.editMode; // toggle edit mode
+        console.log(`edit mode: ${state.editMode}`);
+    });
+
+    saveButton.addEventListener('click', async () => {
+        await removeDragAndDeleteFromAll();
+        console.log(state);
+
+        toggleVisibility(editModeButton);
+        toggleVisibility(saveButton);
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
