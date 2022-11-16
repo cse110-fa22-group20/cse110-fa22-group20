@@ -1,3 +1,4 @@
+const testing = false;
 /**
  * File stores all the functions used to interact with IndexedDB. 
  */
@@ -32,7 +33,7 @@ request.onupgradeneeded = () => {
 
     // createIndex allows for searching by a "column" name
     // in this case, sorting/searching by "type" is enabled
-    posts.createIndex("type", ["type"], {unique: false});
+    posts.createIndex("type", ["type"], {unique: true});
 }
 
 /*
@@ -343,15 +344,29 @@ const deleteDetails = () => {
     return success;
 }
 
+if (testing) {
+    exports.dbReady = dbReady;
+    exports.addPost = addPost;
+    exports.updatePost = updatePost;
+    exports.getPost = getPost;
+    exports.getAllPosts = getAllPosts;
+    exports.deletePost = deletePost;
+    exports.addDetails = addDetails;
+    exports.updateDetails = updateDetails;
+    exports.getDetails = getDetails;
+    exports.deleteDetails = deleteDetails;
+}
+
+// 12 lines
 export { 
-    dbReady,
-    addPost, 
-    updatePost, 
-    getPost, 
-    getAllPosts, 
-    deletePost, 
-    addDetails, 
-    updateDetails, 
-    getDetails, 
-    deleteDetails,
+dbReady,
+addPost, 
+updatePost, 
+getPost, 
+getAllPosts, 
+deletePost, 
+addDetails, 
+updateDetails, 
+getDetails, 
+deleteDetails,
 };
