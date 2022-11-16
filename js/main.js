@@ -94,25 +94,71 @@ const addDragAndDelete = (postObj) => {
     postObj.appendChild(del);
 };
 
+/*
+    Add the drag and delete side buttons to all post elements.
+*/
 const addDragAndDeleteToAll = () => {
-    const posts = document.querySelectorAll('.post');
-    for (const post of posts) {
-        addDragAndDelete(post);
-    }
+    return new Promise((res) => {
+        const posts = document.querySelectorAll('.post');
+        for (const post of posts) {
+            addDragAndDelete(post);
+        }
+        res();
+    })
 }
 
+/*
+    Remove the drag and delete side buttons to a post element.
+*/
 const removeDragAndDelete = (postObj) => {
     const text = postObj.querySelector('p').cloneNode(true);
     postObj.innerHTML = '';
     postObj.appendChild(text);
+    applyEditListener(text);
 };
 
+/*
+    Remove the drag and delete side buttons from all post elements.
+*/
 const removeDragAndDeleteFromAll = () => {
-    for (let i = 0; i < state.postIDCounter; i++) {
-        const post = document.querySelector(`#p${i}.post`);
-        removeDragAndDelete(post);
-    }
+    return new Promise((res) => {
+        for (let i = 0; i < state.postIDCounter; i++) {
+            const post = document.querySelector(`#p${i}.post`);
+            removeDragAndDelete(post);
+        }
+        res();
+    });
 }
+
+/*
+    Make p tag switch to textarea on click.
+*/
+const applyEditListener= (innerText) => {
+    innerText.addEventListener('click', (e) => {
+        const post = e.target.parentElement;
+        if (state.editMode) {
+            const textBox = document.createElement('textarea');
+            const submit = document.createElement('button');
+
+            textBox.innerText = e.target.innerText;
+            submit.innerText = "Submit";
+
+
+            post.appendChild(textBox);
+            post.appendChild(submit);
+            toggleVisibility(e.target);
+
+            submit.addEventListener('click', () => {
+                const staticText = textBox.value;
+                console.log(staticText);
+                e.target.innerText = staticText;
+                toggleVisibility(e.target);
+                post.removeChild(textBox);
+                post.removeChild(submit);
+            });
+        }
+    });
+};
 
 /*
     Creates DOM element from a post object with type='text'.
@@ -129,13 +175,7 @@ const createTextPostObject = (postObj) => {
         </p>
     `;
 
-    const innerText = post.querySelector('p');
-    innerText.addEventListener('click', () => {
-        if (state.editMode) {
-            console.log('editing!!');
-        }
-    });
-
+    applyEditListener(post.querySelector('p'));
     return post;
 };
 
@@ -152,11 +192,14 @@ const createPostObject = (postObj) => {
     Populates DOM with post objects stored in `state`.
 */
 const populatePosts = (state) => {
-    const postContainer = document.querySelector('#posts-wrapper');
-    const typeSelector = document.querySelector('#post-type-selector');
-    state.posts.forEach((postObj) => {
-        const post = createPostObject(postObj);
-        postContainer.insertBefore(post, typeSelector);
+    return new Promise((res) => {
+        const postContainer = document.querySelector('#posts-wrapper');
+        const typeSelector = document.querySelector('#post-type-selector');
+        state.posts.forEach((postObj) => {
+            const post = createPostObject(postObj);
+            postContainer.insertBefore(post, typeSelector);
+        });
+        res();
     });
 };
 
@@ -212,7 +255,7 @@ async function init() {
 
     //console.log(`${JSON.stringify(state)}`);
 
-    populatePosts(state);
+    await populatePosts(state);
 
     addPostButton.onclick = () => {
         const postTypeSelector = document.querySelector('#post-type-selector');
@@ -232,14 +275,15 @@ async function init() {
         });
     });
 
-    editModeButton.addEventListener('click', () => {
-        if (!state.editMode) {
-            removeDragAndDeleteFromAll();
+    editModeButton.addEventListener('click', async () => {
+        if (state.editMode) {
+            await removeDragAndDeleteFromAll();
         } else {
-            addDragAndDeleteToAll();
+            await addDragAndDeleteToAll();
         }
-        editModeButton.innerText = state.editMode ? "Done" : "Edit";
+        editModeButton.innerText = !state.editMode ? "Done" : "Edit";
         state.editMode = !state.editMode; // toggle edit mode
+        console.log(`edit mode: ${state.editMode}`);
     });
 }
 
