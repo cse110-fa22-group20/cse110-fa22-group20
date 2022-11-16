@@ -43,23 +43,22 @@ describe("checkProfile tests", () => {
     });
 });
 
-describe("checkUserExist tests", async () => {
+describe("checkUserExist tests", () => {
     test("initially, user does not exist", () => {
         expect(newUser.checkUserExist()).toBe(false);
     });
 
-    // add user to db
-    await db.dbReady();
-    const profileObj = {
-        name: "name",
-        image: "image",
-        description: "test",
-        primaryColor: null,
-        secondaryColor: null
-    };
-    await db.addDetails(profileObj);
-
-    test("user should exist now", () => {
+    test("user should exist now", async () => {
+        // add user to db
+        await db.dbReady();
+        const profileObj = {
+            name: "name",
+            image: "image",
+            description: "test",
+            primaryColor: null,
+            secondaryColor: null
+        };
+        await db.addDetails(profileObj);
         expect(newUser.checkUserExist()).toBe(true);
     });
 });
