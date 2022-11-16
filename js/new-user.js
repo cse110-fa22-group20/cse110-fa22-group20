@@ -15,9 +15,9 @@ const loadModules = async () => {
                 return;
             });
         } else {
-            const addDetails = require("./tests/db-for-test").addDetails;
-            const dbReady = require("./tests/db-for-test").dbReady;
-            const getDetails = require("./tests/db-for-test").getDetails;
+            const addDetails = require("./tests/db-for-test.js").addDetails;
+            const dbReady = require("./tests/db-for-test.js").dbReady;
+            const getDetails = require("./tests/db-for-test.js").getDetails;
             res();
             return;
         }
