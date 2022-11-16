@@ -23,6 +23,7 @@ const loadModules = async () => {
 const state = {
 postIDCounter: 0,
 posts: [],
+editMode: false,
 };
 
 window.addEventListener('DOMContentLoaded', init);
@@ -81,21 +82,59 @@ const deleteDummyPosts = () => {
 };
 
 /*
+    Add the drag and delete side buttons to a post element.
+*/
+const addDragAndDelete = (postObj) => {
+    const drag = document.createElement('div');
+    drag.setAttribute('class', 'drag-icon-container');
+    const del = document.createElement('div');
+    del.setAttribute('class', 'delete-icon-container');
+
+    postObj.appendChild(drag);
+    postObj.appendChild(del);
+};
+
+const addDragAndDeleteToAll = () => {
+    const posts = document.querySelectorAll('.post');
+    for (const post of posts) {
+        addDragAndDelete(post);
+    }
+}
+
+const removeDragAndDelete = (postObj) => {
+    const text = postObj.querySelector('p').cloneNode(true);
+    postObj.innerHTML = '';
+    postObj.appendChild(text);
+};
+
+const removeDragAndDeleteFromAll = () => {
+    for (let i = 0; i < state.postIDCounter; i++) {
+        const post = document.querySelector(`#p${i}.post`);
+        removeDragAndDelete(post);
+    }
+}
+
+/*
     Creates DOM element from a post object with type='text'.
 */
 const createTextPostObject = (postObj) => {
     const post = document.createElement('div');
 
-    post.setAttribute('id', postObj.id);
+    post.setAttribute('id', "p" + postObj.id);
     post.setAttribute('class', 'post');
 
     post.innerHTML = `
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
         <p class="content text-post-content">
             ${postObj.content}
         </p>
     `;
+
+    const innerText = post.querySelector('p');
+    innerText.addEventListener('click', () => {
+        if (state.editMode) {
+            console.log('editing!!');
+        }
+    });
 
     return post;
 };
@@ -161,6 +200,7 @@ async function init() {
     const addPostButton = document.querySelector('#add-button');
     const addTextPostButton  = document.querySelector('#add-text-post');
     const textPostForm  = document.querySelector('#text-post-popup form');
+    const editModeButton = document.querySelector('#edit-button');
 
     //deleteDummyPosts();
     await dbReady();
@@ -190,6 +230,16 @@ async function init() {
             appendPost(state.posts[index]);
             //prependPost(state.posts[index]);
         });
+    });
+
+    editModeButton.addEventListener('click', () => {
+        if (!state.editMode) {
+            removeDragAndDeleteFromAll();
+        } else {
+            addDragAndDeleteToAll();
+        }
+        editModeButton.innerText = state.editMode ? "Done" : "Edit";
+        state.editMode = !state.editMode; // toggle edit mode
     });
 }
 
