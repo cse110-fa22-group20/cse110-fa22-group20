@@ -50,4 +50,7 @@ jobs:
       # Run unit tests with jest
       - name: JSCheck
         # Must pass HTMLCheck before testing js
-        run: yarn test
+        run: |
+          cat ./source/js/new-user.js | sed -z 's/false/true/' > temp
+          mv temp ./source/js/new-user.js
+          yarn test
