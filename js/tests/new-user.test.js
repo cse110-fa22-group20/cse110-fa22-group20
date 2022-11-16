@@ -3,7 +3,7 @@
  */
 require("fake-indexeddb/auto");
 const newUser = require("../new-user.js");
-const db = reqire("../db.js");
+const db = require("../db.js");
 
 describe("checkProfile tests", () => {
     test("valid profileObj", () => {
