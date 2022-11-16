@@ -20,6 +20,11 @@ const loadModules = async () => {
     });
 }
 
+const state = {
+postIDCounter: 0,
+posts: [],
+};
+
 window.addEventListener('DOMContentLoaded', init);
 
 /*
@@ -157,15 +162,13 @@ async function init() {
     const addTextPostButton  = document.querySelector('#add-text-post');
     const textPostForm  = document.querySelector('#text-post-popup form');
 
-    deleteDummyPosts();
+    //deleteDummyPosts();
     await dbReady();
     console.log('db is ready.');
 
     let retrievedPosts = await getAllPosts();
-    const state = {
-        postIDCounter: retrievedPosts.length,
-        posts: retrievedPosts,
-    };
+    state.postIDCounter = retrievedPosts.length;
+    state.posts = retrievedPosts;
 
     //console.log(`${JSON.stringify(state)}`);
 
