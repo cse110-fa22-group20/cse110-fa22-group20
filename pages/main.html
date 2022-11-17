@@ -75,17 +75,29 @@
                 <button id="save-button" class="fixed-button"><p>Save</p></button>
             </div>
             <div class="popup-background hidden"></div>
+
+
             <div id="image-post-popup" class="popup hidden">
-                <h2>Add image post</h2>
-                <form>
-                    <label id="add-image-label">
-                        <input id="add-image" type="file">
+                <button id="close-image-popup" class="close-popup"></button>
+                <form id="image-post-form" class="image-form-container">
+                    <h2>Add image post</h2>
+                    <label id="add-image-post-info"> 
+                        <label id="add-image-label">
+                            <input id="add-image" type="file">
+                        </label>
+                        <label id="add-image-caption-label"> 
+                            <textarea id="add-caption" rows="10" placeholder="Add caption"></textarea>
+                        </label>
                     </label>
-                    <input type="submit" value="post">
+                    <input type="button" id="add-another-image" value="Add another image">
+                    <input id="post-image" type="submit" value="Post">
                 </form>
             </div>
+
+
             <!-- <div class = "pop-up-screen"></div> -->
             <div id="text-post-popup" class="popup hidden">
+                <button id="close-text-popup" class="close-popup"></button>
                 <form id="text-post-form" class="text-form-container">
                     <h2>Add text post</h2>
                     <input type="text">
