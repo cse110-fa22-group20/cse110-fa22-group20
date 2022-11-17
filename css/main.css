@@ -146,6 +146,25 @@ body
     border-width: 2px;
 }
 
+/* Adding styles to overall image-post-form popup */
+#text-post-popup
+{
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 300px;
+    justify-self: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+    top: 30%;
+    text-align: center;
+    position: absolute;
+    border: 5px;
+    border-color: black;
+}
+
 /* Add styles to the form container */
 .text-form-container {
     /* max-width: 500px; */
@@ -178,7 +197,8 @@ body
 }
 
 /* Set a style for the submit button */
-.text-form-container .btn {
+.text-form-container .btn 
+{
     background-color: var(--george-blue);
     color: black;
     padding: 30x 30px;
@@ -195,9 +215,9 @@ body
     position: relative;
   }
 
-.pop-up-screen
+.popup-background
 {
-    z-index:999999;
+    z-index:1;
     position:fixed;
     background: rgba(0,0,0,0.2);
     width:100%;
