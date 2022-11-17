@@ -137,16 +137,29 @@ const applyEditListener= (innerText) => {
     innerText.addEventListener('click', (e) => {
         const post = e.target.parentElement;
         if (state.editMode) {
-            const textBox = document.createElement('textarea');
+            const textBox = document.createElement('input');
             const submit = document.createElement('button');
             const id = Number(post.getAttribute('id').substring(1));
 
-            textBox.innerText = e.target.innerText;
+            textBox.setAttribute('type', 'text');
+            textBox.setAttribute('class', 'editable-text');
+            textBox.addEventListener('input', (e) => {
+                e.target.style.width = e.target.value.length + "ch";
+            });
+            textBox.value = e.target.innerText;
+            textBox.style.width = textBox.value.length + "ch";
+            textBox.style.fontSize = window.getComputedStyle(document.body)
+                                     .getPropertyValue('font-size');
+
+
+            submit.style.height = textBox.style.height;
+            submit.setAttribute('class', 'submit-button');
             submit.innerText = "Submit";
 
             post.appendChild(textBox);
             post.appendChild(submit);
             toggleVisibility(e.target);
+            textBox.focus();
 
             submit.addEventListener('click', () => {
                 const staticText = textBox.value;
