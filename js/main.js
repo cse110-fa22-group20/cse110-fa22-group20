@@ -14,6 +14,23 @@ const toggleVisibility = (obj) => {
         obj.classList.add('hidden');
 };
 
+// window.addEventListener('DOMContentLoaded', init);
+
+// ensures that page as loaded before running anything
+// function init() {
+    // const addPostButton = document.querySelector('#add-button');
+
+    // addPostButton.onclick = () => {
+    //     const postTypeSelector = document.querySelector('#post-type-selector');
+
+    //     // gets the display of the post type selector
+    //     // if it's visible, hide it
+    //     // if it's hidden, make it visible
+    //     if (getComputedStyle(postTypeSelector).display === 'none')
+    //         postTypeSelector.classList.remove('hidden');
+    //     else postTypeSelector.classList.add('hidden');
+    // }
+
 /*
 * Darken background show popup
 */
@@ -23,8 +40,8 @@ const textPostPopup = document.querySelector("#text-post-popup")
 addTextPostButton.onclick = () => {
     if (getComputedStyle(textPostPopup).display === 'none')
     {
-        textPostPopup.classList.remove('hidden');
-        popupBackground.classList.remove('hidden');
+        // textPostPopup.classList.remove('hidden');
+        // popupBackground.classList.remove('hidden');
 
     }
 }
