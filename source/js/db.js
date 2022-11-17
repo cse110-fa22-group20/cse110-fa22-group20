@@ -49,7 +49,7 @@ const dbReady = () => {
         while (request.readyState !== 'done') {
             await delay(200);
         }
-        res();
+        res(true);
     });
 };
 
@@ -235,25 +235,24 @@ const deletePost = (id) => {
  * return true if successful, false otherwise
  */
  const addDetails = (detailsObj) => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let success = false;
-    let query = details.add(detailsObj);
+        let query = details.add(detailsObj);
 
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
+        query.onsuccess = () => {
+            console.log(); // fill in later
+            res(true);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(false);
+        }
+    });
 }
 
 /** 
@@ -297,25 +296,24 @@ const updateDetails = (detailsObj) => {
  * return a single details JSON object
  */
 const getDetails = () => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let detailsObj = null;
+        // since there is only one item we can just call getAll()
+        let query = details.getAll();
 
-    // since there is only one item we can just call getAll()
-    let query = details.getAll();
+        query.onsuccess = () => {
+            res(query.result[0]);
+        }
 
-    query.onsuccess = () => {
-        detailsObj = query.result[0];
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return detailsObj;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(null);
+        }
+    });
 }
 
 /** 
@@ -359,14 +357,14 @@ if (testing) {
 
 // 12 lines
 export { 
-dbReady,
-addPost, 
-updatePost, 
-getPost, 
-getAllPosts, 
-deletePost, 
-addDetails, 
-updateDetails, 
-getDetails, 
-deleteDetails,
+    dbReady,
+    addPost, 
+    updatePost, 
+    getPost, 
+    getAllPosts, 
+    deletePost, 
+    addDetails, 
+    updateDetails, 
+    getDetails, 
+    deleteDetails,
 };
