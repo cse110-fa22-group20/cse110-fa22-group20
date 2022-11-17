@@ -4,7 +4,7 @@ name: HTML/CSS Validate & JS Unit Test
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ "main", "text-post-popup-staging" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -37,16 +37,15 @@ jobs:
              yarn add -D jest-environment-jsdom
              yarn add --dev fake-indexeddb
 
-      # Commented out HTMLCheck temporarily
       # Validate HTML/CSS in source/
-      #- name: HTMLCheck
-      #  run: uname -a
-      #- name: HTML5Validator
-      #  uses: Cyb3r-Jak3/html5validator-action@v7.1.1
-      #  with:
-      #      root: source/
-      #      log_level: INFO
-      #      css: true
+      - name: HTMLCheck
+        run: uname -a
+      - name: HTML5Validator
+        uses: Cyb3r-Jak3/html5validator-action@v7.1.1
+        with:
+            root: source/
+            log_level: INFO
+            css: true
 
       # Run unit tests with jest
       - name: JSCheck
