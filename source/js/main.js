@@ -15,6 +15,36 @@ const toggleVisibility = (obj) => {
 };
 
 /*
+* Darken background show popup
+*/
+const addTextPostButton = document.querySelector("#add-text-post")
+const popupBackground = document.querySelector(".popup-background")
+const textPostPopup = document.querySelector("#text-post-popup")
+addTextPostButton.onclick = () => {
+    if (getComputedStyle(textPostPopup).display === 'none')
+    {
+        textPostPopup.classList.remove('hidden');
+        popupBackground.classList.remove('hidden');
+
+    }
+}
+
+/*
+* Close text popup
+*/
+const closeTextPostButton = document.querySelector ("#close-text-popup")
+closeTextPostButton.onclick = () => {
+    if (getComputedStyle(textPostPopup).display === 'none')
+    {}
+    else 
+    {
+        textPostPopup.classList.add('hidden');
+        popupBackground.classList.add('hidden'); 
+    }
+}
+
+
+/*
     Gets text content of the new post.
     Creates new post object, attempts to add it to the database.
     Waits for db operation to complete.
