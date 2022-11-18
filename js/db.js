@@ -1,3 +1,4 @@
+const testing = false;
 /**
  * File stores all the functions used to interact with IndexedDB. 
  */
@@ -32,7 +33,7 @@ request.onupgradeneeded = () => {
 
     // createIndex allows for searching by a "column" name
     // in this case, sorting/searching by "type" is enabled
-    posts.createIndex("type", ["type"], {unique: false});
+    posts.createIndex("type", ["type"], {unique: true});
 }
 
 /*
@@ -48,7 +49,7 @@ const dbReady = () => {
         while (request.readyState !== 'done') {
             await delay(200);
         }
-        res();
+        res(true);
     });
 };
 
@@ -234,25 +235,24 @@ const deletePost = (id) => {
  * return true if successful, false otherwise
  */
  const addDetails = (detailsObj) => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let success = false;
-    let query = details.add(detailsObj);
+        let query = details.add(detailsObj);
 
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
+        query.onsuccess = () => {
+            console.log(); // fill in later
+            res(true);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(false);
+        }
+    });
 }
 
 /** 
@@ -296,25 +296,24 @@ const updateDetails = (detailsObj) => {
  * return a single details JSON object
  */
 const getDetails = () => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let detailsObj = null;
+        // since there is only one item we can just call getAll()
+        let query = details.getAll();
 
-    // since there is only one item we can just call getAll()
-    let query = details.getAll();
+        query.onsuccess = () => {
+            res(query.result[0]);
+        }
 
-    query.onsuccess = () => {
-        detailsObj = query.result[0];
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return detailsObj;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(null);
+        }
+    });
 }
 
 /** 
@@ -343,6 +342,20 @@ const deleteDetails = () => {
     return success;
 }
 
+if (testing) {
+    exports.dbReady = dbReady;
+    exports.addPost = addPost;
+    exports.updatePost = updatePost;
+    exports.getPost = getPost;
+    exports.getAllPosts = getAllPosts;
+    exports.deletePost = deletePost;
+    exports.addDetails = addDetails;
+    exports.updateDetails = updateDetails;
+    exports.getDetails = getDetails;
+    exports.deleteDetails = deleteDetails;
+}
+
+// 12 lines
 export { 
     dbReady,
     addPost, 
