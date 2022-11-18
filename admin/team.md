@@ -1,6 +1,6 @@
 # We are George.
 <img src = "branding/logo.png" alt = "Team George Logo" width = "200"><br>
-We're all about curiousity, innovation, respect, loyalty, innovation, teamwork, and responsibility. 
+We're all about curiousity, innovation, respect, loyalty, teamwork, and responsibility. 
 ## Our Team
 - Ari Brin
   - https://aribrin.github.io

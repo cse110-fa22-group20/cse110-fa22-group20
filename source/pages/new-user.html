@@ -14,6 +14,7 @@
         <link href="../css/new-user.css" rel="stylesheet">
 
         <!--scripts-->
+        <script type="module" src="../js/new-user.js"></script>
     </head>
     <body>
         <header>
@@ -30,17 +31,17 @@
                     <form class="user-form">
                         <!--clicking label will show file upload so they can be used as a way to style input-->
                         <label id="user-image-label">
-                            <input type="file" name="user-image" id="user-image"/>
+                            <input type="file" accept="image/*" name="user-image" id="user-image"/>
                         </label>
                         <div id="user-inputs">
-                            <input type="text" name="user-name" id="user-name" cols="30" rows="1" placeholder="Name (personal, company, etc.)" minlength=1></textarea>
+                            <input type="text" name="user-name" id="user-name" placeholder="Name (personal, company, etc.)" minlength=1>
                             <textarea name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
                             <!--this div is in place for grid positioning, can be removed-->
                             <div>
                                 <button type="submit" id="go-button">Let's go!</button>
-                                <p>Or</p>
+                                <p hidden>Or</p>
                                 <!--same idea as #user-image-label-->
-                                <label id="existing-page-label">
+                                <label hidden id="existing-page-label">
                                     Upload an existing page    
                                     <input type="file" name="existing-page" id="existing-page"/>
                                 </label>

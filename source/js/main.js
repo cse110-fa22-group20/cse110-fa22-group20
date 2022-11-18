@@ -1,4 +1,24 @@
-import { dbReady, addPost, getAllPosts } from './db.js';
+const testing = false;
+var dbReady = null, addPost = null, getAllPosts = null;
+const loadModules = async () => {
+    return new Promise((res, rej) => {
+        if(!testing) {
+            import('./db.js').then(exports => {
+                dbReady = exports.dbReady;
+                addPost = exports.addPost;
+                getAllPosts = exports.getAllPosts;
+                res();
+                return;
+            });
+        } else {
+            const dbReady = require("./db.js").dbReady;
+            const addPost = require("./db.js").addPost;
+            const getAllPosts = require("./db.js").getAllPosts;
+            res();
+            return;
+        }
+    });
+}
 
 window.addEventListener('DOMContentLoaded', init);
 
@@ -58,7 +78,7 @@ const textPostFormSubmit = (event, state) => {
             state.posts.push(newPost);
             res(true);
         }
-        rej(false);
+        rej(true);
     });
 }
 
@@ -122,7 +142,7 @@ const populatePosts = (state) => {
 */
 const insertPost = (postObj, beforeIndex) => {
     const postContainer = document.querySelector('#posts-wrapper');
-    const posts = document.getElementsByClassName('.post');
+    const posts = document.querySelectorAll('.post');
     let beforeElement = null;
     if (beforeIndex < 0 || beforeIndex > posts.length-1) {
         beforeElement = document.querySelector('#post-type-selector');
@@ -139,8 +159,17 @@ const appendPost = (postObj) => {
     insertPost(postObj, -1);
 }
 
+/*
+    Prepend a new post to the DOM.
+    Stub used for making sure insertPost works as expected.
+*/
+const prependPost = (postObj) => {
+    insertPost(postObj, 0);
+}
+
 // ensures that page as loaded before running anything
 async function init() {
+    await loadModules();
     const addPostButton = document.querySelector('#add-button');
     const addTextPostButton  = document.querySelector('#add-text-post');
     const textPostForm  = document.querySelector('#text-post-popup form');
@@ -155,13 +184,12 @@ async function init() {
         posts: retrievedPosts,
     };
 
-    console.log(`${JSON.stringify(state)}`);
+    //console.log(`${JSON.stringify(state)}`);
 
     populatePosts(state);
 
     addPostButton.onclick = () => {
         const postTypeSelector = document.querySelector('#post-type-selector');
-        
         toggleVisibility(postTypeSelector);
     };
 
@@ -176,9 +204,15 @@ async function init() {
     textPostForm.addEventListener('submit', (event) => {
         textPostFormSubmit(event, state).then((res) => {
             const index = !state.postIDCounter ? 0: state.postIDCounter-1;
-            console.log(state);
-            console.log(index);
             appendPost(state.posts[index]);
+            //prependPost(state.posts[index]);
         });
     });
+}
+
+if (testing) {
+    exports.createTextPostObject = createTextPostObject;
+    exports.populatePosts = populatePosts;
+    exports.appendPost = appendPost;
+    exports.insertPost = insertPost;
 }
