@@ -74,41 +74,28 @@
                 <button id="add-button" class="fixed-button">Add</button>
                 <button id="save-button" class="fixed-button">Save</button>
             </div>
-            <div class="popup-background hidden"></div>
-
-
+            <div id="popup-background" class="hidden"></div>
             <div id="image-post-popup" class="popup hidden">
-                <button id="close-image-popup" class="close-popup"></button>
+                <button id="image-close-button" class="close-button"></button>
+                <h2>Add image post</h2>
                 <form id="image-post-form" class="image-form-container">
-                    <h2>Add image post</h2>
-                    <label id="add-image-post-info"> 
-                        <label id="add-image-label">
-                            <input id="add-image" type="file">
-                        </label>
-                        <label id="add-image-caption-label"> 
-                            <textarea id="add-caption" rows="10" placeholder="Add caption"></textarea>
-                        </label>
-                    </label>
-                    <input type="button" id="add-another-image" value="Add another image">
-                    <input id="post-image" type="submit" value="Post">
+                    <!--will be filled in using shadow DOM-->
+                    <div id="image-container"></div>
+                    <button type="button" id="add-image-button">Add image to post</button>
+                    <input type="submit" id="image-post-submit" value="Post">
                 </form>
             </div>
-
-            <!-- <div class = "pop-up-screen"></div> -->
             <div id="text-post-popup" class="popup hidden">
-                <button id="close-text-popup" class="close-popup"></button>
+                <button id="close-text-popup" class="close-button"></button>
                 <form id="text-post-form" class="text-form-container">
                     <h2>Add text post</h2>
-                    <label id="add-text-label">
-                        <input id="add-text" type="text">
-                        <!-- <textarea id="add-caption" rows="10" placeholder="Add caption"></textarea>
-                        <textarea name="text-content" form="text-post-form"></textarea> -->
-                        <input id="post-text" type="submit" value="Post">
-                        <!-- <button type="submit" class="btn">Post</button> -->
-                    </label>
+                    <!--using contenteditable because it will auto grow-->
+                    <div contenteditable id="text-post-textarea" data-placeholder="Type here..."></div>
+                    <input id="post-text" type="submit" value="Post">
+                    <!-- <button type="submit" class="btn">Post</button> -->
                   </form>
             </div>
-
+            
         </div>
     </body>
 </html>

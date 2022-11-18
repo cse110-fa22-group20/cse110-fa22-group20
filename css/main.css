@@ -253,78 +253,107 @@ Adding image post styles
     cursor: pointer;
 }
 
-/* darken background*/
-.popup-background
+#popup-background 
 {
-    z-index:0;
-    position:fixed;
-    background: rgba(0,0,0,0.2);
-    width:100%;
-    height:100vh;
-    display:flex;
-    align-items: center;
-    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    background-color: black;
+    opacity: 0.7;
 }
 
-/* Styling the close button on the text popup */
-#text-post-popup #close-text-popup
+.popup 
 {
-    width: 10px;
-    height: 13px;
-    right: 10px;
-    top: 10px;
+    position: fixed;
+    border-radius: 5px;
+    width: 466px;
+    padding: 10px;
+    background-color: white;
+    top: calc(50vh - 150px);
+    left: calc(50% - 233px);
+}
+
+
+.popup h2
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+#image-post-popup
+{
+    height: 300px;
+}
+
+.close-button 
+{
+    background-image: url("../assets/x.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: white;
+    border: 0px;
+    height: 15px;
+    width: 15px;
     position: absolute;
-    background: url("../assets/x.svg");
-    border: none;
+    right: 5px;
+    top: 5px;
+}
+
+.close-button:hover
+{
     cursor: pointer;
 }
 
-/* Add styles to the form container */
-#text-post-popup
+#image-post-form 
 {
     display: flex;
     flex-direction: column;
-    width: 400px;
-    height: 200px;
-    justify-self: center;
-    padding: 10px;
-    background-color: white;
-    border-radius: 6px;
-    top: 30%;
-    position: absolute;
-}
-  
-/* input fields */
-#text-post-popup input[type=text]
-{
-    width: 90%;
-    padding: 15px;
-    margin: 0px 8px 40px 5px;
-    border: none;
-    background: #f1f1f1;
-    position: relative;
+    overflow: scroll;
+    height: 205px;
 }
 
-/* Set a style for the submit button */
-#post-text
+#add-image-button 
 {
+    margin-top: 10px;
     background-color: var(--george-blue);
-    color: black;
-    padding: 30x 30px;
-    cursor: pointer;
-    left: 35%;
-    margin-bottom:10px;
-    opacity: 0.8;
-    width: 30%;
-    border: 2px solid var(--george-blue);
+    border: 0px;
+    position: absolute;
+    bottom: 40px;
+    width: calc(100% - 20px);
     border-radius: 5px;
-    position: relative;
 }
 
-/* darken the upload image icon when hover */
-#post-text:hover
+#image-post-submit, #post-text
 {
-    background-color: rgb(79, 182, 223);
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    background-color: var(--george-blue);
+    border: 0px;
+    border-radius: 5px;
+}
+
+#text-post-form 
+{
+    display: grid;
+}
+
+#text-post-textarea
+{
+    justify-self: center;
+    background-color: var(--background-grey);
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    min-height: 150px;
+    max-height: calc(50vh);
+    overflow: scroll;
+    margin-bottom: 35px;
+    padding: 5px;
+}
+
+#text-post-textarea:empty::before {
+    content: attr(data-placeholder);
 }
 
 .hidden
@@ -338,6 +367,7 @@ Adding image post styles
         /* 110px accounts for scrollbar and negatively positioned delete/drag*/
         width: calc(100vw - 110px);
         justify-self: center;
+        text-align: center;
     }
 
     #post-type-selector 
