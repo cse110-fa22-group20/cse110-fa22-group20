@@ -368,7 +368,6 @@ Adding image post styles
         /* 110px accounts for scrollbar and negatively positioned delete/drag*/
         width: calc(100vw - 110px);
         justify-self: center;
-        text-align: center;
     }
 
     #post-type-selector 
