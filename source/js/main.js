@@ -45,31 +45,34 @@ const toggleVisibility = (obj) => {
     original scope.
 */
 const textPostFormSubmit = (event, content, state) => {
-    return new Promise(async (res, rej) => {
-        event.preventDefault(); 
-        const newPostID = state.postIDCounter;
-
-        const newPost = {
-            id: newPostID,
-            type: 'text',
-            content: content,
-        };
-
-        let successfullyAdded = await addPost(newPost);
-        if (successfullyAdded) {
-            const textPostTextarea = document.querySelector("#text-post-textarea");
-            const textPostPopup = document.querySelector("#text-post-popup");
-            const popupBackground = document.querySelector("#popup-background");
-
-            textPostTextarea.innerHTML = '';
-            toggleVisibility(textPostPopup);
-            toggleVisibility(popupBackground);
-            state.postIDCounter++;
-            state.posts.push(newPost);
-            res(true);
-        }
-        rej(true);
-    });
+    event.preventDefault(); 
+    
+    if(content.length > 0) {
+        return new Promise(async (res, rej) => {
+            const newPostID = state.postIDCounter;
+    
+            const newPost = {
+                id: newPostID,
+                type: 'text',
+                content: content,
+            };
+    
+            let successfullyAdded = await addPost(newPost);
+            if (successfullyAdded) {
+                const textPostTextarea = document.querySelector("#text-post-textarea");
+                const textPostPopup = document.querySelector("#text-post-popup");
+                const popupBackground = document.querySelector("#popup-background");
+    
+                textPostTextarea.innerHTML = '';
+                toggleVisibility(textPostPopup);
+                toggleVisibility(popupBackground);
+                state.postIDCounter++;
+                state.posts.push(newPost);
+                res(true);
+            }
+            rej(true);
+        });
+    }
 }
 
 /*
@@ -274,8 +277,6 @@ async function init() {
 
     textPostForm.addEventListener('submit', async (event) => {
         const content = textPostTextarea.innerText;
-
-        console.log(content);
 
         await textPostFormSubmit(event, content, state).then((res) => {
             const index = !state.postIDCounter ? 0: state.postIDCounter-1;
