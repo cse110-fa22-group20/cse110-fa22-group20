@@ -22,6 +22,7 @@ function init() {
     const addImagePostButton = document.querySelector("#add-image-post")
     const popupBackground = document.querySelector("#popup-background")
     const imagePostPopup = document.querySelector("#image-post-popup")
+    const imageContainer = document.querySelector("#image-container");
     const imagePostForm = document.querySelector("#image-post-form");
 
     addImagePostButton.onclick = () => {
@@ -35,22 +36,61 @@ function init() {
     /*
     * Close add image popup page if click close (x) on the top right
     */
-    const closeImagePostButton = document.querySelector (".close-button")
+    const closeImagePostButton = document.querySelector("#image-close-button");
     closeImagePostButton.onclick = () => {
         if (getComputedStyle(imagePostPopup).display !== 'none')
         {
+            imageContainer.innerHTML = "";
+
             imagePostPopup.classList.add('hidden');
             popupBackground.classList.add('hidden'); 
         }
     }
 
-    imagePostForm.insertBefore(document.createElement("add-image-row"), imagePostForm.firstChild);
+    const addImageButton = document.querySelector("#add-image-button");
+
+    addImageButton.onclick = () => {
+        const images = document.querySelectorAll("add-image-row");
+        let lastImage;
+
+        let int = 0;
+
+        for(let image of images) {
+            lastImage = image;
+            int++;
+        }
+
+        console.log(int);
+
+        console.log(lastImage);
+
+        if(lastImage) {
+            lastImage.insertAdjacentElement("afterend", document.createElement("add-image-row"));
+        }
+        else {
+            imageContainer.insertBefore(document.createElement("add-image-row"), imageContainer.firstChild);
+        }
+    }
+
+    
+
+    imagePostForm.onsubmit = (event) => {
+        event.preventDefault();
+
+        if (getComputedStyle(imagePostPopup).display !== 'none')
+        {
+            imageContainer.innerHTML = "";
+
+            imagePostPopup.classList.add('hidden');
+            popupBackground.classList.add('hidden'); 
+        }
+    }
 }
 
 function addImageToPost() {
     customElements.define("image-popup-input", ImagePopupInput, {extends: HTMLElement});
 }
-''
+
 class AddImageRow extends HTMLElement {
     constructor() {
         super();
@@ -65,6 +105,11 @@ class AddImageRow extends HTMLElement {
 
         style.innerText = 
         `
+            *
+            {
+                font-family: 'Poppins', 'Helvetica', 'sans-serif';
+            }
+
             .remove-image 
             {
                 background-color: var(--remove-red);
@@ -88,6 +133,7 @@ class AddImageRow extends HTMLElement {
                 display: flex;
                 flex-direction: row;
                 gap: 10px;
+                margin-bottom: 5px;
             }
 
             .add-image-caption
@@ -105,9 +151,8 @@ class AddImageRow extends HTMLElement {
                 height: 100px;
                 display: block;
                 justify-self: center;
-                background: url("../assets/default-image.svg"), white;   
+                background: url("../assets/add.svg"), var(--background-grey);   
                 background-repeat: no-repeat;
-                background-size: 110px;
                 background-position: center;
                 border-radius: 5px;
             }
@@ -130,6 +175,7 @@ class AddImageRow extends HTMLElement {
         removeImageDiv.classList.add("remove-image");
 
         addImageInput.setAttribute("type", "file");
+        addImageCaption.setAttribute("placeholder", "Enter a caption...");
 
         addImageLabel.appendChild(addImageInput);
 
@@ -137,6 +183,22 @@ class AddImageRow extends HTMLElement {
         addRowDiv.appendChild(addImageCaption);
         addRowDiv.appendChild(removeImageDiv);
         addRowDiv.append(style);
+
+        removeImageDiv.onclick = () => {
+            this.remove();
+        }
+
+        addImageInput.onchange = (event) => {
+            const fileReader = new FileReader();
+
+            fileReader.onload = () => {
+                const displayImage = fileReader.result;
+                addImageLabel.style.backgroundImage = `url(${displayImage})`;
+                addImageLabel.style.backgroundSize = "100px 100px";
+            };
+
+            fileReader.readAsDataURL(event.target.files[0]);
+        }
 
         shadowElement.appendChild(addRowDiv);
     }

@@ -76,17 +76,12 @@
             </div>
             <div id="popup-background" class=""></div>
             <div id="image-post-popup" class="popup">
-                <button class="close-button"></button>
+                <button id="image-close-button" class="close-button"></button>
                 <h2>Add image post</h2>
                 <form id="image-post-form" class="image-form-container">
-                    <!-- <div class="add-image-row">
-                        <label class="add-image-label">
-                            <input class="add-image-input hidden" name="add-image-input" type="file">
-                        </label>
-                        <textarea class="add-image-caption" name="add-image-caption" placeholder="Enter a caption"></textarea>
-                        <div class="remove-image"></div>
-                    </div> -->
-                    <button type="button" id="add-image-button">Add another image</button>
+                    <!--will be filled in using shadow DOM-->
+                    <div id="image-container"></div>
+                    <button type="button" id="add-image-button" accept="image/*">Add image to post</button>
                     <input type="submit" id="image-post-submit" value="Post">
                 </form>
             </div>
