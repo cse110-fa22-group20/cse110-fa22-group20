@@ -1,0 +1,58 @@
+# CSE 110 Group 20 Meeting Minutes
+## Meeting Information
+**Meeting Date**: 11/16/2022 <br>
+**Meeting Location**: WongAvery <br>
+**Meeting Purpose**: Sprint <br>
+**Meeting Start Time**: 11:15 <br>
+**Meeting End Time**: 11:45 <br>
+
+## Attendance
+Present:
+- Ari Brin
+- Benjamin Kim
+- Joseph Mikhail
+- Koa Calloway
+- Mariel Chua
+- Navid Boloorian
+- Roland Wen
+- Zixian Wang
+- Jiaying Yang
+- Ryan Vanny
+
+Absent:
+- None
+
+## Agenda
+### Sprint Review
+- Finished tasks
+    - New user form functionality
+        - New users can now be created with the use of the form on new-user.html
+        - Individuals who have already created a user profile are redirected to main.html
+    - CI/CD pipeline fully setup
+        - Tests have been added and linting is there
+    - Text post functionality
+        - Code to insert text posts into db is done, just needs to be linked to button
+    - Styling text post popup
+        - Text post popup created and styled according to Figma design
+### Sprint planning
+- Todo for this week
+    - Render information from db instead of static code (continuing)
+        - Use dummy data inserted into db for testing purposes
+        - Assigned to Ari, Ben, and Joseph
+    - Make image posts functional
+        - Insert image post information into db
+        - Assigned to Ari, Ben, and Joseph 
+    - Make text posts textareas with a submit button on click
+        - When edit view is active, clicking on an text post will make the text a textarea and add a submit button to save changes
+        - Assigned to Koa
+    - Add updating functionality to text post
+        - Update text posts upon submission
+        - Assigned to Jiaying
+    - Load information into image popup for editing purposes
+        - When an image is clicked, load its corresponding id into the image popup and call the db with that informationo to render in popup
+        - Assigned to Zixian 
+    - Delete posts
+        - Clicking on trash icon should open an "are you sure" popup
+            - If sure, delete post, else hide popup again
+        - Assigned to Roland and Mariel
+
