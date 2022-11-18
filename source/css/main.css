@@ -254,6 +254,86 @@ Adding image post styles
     cursor: pointer;
 }
 
+#popup-background 
+{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    background-color: black;
+    opacity: 0.7;
+}
+
+.popup 
+{
+    border-radius: 5px;
+}
+
+#image-post-popup
+{
+    position: fixed;
+    background-color: white;
+    justify-self: center;
+    align-self: center;
+    padding: 10px;
+    height: 300px;
+    width: 466px;
+}
+
+.close-button 
+{
+    background-image: url("../assets/x.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: white;
+    border: 0px;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.close-button:hover
+{
+    cursor: pointer;
+}
+
+#image-post-popup h2
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+#image-post-form 
+{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    height: 205px;
+}
+
+#add-image-button 
+{
+    margin-top: 10px;
+    background-color: var(--george-blue);
+    border: 0px;
+    position: absolute;
+    bottom: 40px;
+    width: calc(100% - 20px);
+    border-radius: 5px;
+}
+
+#image-post-submit 
+{
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    background-color: var(--george-blue);
+    border: 0px;
+    border-radius: 5px;
+}
+
 .hidden
 {
     display: none !important;

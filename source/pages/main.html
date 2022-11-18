@@ -74,14 +74,15 @@
                 <button id="add-button" class="fixed-button">Add</button>
                 <button id="save-button" class="fixed-button">Save</button>
             </div>
-            <div class="popup-background hidden"></div>
+            <div id="popup-background" class="hidden"></div>
             <div id="image-post-popup" class="popup hidden">
+                <button id="image-close-button" class="close-button"></button>
                 <h2>Add image post</h2>
-                <form>
-                    <label id="add-image-label">
-                        <input id="add-image" type="file">
-                    </label>
-                    <input type="submit" value="post">
+                <form id="image-post-form" class="image-form-container">
+                    <!--will be filled in using shadow DOM-->
+                    <div id="image-container"></div>
+                    <button type="button" id="add-image-button">Add image to post</button>
+                    <input type="submit" id="image-post-submit" value="Post">
                 </form>
             </div>
             <div id="text-post-popup" class="popup hidden">
@@ -91,6 +92,7 @@
                     <input type="submit" value="post">
                 </form>
             </div>
+            
         </div>
     </body>
 </html>
