@@ -1,3 +1,4 @@
+const testing = false;
 /**
  * File stores all the functions used to interact with IndexedDB. 
  */
@@ -32,7 +33,7 @@ request.onupgradeneeded = () => {
 
     // createIndex allows for searching by a "column" name
     // in this case, sorting/searching by "type" is enabled
-    posts.createIndex("type", ["type"], {unique: false});
+    posts.createIndex("type", ["type"], {unique: true});
 }
 
 /*

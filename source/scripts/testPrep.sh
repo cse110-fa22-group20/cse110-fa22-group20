@@ -6,8 +6,12 @@
 cd ../js
 # Save files to a temporary folder in case you mess up while making changes to this script.
 mkdir unaltered
+cp main.js unaltered/
 cp new-user.js unaltered/
 cp db.js unaltered/
+
+cat main.js | sed -z 's/false/true/' > temp
+mv temp main.js
 
 cat new-user.js | sed -z 's/false/true/' > temp
 mv temp new-user.js
