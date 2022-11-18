@@ -277,6 +277,7 @@ Adding image post styles
     align-self: center;
     padding: 10px;
     height: 300px;
+    width: 466px;
 }
 
 .close-button 
@@ -308,7 +309,8 @@ Adding image post styles
 {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    overflow: scroll;
+    height: 205px;
 }
 
 #add-image-button 
@@ -316,6 +318,9 @@ Adding image post styles
     margin-top: 10px;
     background-color: var(--george-blue);
     border: 0px;
+    position: absolute;
+    bottom: 40px;
+    width: calc(100% - 20px);
     border-radius: 5px;
 }
 
