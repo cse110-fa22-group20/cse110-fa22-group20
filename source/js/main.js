@@ -153,7 +153,7 @@ const prependPost = (postObj) => {
 // ensures that page as loaded before running anything
 async function init() {
     await loadModules();
-    
+
     deleteDummyPosts();
 
     // create <add-image-row> element
@@ -352,6 +352,7 @@ class AddImageRow extends HTMLElement {
 
         // set necessary element attributes
         addImageInput.setAttribute("type", "file");
+        addImageInput.setAttribute("accept", "image/*");
         addImageCaption.setAttribute("placeholder", "Enter a caption...");
 
         // puts input into label
