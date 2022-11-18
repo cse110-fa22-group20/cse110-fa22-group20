@@ -12,7 +12,7 @@ const indexedDB =
 
 // integer is the version number for the database
 // changing it will trigger onupgradeneeded
-const request = indexedDB.open("UnpluggdDatabase", 0);
+const request = indexedDB.open("UnpluggdDatabase", 1);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
@@ -34,6 +34,23 @@ request.onupgradeneeded = () => {
     // in this case, sorting/searching by "type" is enabled
     posts.createIndex("type", ["type"], {unique: false});
 }
+
+/*
+    Returns a promise that resolves once 'request' is ready.
+*/
+const dbReady = () => {
+    const delay = (ms) => {
+        return new Promise((timerRes) => {
+            setTimeout(timerRes, ms);
+        });
+    }
+    return new Promise(async (res) => {
+        while (request.readyState !== 'done') {
+            await delay(200);
+        }
+        res(true);
+    });
+};
 
 
 /** 
@@ -58,25 +75,24 @@ request.onupgradeneeded = () => {
  * return true if successful, false otherwise
  */
 const addPost = (post) => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
 
-    let success = false;
-    let query = posts.add(post);
+        let query = posts.add(post);
 
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
+        query.onsuccess = () => {
+            console.log(); // fill in later
+            res(true);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
+        query.onerror = (event) => {
+            console.log(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
+            console.log(event);
+            rej(false);
+        }
+    });
 }
 
 /** 
@@ -156,23 +172,24 @@ const getPost = (id) => {
  * return an array of post JSON objects
  */
 const getAllPosts = () => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
 
-    let postsArray = null;
-    let query = posts.getAll();
+        let query = posts.getAll();
 
-    query.onsuccess = () => {
-        postsArray = query.result;
-    }
+        query.onsuccess = () => {
+            console.log("Successfully retrieved all posts from db.");
+            res(query.result);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return postsArray;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej([]);
+        }
+    });
 }
 
 /** 
@@ -217,25 +234,24 @@ const deletePost = (id) => {
  * return true if successful, false otherwise
  */
  const addDetails = (detailsObj) => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let success = false;
-    let query = details.add(detailsObj);
+        let query = details.add(detailsObj);
 
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
+        query.onsuccess = () => {
+            console.log(); // fill in later
+            res(true);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(false);
+        }
+    });
 }
 
 /** 
@@ -279,25 +295,24 @@ const updateDetails = (detailsObj) => {
  * return a single details JSON object
  */
 const getDetails = () => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("details", "readwrite");
+        const details = transaction.objectStore("details");
 
-    let detailsObj = null;
+        // since there is only one item we can just call getAll()
+        let query = details.getAll();
 
-    // since there is only one item we can just call getAll()
-    let query = details.getAll();
+        query.onsuccess = () => {
+            res(query.result[0]);
+        }
 
-    query.onsuccess = () => {
-        detailsObj = query.result[0];
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return detailsObj;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(null);
+        }
+    });
 }
 
 /** 
@@ -326,4 +341,29 @@ const deleteDetails = () => {
     return success;
 }
 
-export { addPost, updatePost, getPost, getAllPosts, deletePost, addDetails, updateDetails, getDetails, deleteDetails };
+if (testing) {
+    exports.dbReady = dbReady;
+    exports.addPost = addPost;
+    exports.updatePost = updatePost;
+    exports.getPost = getPost;
+    exports.getAllPosts = getAllPosts;
+    exports.deletePost = deletePost;
+    exports.addDetails = addDetails;
+    exports.updateDetails = updateDetails;
+    exports.getDetails = getDetails;
+    exports.deleteDetails = deleteDetails;
+}
+
+// 12 lines
+export { 
+    dbReady,
+    addPost, 
+    updatePost, 
+    getPost, 
+    getAllPosts, 
+    deletePost, 
+    addDetails, 
+    updateDetails, 
+    getDetails, 
+    deleteDetails,
+};

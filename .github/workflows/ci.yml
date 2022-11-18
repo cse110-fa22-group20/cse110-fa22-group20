@@ -34,6 +34,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install jest
         run: yarn add --dev jest
+             yarn add -D jest-environment-jsdom
+             yarn add --dev fake-indexeddb
 
       # Validate HTML/CSS in source/
       - name: HTMLCheck
@@ -48,4 +50,7 @@ jobs:
       # Run unit tests with jest
       - name: JSCheck
         # Must pass HTMLCheck before testing js
-        run: yarn test
+        run: |
+          cd ./source/scripts
+          ./testPrep.sh
+          yarn test
