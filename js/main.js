@@ -2,6 +2,9 @@ window.addEventListener('DOMContentLoaded', init);
 
 // ensures that page as loaded before running anything
 function init() {
+    // create <add-image-row> element
+    customElements.define("add-image-row", AddImageRow);
+
     const addPostButton = document.querySelector('#add-button');
 
     addPostButton.onclick = () => {
@@ -15,16 +18,13 @@ function init() {
         else postTypeSelector.classList.add('hidden');
     }
 
-    /*
-    * 1. Shows up the add image popup page if click add-image-post
-    * 2. Darken the background when click add image post
-    */
     const addImagePostButton = document.querySelector("#add-image-post")
     const popupBackground = document.querySelector("#popup-background")
     const imagePostPopup = document.querySelector("#image-post-popup")
-    const imageContainer = document.querySelector("#image-container");
-    const imagePostForm = document.querySelector("#image-post-form");
 
+    /**
+     * Shows image post popup and background when a button is clicked
+     */
     addImagePostButton.onclick = () => {
         if (getComputedStyle(imagePostPopup).display === 'none')
         {
@@ -33,15 +33,20 @@ function init() {
         }
     }
 
-    /*
-    * Close add image popup page if click close (x) on the top right
-    */
+    const imageContainer = document.querySelector("#image-container");
+    const imagePostForm = document.querySelector("#image-post-form");
+
+    /**
+     * Closes popup
+     */
     const closeImagePostButton = document.querySelector("#image-close-button");
     closeImagePostButton.onclick = () => {
         if (getComputedStyle(imagePostPopup).display !== 'none')
         {
+            // clear the contents of the popup so images aren't carried  over
             imageContainer.innerHTML = "";
 
+            // hide popup and background
             imagePostPopup.classList.add('hidden');
             popupBackground.classList.add('hidden'); 
         }
@@ -49,34 +54,31 @@ function init() {
 
     const addImageButton = document.querySelector("#add-image-button");
 
+    /**
+     * Allows for new images to be added to post
+     */
     addImageButton.onclick = () => {
         const images = document.querySelectorAll("add-image-row");
-        let lastImage;
+        const lastImage = images[images.length - 1];
 
-        let int = 0;
-
-        for(let image of images) {
-            lastImage = image;
-            int++;
-        }
-
-        console.log(int);
-
-        console.log(lastImage);
-
+        // checks to see if there are any imgaes that already are in the popup
         if(lastImage) {
+            // insert after the last child
             lastImage.insertAdjacentElement("afterend", document.createElement("add-image-row"));
         }
         else {
-            imageContainer.insertBefore(document.createElement("add-image-row"), imageContainer.firstChild);
+            // insert as the only child
+            imageContainer.appendChild(document.createElement("add-image-row"));
         }
     }
 
-    
-
+    /**
+     * Handles form submission
+     */
     imagePostForm.onsubmit = (event) => {
         event.preventDefault();
 
+        // hide popup and clear it 
         if (getComputedStyle(imagePostPopup).display !== 'none')
         {
             imageContainer.innerHTML = "";
@@ -87,14 +89,14 @@ function init() {
     }
 }
 
-function addImageToPost() {
-    customElements.define("image-popup-input", ImagePopupInput, {extends: HTMLElement});
-}
-
+/**
+ * Class for <add-image-row> element. Contains image upload, caption, and deletion functionality
+ */
 class AddImageRow extends HTMLElement {
     constructor() {
         super();
 
+        // initialize shadow DOM and create necessary elements
         const shadowElement = this.attachShadow({mode: "open"});
         const addRowDiv = document.createElement("div");
         const addImageLabel = document.createElement("label");
@@ -103,6 +105,7 @@ class AddImageRow extends HTMLElement {
         const removeImageDiv = document.createElement("div");
         const style = document.createElement("style");
 
+        // set styling for element
         style.innerText = 
         `
             *
@@ -168,41 +171,58 @@ class AddImageRow extends HTMLElement {
             }
         `;
 
+        // add necessary classes to elements
         addRowDiv.classList.add("add-image-row");
         addImageLabel.classList.add("add-image-label");
         addImageInput.classList.add("add-image-input", "hidden");
         addImageCaption.classList.add("add-image-caption");
         removeImageDiv.classList.add("remove-image");
 
+        // set necessary element attributes
         addImageInput.setAttribute("type", "file");
         addImageCaption.setAttribute("placeholder", "Enter a caption...");
 
+        // puts input into label
         addImageLabel.appendChild(addImageInput);
 
+        // adds all elements to row
         addRowDiv.appendChild(addImageLabel);
         addRowDiv.appendChild(addImageCaption);
         addRowDiv.appendChild(removeImageDiv);
         addRowDiv.append(style);
 
+        /**
+         * When remove button is clicked, remove associated row
+         */
         removeImageDiv.onclick = () => {
             this.remove();
         }
 
+        /**
+         * When image is uploaded, set the background as the image
+         */
         addImageInput.onchange = (event) => {
             const fileReader = new FileReader();
 
+            /**
+             * Set background
+             */
             fileReader.onload = () => {
                 const displayImage = fileReader.result;
                 addImageLabel.style.backgroundImage = `url(${displayImage})`;
                 addImageLabel.style.backgroundSize = "100px 100px";
             };
 
+            /**
+             * Read as url to be passed into backgroundImage
+             */
             fileReader.readAsDataURL(event.target.files[0]);
         }
 
+        /**
+         * Add row to html flow
+         */
         shadowElement.appendChild(addRowDiv);
     }
 }
-
-customElements.define("add-image-row", AddImageRow);
 
