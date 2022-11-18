@@ -70,6 +70,9 @@ function init() {
             // insert as the only child
             imageContainer.appendChild(document.createElement("add-image-row"));
         }
+
+        // scroll to the bottom to show the newly added image
+        imagePostForm.scrollTop = imagePostForm.scrollHeight;
     }
 
     /**
