@@ -52,6 +52,8 @@ const toggleVisibility = (obj) => {
     original scope.
 */
 const textPostFormSubmit = (event, content, state) => {
+    console.log("HERE");
+
     event.preventDefault(); 
 
     // removes spaces in the case that someone has entered a single space and tries to submit that
@@ -60,13 +62,14 @@ const textPostFormSubmit = (event, content, state) => {
     // don't submit empty posts
     if(content.length > 0) {
         return new Promise(async (res, rej) => {
-            const newPostID = state.postIDCounter;
+            // const newPostID = state.postIDCounter;
     
             const newPost = {
-                id: newPostID,
                 type: 'text',
                 content: content,
             };
+
+            console.log(newPost);
     
             let successfullyAdded = await addPost(newPost);
             if (successfullyAdded) {
