@@ -13,7 +13,7 @@ const indexedDB =
 
 // integer is the version number for the database
 // changing it will trigger onupgradeneeded
-const request = indexedDB.open("UnpluggdDatabase", 1);
+const request = indexedDB.open("UnpluggdDatabase", 2);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
@@ -24,16 +24,18 @@ request.onerror = (event) => {
 request.onupgradeneeded = () => {
     const db = request.result;
 
-    // create a table/collection to store posts
-    // keyPath is the primary key and will be auto incremented
-    const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    console.log("HERE");
 
-    // create a table/collection to store user details
-    const details = db.createObjectStore("details", {keyPath: "name"});
+    if(!db.objectStoreNames.contains('posts')) {
+        // create a table/collection to store posts
+        // keyPath is the primary key and will be auto incremented
+        const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    }
 
-    // createIndex allows for searching by a "column" name
-    // in this case, sorting/searching by "type" is enabled
-    posts.createIndex("type", ["type"], {unique: true});
+    if(!db.objectStoreNames.contains('details')) {
+        // create a table/collection to store user details
+        const details = db.createObjectStore("details", {keyPath: "name"});
+    }
 }
 
 /*
@@ -81,7 +83,9 @@ const addPost = (post) => {
         const transaction = db.transaction("posts", "readwrite");
         const posts = transaction.objectStore("posts");
 
-        let query = posts.add(post);
+        const query = posts.add(post);
+
+        console.log(post);
 
         query.onsuccess = () => {
             console.log(); // fill in later
