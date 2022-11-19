@@ -24,6 +24,7 @@ const state = {
     postIDCounter: 0,
     posts: [],
     editMode: false,
+    editingPost: false
 };
 
 window.addEventListener('DOMContentLoaded', init);
@@ -150,7 +151,11 @@ const removeDragAndDeleteFromAll = () => {
 const applyEditListener = (innerText) => {
     innerText.addEventListener('click', (e) => {
         const post = e.target.parentElement;
-        if (state.editMode) {
+        if (state.editMode && !state.editingPost) {
+            state.editingPost = true;
+            const saveButton = document.querySelector('#save-button');
+            toggleVisibility(saveButton);
+
             const textBox = document.createElement('div');
             const submit = document.createElement('button');
             const id = Number(post.getAttribute('id').substring(1));
@@ -181,6 +186,8 @@ const applyEditListener = (innerText) => {
                     toggleVisibility(e.target);
                     post.removeChild(textBox);
                     post.removeChild(submit);
+                    state.editingPost = false;
+                    toggleVisibility(saveButton);
                 } 
             });
         }
@@ -400,13 +407,15 @@ async function init() {
     });
 
     saveButton.addEventListener('click', async () => {
-        await removeDragAndDeleteFromAll();
-        console.log(state);
+        if (!state.editingPost) {
+            await removeDragAndDeleteFromAll();
+            console.log(state);
 
-        toggleVisibility(editModeButton);
-        toggleVisibility(saveButton);
-        state.editMode = !state.editMode; // toggle edit mode
-        console.log(`edit mode: ${state.editMode}`);
+            toggleVisibility(editModeButton);
+            toggleVisibility(saveButton);
+            state.editMode = !state.editMode; // toggle edit mode
+            console.log(`edit mode: ${state.editMode}`);
+        }
     });
 };
 
