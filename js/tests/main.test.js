@@ -14,13 +14,7 @@ test("Test 'createTextPostObject'", () => {
     expect(main.createTextPostObject(newPost).tagName).toBe('DIV');
     expect(main.createTextPostObject(newPost).getAttribute('id')).toBe('p20');
     expect(main.createTextPostObject(newPost).getAttribute('class')).toBe('post');
-    expect(main.createTextPostObject(newPost).innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(main.createTextPostObject(newPost).querySelector('pre').innerText).toBe('dummy text');
 });
 
 test("'populatePosts' five posts.", () => {
@@ -93,13 +87,7 @@ test("'appendPost' one time.", () => {
     expect(el.tagName).toBe('DIV');
     expect(el.getAttribute('id')).toBe('p0');
     expect(el.getAttribute('class')).toBe('post');
-    expect(el.innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(el.querySelector('pre').innerText).toBe('dummy text');
 });
 
 test("'appendPost' two times.", () => {
@@ -131,25 +119,13 @@ test("'appendPost' two times.", () => {
     expect(el1.tagName).toBe('DIV');
     expect(el1.getAttribute('id')).toBe('p0');
     expect(el1.getAttribute('class')).toBe('post');
-    expect(el1.innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(el1.querySelector('pre').innerText).toBe('dummy text');
 
     const el2 = document.querySelector('#root').firstChild.firstChild.nextSibling;
     expect(el2.tagName).toBe('DIV');
     expect(el2.getAttribute('id')).toBe('p1');
     expect(el2.getAttribute('class')).toBe('post');
-    expect(el2.innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(el2.querySelector('pre').innerText).toBe('dummy text');
 });
 
 test("'insertPost'", () => {
@@ -181,23 +157,11 @@ test("'insertPost'", () => {
     expect(el1.tagName).toBe('DIV');
     expect(el1.getAttribute('id')).toBe('p1');
     expect(el1.getAttribute('class')).toBe('post');
-    expect(el1.innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(el1.querySelector('pre').innerText).toBe('dummy text');
 
     const el2 = document.querySelector('#root').firstChild.firstChild.nextSibling;
     expect(el2.tagName).toBe('DIV');
     expect(el2.getAttribute('id')).toBe('p0');
     expect(el2.getAttribute('class')).toBe('post');
-    expect(el2.innerHTML).toBe(`
-        <div class="drag-icon-container"></div>
-        <div class="delete-icon-container"></div>
-        <p class="content text-post-content">
-            dummy text
-        </p>
-    `);
+    expect(el2.querySelector('pre').innerText).toBe('dummy text');
 });

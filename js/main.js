@@ -401,21 +401,21 @@ async function init() {
     editModeButton.addEventListener('click', async () => {
         await addDragAndDeleteToAll();
         toggleVisibility(saveButton);
+        toggleVisibility(addPostButton);
         toggleVisibility(editModeButton);
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
 
     saveButton.addEventListener('click', async () => {
-        if (!state.editingPost) {
-            await removeDragAndDeleteFromAll();
-            console.log(state);
+        await removeDragAndDeleteFromAll();
+        console.log(state);
 
-            toggleVisibility(editModeButton);
-            toggleVisibility(saveButton);
-            state.editMode = !state.editMode; // toggle edit mode
-            console.log(`edit mode: ${state.editMode}`);
-        }
+        toggleVisibility(editModeButton);
+        toggleVisibility(addPostButton);
+        toggleVisibility(saveButton);
+        state.editMode = !state.editMode; // toggle edit mode
+        console.log(`edit mode: ${state.editMode}`);
     });
 };
 
