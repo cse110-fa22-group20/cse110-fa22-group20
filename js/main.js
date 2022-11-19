@@ -96,6 +96,7 @@ const deleteDummyPosts = () => {
     }
 };
 
+
 /*
     Add the drag and delete side buttons to a post element.
 */
@@ -104,6 +105,13 @@ const addDragAndDelete = (postObj) => {
     drag.setAttribute('class', 'drag-icon-container');
     const del = document.createElement('div');
     del.setAttribute('class', 'delete-icon-container');
+
+    /*
+    const deleteButton = document.createElement('button');
+    deleteButton.setAttribute('id', 'delete-post-button');
+    del.appendChild(deleteButton)
+    */
+
 
     postObj.appendChild(drag);
     postObj.appendChild(del);
@@ -144,6 +152,7 @@ const removeDragAndDeleteFromAll = () => {
         res();
     });
 }
+
 
 /*
     Make pre tag switch to contenteditable div on click.
@@ -417,6 +426,16 @@ async function init() {
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
+
+    /*
+    const deleteButton = document.querySelector('#delete-post-button');
+    const deletePostPopup = document.querySelector('#delete-post-popoup');
+    deleteButton.onclick = () => {
+        toggleVisibility(deletePostPopup);
+        //need to add functionality for delete-confirm-button
+        //and delete-cancel-button that actually gets rid of the post block
+    }
+    */
 };
 
 /**
