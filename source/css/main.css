@@ -283,6 +283,20 @@ Adding image post styles
     padding: 5px;
 }
 
+/*
+
+#confirm-delete-button
+{
+    background-color: red;
+    text-decoration-color: white;
+}
+
+#cancel-delete-button
+{
+    background-color: var(--george-blue); 
+}
+*/
+
 #popup-background 
 {
     position: fixed;
