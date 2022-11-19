@@ -125,7 +125,7 @@ const addDragAndDeleteToAll = () => {
     Remove the drag and delete side buttons to a post element.
 */
 const removeDragAndDelete = (postObj) => {
-    const text = postObj.querySelector('p').cloneNode(true);
+    const text = postObj.querySelector('pre').cloneNode(true);
     postObj.innerHTML = '';
     postObj.appendChild(text);
     applyEditListener(text);
