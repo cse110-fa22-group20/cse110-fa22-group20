@@ -147,7 +147,7 @@ const removeDragAndDeleteFromAll = () => {
 /*
     Make pre tag switch to contenteditable div on click.
 */
-const applyEditListener= (innerText) => {
+const applyEditListener = (innerText) => {
     innerText.addEventListener('click', (e) => {
         const post = e.target.parentElement;
         if (state.editMode) {
@@ -157,11 +157,7 @@ const applyEditListener= (innerText) => {
 
             textBox.setAttribute('contenteditable', '');
             textBox.setAttribute('class', 'editable-text');
-            textBox.addEventListener('input', (e) => {
-                e.target.style.width = e.target.value.length + "ch";
-            });
             textBox.innerText = e.target.innerText;
-            //textBox.style.width = textBox.value.length + "ch";
             textBox.style.fontSize = window.getComputedStyle(document.body)
                                      .getPropertyValue('font-size');
 
@@ -176,14 +172,16 @@ const applyEditListener= (innerText) => {
             textBox.focus();
 
             submit.addEventListener('click', () => {
-                //const staticText = textBox.textContent;
                 const staticText = textBox.innerText;
-                console.log(staticText);
-                e.target.innerText = staticText;
-                state.posts[id].content = staticText;
-                toggleVisibility(e.target);
-                post.removeChild(textBox);
-                post.removeChild(submit);
+                if (staticText.trim() === "") { // no empty posts 
+                    textBox.innerText = 'Posts cannot be empty.';
+                } else { 
+                    e.target.innerText = staticText;
+                    state.posts[id].content = staticText;
+                    toggleVisibility(e.target);
+                    post.removeChild(textBox);
+                    post.removeChild(submit);
+                } 
             });
         }
     });
