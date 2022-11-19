@@ -1,4 +1,3 @@
-
 /* 
 Overall style to the page 
 */
@@ -266,18 +265,25 @@ Adding image post styles
 
 .popup 
 {
+    position: fixed;
     border-radius: 5px;
+    width: 466px;
+    padding: 10px;
+    background-color: white;
+    top: calc(50vh - 150px);
+    left: calc(50% - 233px);
+}
+
+
+.popup h2
+{
+    padding: 0px;
+    margin: 0px;
 }
 
 #image-post-popup
 {
-    position: fixed;
-    background-color: white;
-    justify-self: center;
-    align-self: center;
-    padding: 10px;
     height: 300px;
-    width: 466px;
 }
 
 .close-button 
@@ -299,12 +305,6 @@ Adding image post styles
     cursor: pointer;
 }
 
-#image-post-popup h2
-{
-    padding: 0px;
-    margin: 0px;
-}
-
 #image-post-form 
 {
     display: flex;
@@ -324,7 +324,7 @@ Adding image post styles
     border-radius: 5px;
 }
 
-#image-post-submit 
+#image-post-submit, #post-text
 {
     position: absolute;
     bottom: 10px;
@@ -332,6 +332,29 @@ Adding image post styles
     background-color: var(--george-blue);
     border: 0px;
     border-radius: 5px;
+}
+
+#text-post-form 
+{
+    display: grid;
+}
+
+#text-post-textarea
+{
+    justify-self: center;
+    background-color: var(--background-grey);
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    min-height: 150px;
+    max-height: calc(50vh);
+    overflow: scroll;
+    margin-bottom: 35px;
+    padding: 5px;
+}
+
+/* while textarea is empty, show the placeholder */
+#text-post-textarea:empty::before {
+    content: attr(data-placeholder);
 }
 
 .hidden

@@ -86,11 +86,14 @@
                 </form>
             </div>
             <div id="text-post-popup" class="popup hidden">
-                <h2>Add text post</h2>
-                <form id="text-post-form">
-                    <textarea name="text-content" form="text-post-form"></textarea>
-                    <input type="submit" value="post">
-                </form>
+                <button id="close-text-popup" class="close-button"></button>
+                <form id="text-post-form" class="text-form-container">
+                    <h2>Add text post</h2>
+                    <!--using contenteditable because it will auto grow-->
+                    <div contenteditable id="text-post-textarea" data-placeholder="Type here..."></div>
+                    <input id="post-text" type="submit" value="Post">
+                    <!-- <button type="submit" class="btn">Post</button> -->
+                  </form>
             </div>
             
         </div>

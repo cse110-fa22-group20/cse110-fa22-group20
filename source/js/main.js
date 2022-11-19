@@ -34,6 +34,8 @@ const toggleVisibility = (obj) => {
         obj.classList.add('hidden');
 };
 
+
+
 /*
     Gets text content of the new post.
     Creates new post object, attempts to add it to the database.
@@ -42,27 +44,39 @@ const toggleVisibility = (obj) => {
     state object is passed by reference, so changes will be reflected in 
     original scope.
 */
-const textPostFormSubmit = (event, state) => {
-    return new Promise(async (res, rej) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const content = formData.get('text-content');
-        const newPostID = state.postIDCounter;
+const textPostFormSubmit = (event, content, state) => {
+    event.preventDefault(); 
 
-        const newPost = {
-            id: newPostID,
-            type: 'text',
-            content: content,
-        };
+    // removes spaces in the case that someone has entered a single space and tries to submit that
+    content = content.trim();
 
-        let successfullyAdded = await addPost(newPost);
-        if (successfullyAdded) {
-            state.postIDCounter++;
-            state.posts.push(newPost);
-            res(true);
-        }
-        rej(true);
-    });
+    // don't submit empty posts
+    if(content.length > 0) {
+        return new Promise(async (res, rej) => {
+            const newPostID = state.postIDCounter;
+    
+            const newPost = {
+                id: newPostID,
+                type: 'text',
+                content: content,
+            };
+    
+            let successfullyAdded = await addPost(newPost);
+            if (successfullyAdded) {
+                const textPostTextarea = document.querySelector("#text-post-textarea");
+                const textPostPopup = document.querySelector("#text-post-popup");
+                const popupBackground = document.querySelector("#popup-background");
+    
+                textPostTextarea.innerHTML = '';
+                toggleVisibility(textPostPopup);
+                toggleVisibility(popupBackground);
+                state.postIDCounter++;
+                state.posts.push(newPost);
+                res(true);
+            }
+            rej(true);
+        });
+    }
 }
 
 /*
@@ -153,15 +167,10 @@ const prependPost = (postObj) => {
 // ensures that page as loaded before running anything
 async function init() {
     await loadModules();
-
     deleteDummyPosts();
 
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
-
-    const addPostButton = document.querySelector('#add-button');
-    const addTextPostButton  = document.querySelector('#add-text-post');
-    const textPostForm  = document.querySelector('#text-post-popup form');
 
     await dbReady();
     console.log('db is ready.');
@@ -175,16 +184,32 @@ async function init() {
     //console.log(`${JSON.stringify(state)}`);
 
     populatePosts(state);
-    console.log(state);
+
+    const addPostButton = document.querySelector('#add-button');
 
     addPostButton.onclick = () => {
         const postTypeSelector = document.querySelector('#post-type-selector');
         toggleVisibility(postTypeSelector);
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
     const addImagePostButton = document.querySelector("#add-image-post")
     const popupBackground = document.querySelector("#popup-background")
     const imagePostPopup = document.querySelector("#image-post-popup")
+
+    /**
+     * Close text popup
+     */
+    const closeTextPostButton = document.querySelector ("#close-text-popup")
+    const textPostPopup = document.querySelector("#text-post-popup")
+    const textPostForm = document.querySelector("#text-post-form");
+    const textPostTextarea = document.querySelector("#text-post-textarea");
+
+    closeTextPostButton.onclick = () => {
+        textPostTextarea.innerHTML = '';
+        toggleVisibility(textPostPopup);
+        toggleVisibility(popupBackground);
+    }
 
     /**
      * Shows image post popup and background when a button is clicked
@@ -193,6 +218,13 @@ async function init() {
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
     }
+
+    const addTextPostButton  = document.querySelector('#add-text-post');
+
+    addTextPostButton.onclick = () => {
+        toggleVisibility(textPostPopup);
+        toggleVisibility(popupBackground);
+    };
 
     const imageContainer = document.querySelector("#image-container");
     const imagePostForm = document.querySelector("#image-post-form");
@@ -239,7 +271,6 @@ async function init() {
     imagePostForm.onsubmit = (event) => {
         event.preventDefault();
 
-
         // hide popup and clear it 
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
@@ -247,13 +278,10 @@ async function init() {
         imageContainer.innerHTML = "";
     }
 
-    addTextPostButton.addEventListener('click', () => {
-        const textPostPopup = document.querySelector('#text-post-popup');
-        toggleVisibility(textPostPopup);
-    });
+    textPostForm.addEventListener('submit', async (event) => {
+        const content = textPostTextarea.innerText;
 
-    textPostForm.addEventListener('submit', (event) => {
-        textPostFormSubmit(event, state).then((res) => {
+        await textPostFormSubmit(event, content, state).then((res) => {
             const index = !state.postIDCounter ? 0: state.postIDCounter-1;
             appendPost(state.posts[index]);
             //prependPost(state.posts[index]);
