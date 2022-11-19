@@ -12,7 +12,7 @@ test("Test 'createTextPostObject'", () => {
     };
 
     expect(main.createTextPostObject(newPost).tagName).toBe('DIV');
-    expect(main.createTextPostObject(newPost).getAttribute('id')).toBe('20');
+    expect(main.createTextPostObject(newPost).getAttribute('id')).toBe('p20');
     expect(main.createTextPostObject(newPost).getAttribute('class')).toBe('post');
     expect(main.createTextPostObject(newPost).innerHTML).toBe(`
         <div class="drag-icon-container"></div>
@@ -91,7 +91,7 @@ test("'appendPost' one time.", () => {
 
     const el = document.querySelector('#root').firstChild.firstChild;
     expect(el.tagName).toBe('DIV');
-    expect(el.getAttribute('id')).toBe('0');
+    expect(el.getAttribute('id')).toBe('p0');
     expect(el.getAttribute('class')).toBe('post');
     expect(el.innerHTML).toBe(`
         <div class="drag-icon-container"></div>
@@ -129,7 +129,7 @@ test("'appendPost' two times.", () => {
 
     const el1 = document.querySelector('#root').firstChild.firstChild;
     expect(el1.tagName).toBe('DIV');
-    expect(el1.getAttribute('id')).toBe('0');
+    expect(el1.getAttribute('id')).toBe('p0');
     expect(el1.getAttribute('class')).toBe('post');
     expect(el1.innerHTML).toBe(`
         <div class="drag-icon-container"></div>
@@ -141,7 +141,7 @@ test("'appendPost' two times.", () => {
 
     const el2 = document.querySelector('#root').firstChild.firstChild.nextSibling;
     expect(el2.tagName).toBe('DIV');
-    expect(el2.getAttribute('id')).toBe('1');
+    expect(el2.getAttribute('id')).toBe('p1');
     expect(el2.getAttribute('class')).toBe('post');
     expect(el2.innerHTML).toBe(`
         <div class="drag-icon-container"></div>
@@ -179,7 +179,7 @@ test("'insertPost'", () => {
 
     const el1 = document.querySelector('#root').firstChild.firstChild;
     expect(el1.tagName).toBe('DIV');
-    expect(el1.getAttribute('id')).toBe('1');
+    expect(el1.getAttribute('id')).toBe('p1');
     expect(el1.getAttribute('class')).toBe('post');
     expect(el1.innerHTML).toBe(`
         <div class="drag-icon-container"></div>
@@ -191,7 +191,7 @@ test("'insertPost'", () => {
 
     const el2 = document.querySelector('#root').firstChild.firstChild.nextSibling;
     expect(el2.tagName).toBe('DIV');
-    expect(el2.getAttribute('id')).toBe('0');
+    expect(el2.getAttribute('id')).toBe('p0');
     expect(el2.getAttribute('class')).toBe('post');
     expect(el2.innerHTML).toBe(`
         <div class="drag-icon-container"></div>
