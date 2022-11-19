@@ -1,4 +1,3 @@
-
 /* 
 Overall style to the page 
 */
@@ -199,6 +198,12 @@ Adding image post styles
     justify-content: center;
 }
 
+.text-post-content 
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 .drag-icon-container 
 {
@@ -260,9 +265,8 @@ Adding image post styles
     border: none;
     outline: none;
     resize: none;
-    position: absolute;
-    text-align: center;
-    height: 24px;
+    /*position: absolute;*/
+    /*text-align: center;*/
     padding: 0;
 }
 
@@ -271,11 +275,116 @@ Adding image post styles
     max-height: 100%;
     margin-left: 80%;
     background-color: var(--george-blue);
+    position: absolute;
     border: 0px;
     resize: none;
     font-size: 15px;
     border-radius: 5px;
     padding: 1px;
+}
+
+#popup-background 
+{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    background-color: black;
+    opacity: 0.7;
+}
+
+.popup 
+{
+    position: fixed;
+    border-radius: 5px;
+    width: 466px;
+    padding: 10px;
+    background-color: white;
+    top: calc(50vh - 150px);
+    left: calc(50% - 233px);
+}
+
+
+.popup h2
+{
+    padding: 0px;
+    margin: 0px;
+}
+
+#image-post-popup
+{
+    height: 300px;
+}
+
+.close-button 
+{
+    background-image: url("../assets/x.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: white;
+    border: 0px;
+    height: 15px;
+    width: 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.close-button:hover
+{
+    cursor: pointer;
+}
+
+#image-post-form 
+{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    height: 205px;
+}
+
+#add-image-button 
+{
+    margin-top: 10px;
+    background-color: var(--george-blue);
+    border: 0px;
+    position: absolute;
+    bottom: 40px;
+    width: calc(100% - 20px);
+    border-radius: 5px;
+}
+
+#image-post-submit, #post-text
+{
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 20px);
+    background-color: var(--george-blue);
+    border: 0px;
+    border-radius: 5px;
+}
+
+#text-post-form 
+{
+    display: grid;
+}
+
+#text-post-textarea
+{
+    justify-self: center;
+    background-color: var(--background-grey);
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    min-height: 150px;
+    max-height: calc(50vh);
+    overflow: scroll;
+    margin-bottom: 35px;
+    padding: 5px;
+}
+
+/* while textarea is empty, show the placeholder */
+#text-post-textarea:empty::before {
+    content: attr(data-placeholder);
 }
 
 .hidden
