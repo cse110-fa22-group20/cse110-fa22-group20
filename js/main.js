@@ -145,7 +145,7 @@ const removeDragAndDeleteFromAll = () => {
 }
 
 /*
-    Make p tag switch to textarea on click.
+    Make pre tag switch to contenteditable div on click.
 */
 const applyEditListener= (innerText) => {
     innerText.addEventListener('click', (e) => {
