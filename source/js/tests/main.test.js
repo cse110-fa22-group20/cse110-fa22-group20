@@ -169,15 +169,15 @@ test("'insertPost'", () => {
 
 describe("deletePost tests", () => {
     test("invalid postID('abc')", async () => {
-        expect(await main.deletePost("abc")).toBe(false);
+        expect(await main.deletePost("abc")).toThrow(false);
     });
     
     test("invalid postID('3.5')", async () => {
-        expect(await main.deletePost("3.5")).toBe(false);
+        expect(await main.deletePost("3.5")).toThrow(false);
     });
 
     test("invalid postID(null)", async () => {
-        expect(await main.deletePost(null)).toBe(false);
+        expect(await main.deletePost(null)).toThrow(false);
     });
 
     test("delete one post with valid postID(0)", async () => {
