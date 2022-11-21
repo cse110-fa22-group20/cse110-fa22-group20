@@ -286,30 +286,46 @@ const prependPost = (postObj) => {
  * Return whether the deletion was successful
  */
 const deletePost = async (postID) => {
-    // not even a string
-    if(typeof(postID) != "string") return false;
-    const postIDint = parseInt(postID.substring(1));
-    // reject nan, float, and < 0
-    if(isNaN(postIDint) || Number(postIDint) != postIDint) return false;
-    if(postIDint < 0) return false;
+    return new Promise(async (res, rej) => {
+        // not even a string
+        if(typeof(postID) != "string") {
+            rej(false);
+            return false;
+        }
+        const postIDint = parseInt(postID.substring(1));
+        // reject nan, float, and < 0
+        if(isNaN(postIDint) || Number(postIDint) != postIDint) {
+            rej(false);
+            return false;
+        }
+        if(postIDint < 0) {
+            rej(false);
+            return false;
+        }
 
-    // Remove the html
-    const postContainer = document.querySelector(`#${postID}`);
-    postContainer.remove();
+        // Remove the html
+        const postContainer = document.querySelector(`#${postID}`);
+        postContainer.remove();
 
-    // Remove the post from the db
-    const deleteSuccess = await deletePostFromDB(postIDint);
-    if(!deleteSuccess) return false;
+        // Remove the post from the db
+        const deleteSuccess = await deletePostFromDB(postIDint);
+        if(!deleteSuccess) {
+            rej(false);
+            return false;
+        }
+
+        // Update state
+        state.postIDCounter--;
+        let postIndex = 0;
+        for(let i = 0; i < state.postIDCounter; i++) if(state.posts[i].id == postIDint) {
+            postIndex = i;
+            break;
+        }
+        state.posts.splice(postIndex, 1);
+        res(true);
+        return true;
+    });
     
-    // Update state
-    state.postIDCounter--;
-    let postIndex = 0;
-    for(let i = 0; i < state.postIDCounter; i++) if(state.posts[i].id == postIDint) {
-        postIndex = i;
-        break;
-    }
-    state.posts.splice(postIndex, 1);
-    return true;
 }
 
 // ensures that page as loaded before running anything
@@ -448,9 +464,9 @@ async function init() {
         toggleVisibility(deletePostPopup);
         toggleVisibility(popupBackground);
     });
-    deletePostConfirmButton.addEventListener('click', () => {
+    deletePostConfirmButton.addEventListener('click', async () => {
         let postID = deletePostPopup.getAttribute("data-post-id");
-        deletePost(postID);
+        await deletePost(postID);
 
         // done deleting post, close the popup
         toggleVisibility(deletePostPopup);

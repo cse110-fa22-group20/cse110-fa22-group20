@@ -168,16 +168,16 @@ test("'insertPost'", () => {
 });
 
 describe("deletePost tests", () => {
-    test("invalid postID('abc')", () => {
-        expect(main.deletePost("abc")).toBe(false);
+    test("invalid postID('abc')", async () => {
+        expect(await main.deletePost("abc")).toBe(false);
     });
     
-    test("invalid postID('3.5')", () => {
-        expect(main.deletePost("3.5")).toBe(false);
+    test("invalid postID('3.5')", async () => {
+        expect(await main.deletePost("3.5")).toBe(false);
     });
 
-    test("invalid postID(null)", () => {
-        expect(main.deletePost(null)).toBe(false);
+    test("invalid postID(null)", async () => {
+        expect(await main.deletePost(null)).toBe(false);
     });
 
     test("delete one post with valid postID(0)", async () => {
@@ -187,7 +187,7 @@ describe("deletePost tests", () => {
             content: "Test"
         };
         await db.addPost(post);
-        expect(main.deletePost("0")).toBe(true);
+        expect(await main.deletePost("0")).toBe(true);
         expect(document.querySelector("#p0")).toBe(null);
         const posts = await db.getAllPost();
         expect(posts.length).toBe(0);
@@ -214,7 +214,7 @@ describe("deletePost tests", () => {
         await db.addPost(post[0]);
         await db.addPost(post[1]);
         await db.addPost(post[2]);
-        expect(main.deletePost("1")).toBe(true);
+        expect(await main.deletePost("1")).toBe(true);
         expect(typeof(document.querySelector("#p0"))).toBe("object");
         expect(document.querySelector("#p1")).toBe(null);
         expect(typeof(document.querySelector("#p2"))).toBe("object");
