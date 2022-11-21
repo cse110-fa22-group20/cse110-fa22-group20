@@ -289,17 +289,17 @@ const deletePost = async (postID) => {
     return new Promise(async (res, rej) => {
         // not even a string
         if(typeof(postID) != "string") {
-            rej(false);
+            res(false);
             return false;
         }
         const postIDint = parseInt(postID.substring(1));
         // reject nan, float, and < 0
         if(isNaN(postIDint) || Number(postIDint) != postIDint) {
-            rej(false);
+            res(false);
             return false;
         }
         if(postIDint < 0) {
-            rej(false);
+            res(false);
             return false;
         }
 
@@ -310,7 +310,7 @@ const deletePost = async (postID) => {
         // Remove the post from the db
         const deleteSuccess = await deletePostFromDB(postIDint);
         if(!deleteSuccess) {
-            rej(false);
+            res(false);
             return false;
         }
 
