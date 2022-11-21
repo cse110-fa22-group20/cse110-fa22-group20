@@ -191,7 +191,7 @@ describe("deletePost tests", () => {
         await db.addPost(post);
         expect(await main.deletePost("p0")).toBe(true);
         expect(document.querySelector("#p0")).toBe(null);
-        const posts = await db.getAllPost();
+        const posts = await db.getAllPosts();
         expect(posts.length).toBe(0);
     });
 
@@ -222,7 +222,7 @@ describe("deletePost tests", () => {
         expect(typeof(document.querySelector("#p0"))).toBe("object");
         expect(document.querySelector("#p1")).toBe(null);
         expect(typeof(document.querySelector("#p2"))).toBe("object");
-        const posts = await db.getAllPost();
+        const posts = await db.getAllPosts();
         expect(posts[0].id).toBe(0);
         expect(posts[1].id).toBe(2);
         expect(posts.length).toBe(3);
