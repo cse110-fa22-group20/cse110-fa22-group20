@@ -283,19 +283,50 @@ Adding image post styles
     padding: 5px;
 }
 
-/*
+#delete-post-popup-container
+{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#delete-post-popup > h2
+{
+    width: 93%;
+    height: 47%;
+    left: 3%;
+    top: 24%;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 60px;
+    text-align: center;
+}
 
 #confirm-delete-button
 {
-    background-color: red;
-    text-decoration-color: white;
+    width: 20%;
+    height: 14%;
+    border-radius: 5px;
+    border: 0px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    background: #D22B2B;
+    color: #FFFFFF;
+    text-align: center;
 }
 
 #cancel-delete-button
 {
+    width: 20%;
+    height: 14%;
+    border-radius: 5px;
+    border: 0px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
     background-color: var(--george-blue); 
 }
-*/
 
 #popup-background 
 {
