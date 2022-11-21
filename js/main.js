@@ -653,4 +653,5 @@ if (testing) {
     exports.appendPost = appendPost;
     exports.insertPost = insertPost;
     exports.deletePost = deletePost;
+    exports.loadModules = loadModules;
 }
