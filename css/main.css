@@ -328,6 +328,12 @@ Adding image post styles
     background-color: var(--george-blue); 
 }
 
+.delete-option-button:hover
+{
+    cursor: pointer;
+}
+
+
 #popup-background 
 {
     position: fixed;
