@@ -1,8 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-//require("fake-indexeddb/auto");
+require("fake-indexeddb/auto");
 const main =  require('../main');
+const db = require('../db');
 
 test("Test 'createTextPostObject'", () => {
     const newPost = {
@@ -164,4 +165,62 @@ test("'insertPost'", () => {
     expect(el2.getAttribute('id')).toBe('p0');
     expect(el2.getAttribute('class')).toBe('post');
     expect(el2.querySelector('pre').innerText).toBe('dummy text');
+});
+
+describe("deletePost tests", () => {
+    test("invalid postID('abc')", () => {
+        expect(main.deletePost("abc")).toBe(false);
+    });
+    
+    test("invalid postID('3.5')", () => {
+        expect(main.deletePost("3.5")).toBe(false);
+    });
+
+    test("invalid postID(null)", () => {
+        expect(main.deletePost(null)).toBe(false);
+    });
+
+    test("delete one post with valid postID(0)", async () => {
+        const post = {
+            id: 0,
+            type: "text",
+            content: "Test"
+        };
+        await db.addPost(post);
+        expect(main.deletePost("0")).toBe(true);
+        expect(document.querySelector("#p0")).toBe(null);
+        const posts = await db.getAllPost();
+        expect(posts.length).toBe(0);
+    });
+
+    test("delete one post with valid postID(1)", async () => {
+        const post = [
+            {
+                id: 0,
+                type: "text",
+                content: "Test"
+            },
+            {
+                id: 1,
+                type: "text",
+                content: "Test"
+            },
+            {
+                id: 2,
+                type: "text",
+                content: "Test"
+            }
+        ];
+        await db.addPost(post[0]);
+        await db.addPost(post[1]);
+        await db.addPost(post[2]);
+        expect(main.deletePost("1")).toBe(true);
+        expect(typeof(document.querySelector("#p0"))).toBe("object");
+        expect(document.querySelector("#p1")).toBe(null);
+        expect(typeof(document.querySelector("#p2"))).toBe("object");
+        const posts = await db.getAllPost();
+        expect(posts[0].id).toBe(0);
+        expect(posts[1].id).toBe(2);
+        expect(posts.length).toBe(3);
+    });
 });
