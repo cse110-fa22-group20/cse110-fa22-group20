@@ -1,5 +1,5 @@
 const testing = false;
-var dbReady = null, addPost = null, getAllPosts = null;
+var dbReady = null, addPost = null, getAllPosts = null, deletePostFromDB = null;
 const loadModules = async () => {
     return new Promise((res, rej) => {
         if(!testing) {
@@ -7,13 +7,15 @@ const loadModules = async () => {
                 dbReady = exports.dbReady;
                 addPost = exports.addPost;
                 getAllPosts = exports.getAllPosts;
+                deletePostFromDB = exports.deletePostFromDB;
                 res();
                 return;
             });
         } else {
-            const dbReady = require("./db.js").dbReady;
-            const addPost = require("./db.js").addPost;
-            const getAllPosts = require("./db.js").getAllPosts;
+            dbReady = require("./db.js").dbReady;
+            addPost = require("./db.js").addPost;
+            getAllPosts = require("./db.js").getAllPosts;
+            deletePostFromDB = require("./db.js").deletePostFromDB;
             res();
             return;
         }
@@ -60,7 +62,10 @@ const textPostFormSubmit = (event, content, state) => {
     // don't submit empty posts
     if(content.length > 0) {
         return new Promise(async (res, rej) => {
-            const newPostID = state.postIDCounter;
+            var newPostID = 0;
+            if(state.postIDCounter > 0) {
+                newPostID = state.posts[state.postIDCounter - 1].id + 1;
+            }
     
             const newPost = {
                 id: newPostID,
@@ -106,13 +111,6 @@ const addDragAndDelete = (postObj) => {
     const del = document.createElement('div');
     del.setAttribute('class', 'delete-icon-container');
 
-    /*
-    const deleteButton = document.createElement('button');
-    deleteButton.setAttribute('id', 'delete-post-button');
-    del.appendChild(deleteButton)
-    */
-
-
     postObj.appendChild(drag);
     postObj.appendChild(del);
 };
@@ -146,7 +144,7 @@ const removeDragAndDelete = (postObj) => {
 const removeDragAndDeleteFromAll = () => {
     return new Promise((res) => {
         for (let i = 0; i < state.postIDCounter; i++) {
-            const post = document.querySelector(`#p${i}.post`);
+            const post = document.querySelector(`#p${state.posts[i].id}`);
             removeDragAndDelete(post);
         }
         res();
@@ -280,6 +278,41 @@ const prependPost = (postObj) => {
     insertPost(postObj, 0);
 }
 
+/*
+ * Delete the post given its id in the string format (p...) 
+ * where the ... is an integer >= 0
+ *     - Remove the html
+ *     - Remove the post from the db
+ * Return whether the deletion was successful
+ */
+const deletePost = async (postID) => {
+    // not even a string
+    if(typeof(postID) != "string") return false;
+    const postIDint = parseInt(postID.substring(1));
+    // reject nan, float, and < 0
+    if(isNaN(postIDint) || Number(postIDint) != postIDint) return false;
+    if(postIDint < 0) return false;
+
+    // Remove the html
+    const postContainer = document.querySelector(`#${postID}`);
+    postContainer.remove();
+
+    // Remove the post from the db
+    const deleteSuccess = await deletePostFromDB(postIDint);
+    if(!deleteSuccess) return false;
+    
+    // Update state
+    state.postIDCounter--;
+    let postIndex = 0;
+    for(let i = 0; i < state.postIDCounter; i++) if(state.posts[i].id == postIDint) {
+        postIndex = i;
+        break;
+    }
+    state.posts.splice(postIndex, 1);
+    console.log(state);
+    return true;
+}
+
 // ensures that page as loaded before running anything
 async function init() {
     await loadModules();
@@ -407,12 +440,45 @@ async function init() {
         });
     });
 
+    // delete popup and its buttons are static, no need to query every time
+    const deletePostPopup = document.querySelector('#delete-post-popup');
+    const deletePostConfirmButton = document.querySelector('#confirm-delete-button');
+    const deletePostCancelButton = document.querySelector('#cancel-delete-button');
+    deletePostCancelButton.addEventListener('click', () => {
+        // just close the popup
+        toggleVisibility(deletePostPopup);
+        toggleVisibility(popupBackground);
+    });
+    deletePostConfirmButton.addEventListener('click', () => {
+        let postID = deletePostPopup.getAttribute("post-id");
+        deletePost(postID);
+
+        // done deleting post, close the popup
+        toggleVisibility(deletePostPopup);
+        toggleVisibility(popupBackground);
+    });
+
     editModeButton.addEventListener('click', async () => {
         await addDragAndDeleteToAll();
         toggleVisibility(saveButton);
         toggleVisibility(addPostButton);
         toggleVisibility(editModeButton);
         state.editMode = !state.editMode; // toggle edit mode
+        
+        // find the delete buttons and add event listeners after they're populated
+        // can't really do it outside here since delete button wouldn't exist
+        // before addDragAndDeleteToAll()
+        if(state.editMode) {
+            const deleteButtons = document.querySelectorAll('.delete-icon-container');
+            for(let i = 0; i < deleteButtons.length; i++) {
+                deleteButtons[i].onclick = () => {
+                    // add the post id so that we know who we're deleting after confirmation
+                    deletePostPopup.setAttribute("post-id", deleteButtons[i].parentElement.id);
+                    toggleVisibility(deletePostPopup);
+                    toggleVisibility(popupBackground);
+                }
+            }
+        }
         console.log(`edit mode: ${state.editMode}`);
     });
 
@@ -426,16 +492,6 @@ async function init() {
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
-
-    /*
-    const deleteButton = document.querySelector('#delete-post-button');
-    const deletePostPopup = document.querySelector('#delete-post-popoup');
-    deleteButton.onclick = () => {
-        toggleVisibility(deletePostPopup);
-        //need to add functionality for delete-confirm-button
-        //and delete-cancel-button that actually gets rid of the post block
-    }
-    */
 };
 
 /**
@@ -581,4 +637,5 @@ if (testing) {
     exports.populatePosts = populatePosts;
     exports.appendPost = appendPost;
     exports.insertPost = insertPost;
+    exports.deletePost = deletePost;
 }
