@@ -186,6 +186,7 @@ describe("deletePost tests", () => {
             type: "text",
             content: "Test"
         };
+        await db.dbReady();
         await db.addPost(post);
         expect(await main.deletePost("0")).toBe(true);
         expect(document.querySelector("#p0")).toBe(null);
@@ -211,6 +212,7 @@ describe("deletePost tests", () => {
                 content: "Test"
             }
         ];
+        await db.dbReady();
         await db.addPost(post[0]);
         await db.addPost(post[1]);
         await db.addPost(post[2]);
