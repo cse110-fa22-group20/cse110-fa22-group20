@@ -186,6 +186,7 @@ describe("deletePost tests", () => {
             type: "text",
             content: "Test 1"
         };
+        await main.loadModules();
         await db.dbReady();
         await db.addPost(post);
         expect(await main.deletePost("p0")).toBe(true);
@@ -212,6 +213,7 @@ describe("deletePost tests", () => {
                 content: "Test 2-3"
             }
         ];
+        await main.loadModules();
         await db.dbReady();
         await db.addPost(post[0]);
         await db.addPost(post[1]);
