@@ -309,7 +309,6 @@ const deletePost = async (postID) => {
         break;
     }
     state.posts.splice(postIndex, 1);
-    console.log(state);
     return true;
 }
 
