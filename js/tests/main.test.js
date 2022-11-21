@@ -213,8 +213,6 @@ describe("deletePost tests", () => {
                 content: "Test 2-3"
             }
         ];
-        await main.loadModules();
-        await db.dbReady();
         await db.addPost(post[0]);
         await db.addPost(post[1]);
         await db.addPost(post[2]);
