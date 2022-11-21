@@ -194,35 +194,4 @@ describe("deletePost tests", () => {
         const posts = await db.getAllPosts();
         expect(posts.length).toBe(0);
     });
-
-    test("delete one post with valid postID(1)", async () => {
-        const post = [
-            {
-                id: 0,
-                type: "text",
-                content: "Test 2-1"
-            },
-            {
-                id: 1,
-                type: "text",
-                content: "Test 2-2"
-            },
-            {
-                id: 2,
-                type: "text",
-                content: "Test 2-3"
-            }
-        ];
-        await db.addPost(post[0]);
-        await db.addPost(post[1]);
-        await db.addPost(post[2]);
-        expect(await main.deletePost("p1")).toBe(true);
-        expect(typeof(document.querySelector("#p0"))).toBe("object");
-        expect(document.querySelector("#p1")).toBe(null);
-        expect(typeof(document.querySelector("#p2"))).toBe("object");
-        const posts = await db.getAllPosts();
-        expect(posts[0].id).toBe(0);
-        expect(posts[1].id).toBe(2);
-        expect(posts.length).toBe(3);
-    });
 });
