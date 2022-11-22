@@ -48,7 +48,7 @@ async function init() {
     // state.posts = retrievedPosts;
     // console.log(`${JSON.stringify(state)}`);
 
-    await populatePosts();
+    // await populatePosts();
 
     const addPostButton = document.querySelector('#add-button');
 
