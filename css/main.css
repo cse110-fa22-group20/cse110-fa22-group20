@@ -198,6 +198,11 @@ Adding image post styles
     justify-content: center;
 }
 
+.image-post-content img 
+{
+    border-radius: 5px;
+}
+
 .text-post-content 
 {
     margin-top: 0;
