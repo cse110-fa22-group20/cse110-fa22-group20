@@ -2,6 +2,14 @@ import * as db from "./db.js";
 
 // ensures that page as loaded before running anything
 async function init() {
+    await db.dbReady();
+
+    const userDetails = await db.getDetails();
+
+    if(userDetails == null) window.location.href = "./new-user.html";
+    
+    setUserDetails(userDetails.name, userDetails.description, userDetails.image);
+
     const editModeButton = document.querySelector('#edit-button');
     const saveButton = document.querySelector('#save-button');
 
@@ -9,8 +17,6 @@ async function init() {
 
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
-
-    await db.dbReady();
 
     let retrievedPosts = await db.getAllPosts();
     // state.posts = retrievedPosts;
@@ -128,9 +134,6 @@ async function init() {
 
             db.updatePost(postObj);
             updatePostDOM(id);
-
-            toggleVisibility(imagePostPopup);
-            toggleVisibility(popupBackground);
         }
         else {
             const postObj = {
@@ -140,11 +143,11 @@ async function init() {
 
             db.addPost(postObj);
 
-            toggleVisibility(textPostPopup);
-            toggleVisibility(popupBackground);
-
             populatePosts();
         }
+
+        toggleVisibility(textPostPopup);
+        toggleVisibility(popupBackground);
 
         textPostTextarea.innerText = '';
     }
@@ -188,6 +191,16 @@ const makePostsEditable = () => {
             }
         }
     }
+}
+
+const setUserDetails = (name, description, image) => {
+    const userImage = document.querySelector("#user-image");
+    const userName = document.querySelector("#user-name");
+    const userDescription = document.querySelector("#user-description");
+
+    userName.innerText = name;
+    userDescription.innerText = description;
+    userImage.setAttribute("src", image);
 }
 
 const propogateTextPopup = (postDOM) => {
