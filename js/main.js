@@ -45,11 +45,10 @@ async function init() {
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
 
-    let retrievedPosts = await getAllPosts();
     // state.posts = retrievedPosts;
     // console.log(`${JSON.stringify(state)}`);
 
-    await populatePosts(retrievedPosts);
+    await populatePosts();
 
     const addPostButton = document.querySelector('#add-button');
 
