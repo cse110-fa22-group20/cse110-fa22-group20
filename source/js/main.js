@@ -1,12 +1,37 @@
-import * as db from "./db.js";
-
 const testing = false;
+var dbReady = null, addPost = null, getAllPosts = null, getPost = null, getDetails = null, updatePost = null;
+const loadModules = async () => {
+    return new Promise((res, rej) => {
+        if(!testing) {
+            import('./db.js').then(exports => {
+                dbReady = exports.dbReady;
+                addPost = exports.addPost;
+                getAllPosts = exports.getAllPosts;
+                getPost = exports.getPost;
+                getDetails = exports.getDetails;
+                updatePost = exports.updatePost;
+                res();
+                return;
+            });
+        } else {
+            const dbReady = require("./db.js").dbReady;
+            const addPost = require("./db.js").addPost;
+            const getAllPosts = require("./db.js").getAllPosts;
+            const getPost = require("./db.js").getPost;
+            const getDetails = require("./db.js").getDetails;
+            const updatePost = require("./db.js").updatePost;
+            res();
+            return;
+        }
+    });
+}
 
 // ensures that page as loaded before running anything
 async function init() {
-    await db.dbReady();
+    await loadModules();
+    await dbReady();
 
-    const userDetails = await db.getDetails();
+    const userDetails = await getDetails();
 
     if(userDetails == null) window.location.href = "./new-user.html";
     
@@ -20,7 +45,7 @@ async function init() {
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
 
-    let retrievedPosts = await db.getAllPosts();
+    let retrievedPosts = await getAllPosts();
     // state.posts = retrievedPosts;
     // console.log(`${JSON.stringify(state)}`);
 
@@ -125,6 +150,8 @@ async function init() {
         const textPostTextarea = document.querySelector("#text-post-textarea");
         const content = textPostTextarea.innerText;
 
+        if(content.trim().length === 0) return;
+
         if(state.editMode) {
             const id = parseInt(this.getAttribute("data-post-id"));
 
@@ -134,7 +161,7 @@ async function init() {
                 id: id,
             }
 
-            db.updatePost(postObj);
+            updatePost(postObj);
             updatePostDOM(id);
         }
         else {
@@ -143,7 +170,7 @@ async function init() {
                 content: content,
             }
 
-            db.addPost(postObj);
+            addPost(postObj);
 
             populatePosts();
         }
@@ -353,7 +380,7 @@ const createPostObject = (postObj) => {
     Populates DOM with post objects stored in `state`.
 */
 const populatePosts = async () => {
-    const posts = await db.getAllPosts();
+    const posts = await getAllPosts();
     const postsWrapper = document.querySelector('#posts-wrapper');
     const typeSelector = document.querySelector('#post-type-selector');
 
@@ -391,7 +418,7 @@ const updatePostDOM = async (id) => {
         }
     }
 
-    const dbPost = await db.getPost(parseInt(id));
+    const dbPost = await getPost(parseInt(id));
 
     contentArea.innerText = dbPost.content;
 }
