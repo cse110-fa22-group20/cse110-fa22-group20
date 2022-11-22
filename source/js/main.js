@@ -381,7 +381,7 @@ const createPostObject = (postObj) => {
     Populates DOM with post objects stored in `state`.
 */
 const populatePosts = async (postArg) => {
-    const posts = posArg;
+    const posts = postArg;
     const postsWrapper = document.querySelector('#posts-wrapper');
     const typeSelector = document.querySelector('#post-type-selector');
 
