@@ -76,7 +76,7 @@ button {
     border-radius: 60px;
     background-image: url("../assets/blank-profile-pic.svg");
     background-repeat: no-repeat;
-    background-size: 120px;
+    background-size: cover;
 }
 
 #user-inputs p {

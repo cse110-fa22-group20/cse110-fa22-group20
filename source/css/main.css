@@ -198,6 +198,12 @@ Adding image post styles
     justify-content: center;
 }
 
+.text-post-content 
+{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 
 .drag-icon-container 
 {
@@ -251,6 +257,30 @@ Adding image post styles
 .delete-icon-container:hover
 {
     cursor: pointer;
+}
+
+.editable-text
+{
+    background-color: var(--background-grey);
+    border: none;
+    outline: none;
+    resize: none;
+    /*position: absolute;*/
+    /*text-align: center;*/
+    padding: 0;
+}
+
+.submit-button
+{
+    max-height: 100%;
+    margin-left: 80%;
+    background-color: var(--george-blue);
+    position: absolute;
+    border: 0px;
+    resize: none;
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 #popup-background 
@@ -350,6 +380,11 @@ Adding image post styles
     overflow: scroll;
     margin-bottom: 35px;
     padding: 5px;
+}
+
+pre 
+{
+    white-space: pre-wrap;
 }
 
 /* while textarea is empty, show the placeholder */
