@@ -26,6 +26,8 @@ const loadModules = async () => {
     });
 }
 
+await loadModules();
+
 // ensures that page as loaded before running anything
 async function init() {
     await loadModules();
