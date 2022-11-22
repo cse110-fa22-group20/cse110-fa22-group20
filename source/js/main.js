@@ -48,7 +48,8 @@ async function init() {
     // state.posts = retrievedPosts;
     // console.log(`${JSON.stringify(state)}`);
 
-    await populatePosts();
+    const posts = await getAllPosts();
+    await populatePosts(posts);
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -171,7 +172,8 @@ async function init() {
 
             addPost(postObj);
 
-            populatePosts();
+            const posts = await getAllPosts();
+            await populatePosts(posts);
         }
 
         toggleVisibility(textPostPopup);
@@ -378,8 +380,8 @@ const createPostObject = (postObj) => {
 /*
     Populates DOM with post objects stored in `state`.
 */
-const populatePosts = async () => {
-    const posts = await getAllPosts();
+const populatePosts = async (postArg) => {
+    const posts = posArg;
     const postsWrapper = document.querySelector('#posts-wrapper');
     const typeSelector = document.querySelector('#post-type-selector');
 
