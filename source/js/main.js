@@ -235,7 +235,7 @@ async function init() {
             for(let i = 0; i < deleteButtons.length; i++) {
                 deleteButtons[i].onclick = () => {
                     // add the post id so that we know who we're deleting after confirmation
-                    deletePostPopup.setAttribute("data-post-id", deleteButtons[i].parentElement.id);
+                    deletePostPopup.setAttribute("data-post-id", deleteButtons[i].parentElement.getAttribute("data-post-id"));
                     toggleVisibility(deletePostPopup);
                     toggleVisibility(popupBackground);
                 }
