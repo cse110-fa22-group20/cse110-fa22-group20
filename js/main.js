@@ -150,7 +150,7 @@ async function init() {
         const textPostTextarea = document.querySelector("#text-post-textarea");
         const content = textPostTextarea.innerText;
 
-        if(content.trim().length === 0) return;
+        if(content.trim().length === 0) return; 
 
         if(state.editMode) {
             const id = parseInt(this.getAttribute("data-post-id"));
