@@ -23,10 +23,10 @@
         <nav id="navigation-bar"><h1>Unpluggd</h1></nav>
         <div id="page-wrapper">
             <section id="user-details">
-                <img src="dummy.png" alt = "Dummy Image" width="100" height="100">
+                <img id="user-image" src="dummy.png" alt = "Dummy Image" width="100" height="100">
                 <div>
-                    <h2>User name</h2>
-                    <p>User description</p>
+                    <h2 id="user-name">User name</h2>
+                    <p id="user-description">User description</p>
                 </div>
             </section>
             <section id="posts-wrapper">
@@ -47,7 +47,7 @@
             <div id="popup-background" class="hidden"></div>
             <div id="image-post-popup" class="popup hidden">
                 <button id="image-close-button" class="close-button"></button>
-                <h2>Add image post</h2>
+                <h2 id="image-popup-title">Add image post</h2>
                 <form id="image-post-form" class="image-form-container">
                     <!--will be filled in using shadow DOM-->
                     <div id="image-container"></div>
@@ -58,7 +58,7 @@
             <div id="text-post-popup" class="popup hidden">
                 <button id="close-text-popup" class="close-button"></button>
                 <form id="text-post-form" class="text-form-container">
-                    <h2>Add text post</h2>
+                    <h2 id="text-popup-title">Add text post</h2>
                     <!--using contenteditable because it will auto grow-->
                     <div contenteditable id="text-post-textarea" data-placeholder="Type here..."></div>
                     <input id="post-text" type="submit" value="Post">
@@ -72,7 +72,6 @@
                     <button id="cancel-delete-button" class="delete-option-button">Cancel</button>
                 </div>
             </div> 
-            
         </div>
     </body>
 </html>
