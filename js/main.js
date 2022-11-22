@@ -17,12 +17,14 @@ const loadModules = async () => {
             const dbReady = require("./db.js").dbReady;
             const addPost = require("./db.js").addPost;
             const getAllPosts = require("./db.js").getAllPosts;
+            const getPost = require("./db.js").getPost;
+            const getDetails = require("./db.js").getDetails;
+            const updatePost = require("./db.js").updatePost;
             res();
             return;
         }
     });
 }
-
 
 // ensures that page as loaded before running anything
 async function init() {
