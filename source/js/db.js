@@ -13,7 +13,7 @@ const indexedDB =
 
 // integer is the version number for the database
 // changing it will trigger onupgradeneeded
-const request = indexedDB.open("UnpluggdDatabase", 1);
+const request = indexedDB.open("UnpluggdDatabase", 2);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
@@ -24,16 +24,16 @@ request.onerror = (event) => {
 request.onupgradeneeded = () => {
     const db = request.result;
 
-    // create a table/collection to store posts
-    // keyPath is the primary key and will be auto incremented
-    const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    if(!db.objectStoreNames.contains('posts')) {
+        // create a table/collection to store posts
+        // keyPath is the primary key and will be auto incremented
+        const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    }
 
-    // create a table/collection to store user details
-    const details = db.createObjectStore("details", {keyPath: "name"});
-
-    // createIndex allows for searching by a "column" name
-    // in this case, sorting/searching by "type" is enabled
-    posts.createIndex("type", ["type"], {unique: true});
+    if(!db.objectStoreNames.contains('details')) {
+        // create a table/collection to store user details
+        const details = db.createObjectStore("details", {keyPath: "name"});
+    }
 }
 
 /*
@@ -76,24 +76,25 @@ const dbReady = () => {
  * return true if successful, false otherwise
  */
 const addPost = (post) => {
-    return new Promise((res, rej) => {
-        const db = request.result;
-        const transaction = db.transaction("posts", "readwrite");
-        const posts = transaction.objectStore("posts");
+    const db = request.result;
+    const transaction = db.transaction("posts", "readwrite");
+    const posts = transaction.objectStore("posts");
 
-        let query = posts.add(post);
+    let success;
+    const query = posts.add(post);
 
-        query.onsuccess = () => {
-            console.log(); // fill in later
-            res(true);
-        }
+    query.onsuccess = () => {
+        console.log(); // fill in later
+        success = true;
+    }
 
-        query.onerror = (event) => {
-            console.log(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
-            console.log(event);
-            rej(false);
-        }
-    });
+    query.onerror = (event) => {
+        console.error(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
+        console.error(event);
+        success = false;
+    }
+
+    return success;
 }
 
 /** 
@@ -123,6 +124,8 @@ const updatePost = (post) => {
     const transaction = db.transaction("posts", "readwrite");
     const posts = transaction.objectStore("posts");
 
+    console.log(post);
+
     let success = false;
     let query = posts.put(post);
 
@@ -148,23 +151,28 @@ const updatePost = (post) => {
  * return a single post JSON object
  */
 const getPost = (id) => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
-
-    let post = null;
-    let query = posts.get(id);
-
-    query.onsuccess = () => {
-        post = query.result[0];
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return post;
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
+    
+        const query = posts.getAll();
+    
+        query.onsuccess = (event) => {
+            for(const post of query.result) {
+                if(post.id === id) {
+                    res(post);
+                    break;
+                }
+            }
+        }
+    
+        query.onerror = (event) => {
+            console.error("An error occured with IndexedDB");
+            console.error(event);
+            rej(null);
+        }
+    });
 }
 
 /** 
@@ -172,7 +180,7 @@ const getPost = (id) => {
  * 
  * return an array of post JSON objects
  */
-const getAllPosts = () => {
+const getAllPosts = async () => {
     return new Promise((res, rej) => {
         const db = request.result;
         const transaction = db.transaction("posts", "readwrite");
