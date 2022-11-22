@@ -510,7 +510,7 @@ const deletePost = async (postID) => {
         }
         const postIDint = parseInt(postID);
         // reject nan, float, and < 0
-        if(isNaN(postIDint) || Number(postIDint) != postIDint) {
+        if(isNaN(postIDint) || Number(postID) != postIDint) {
             res(false);
             return false;
         }
