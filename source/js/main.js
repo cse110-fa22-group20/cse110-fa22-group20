@@ -149,10 +149,10 @@ async function init() {
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
 
-        if(addPost(post)) {
-            state.currentImages = [];
-            imageContainer.innerHTML = "";
-        }
+        addPost(post)
+        
+        state.currentImages = [];
+        imageContainer.innerHTML = "";
         
         const posts = await getAllPosts();
         await populatePosts(posts);
