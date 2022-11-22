@@ -159,6 +159,15 @@ async function init() {
         toggleVisibility(editModeButton);
 
         const postTypeSelector = document.querySelector('#post-type-selector');
+        const textPostSubmit = document.querySelector('#post-text');
+        const imagePostSubmit = document.querySelector('#image-post-submit');
+        const imagePopupTitle = document.querySelector("#image-popup-title");
+        const textPopupTitle = document.querySelector("#text-popup-title");
+
+        imagePostSubmit.setAttribute("value", "Update");
+        textPostSubmit.setAttribute("value", "Update");
+        imagePopupTitle.innerText = "Update image post";
+        textPopupTitle.innerText = "Update text post";
 
         if(getComputedStyle(postTypeSelector).display !== "none") {
             toggleVisibility(postTypeSelector);
@@ -174,6 +183,17 @@ async function init() {
         toggleVisibility(editModeButton);
         toggleVisibility(addPostButton);
         toggleVisibility(saveButton);
+
+        const textPostSubmit = document.querySelector('#post-text');
+        const imagePostSubmit = document.querySelector('#image-post-submit');
+        const imagePopupTitle = document.querySelector("#image-popup-title");
+        const textPopupTitle = document.querySelector("#text-popup-title");
+
+        imagePostSubmit.setAttribute("value", "Post");
+        textPostSubmit.setAttribute("value", "Post");
+        imagePopupTitle.innerText = "Add image post";
+        textPopupTitle.innerText = "Add text post";
+
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
