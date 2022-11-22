@@ -382,6 +382,11 @@ Adding image post styles
     padding: 5px;
 }
 
+pre 
+{
+    white-space: pre-wrap;
+}
+
 /* while textarea is empty, show the placeholder */
 #text-post-textarea:empty::before {
     content: attr(data-placeholder);

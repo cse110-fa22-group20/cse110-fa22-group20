@@ -34,8 +34,8 @@
                             <input type="file" accept="image/*" name="user-image" id="user-image"/>
                         </label>
                         <div id="user-inputs">
-                            <input type="text" name="user-name" id="user-name" placeholder="Name (personal, company, etc.)" minlength=1>
-                            <textarea name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
+                            <input required type="text" name="user-name" id="user-name" placeholder="Name (personal, company, etc.)" minlength=1>
+                            <textarea required name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
                             <!--this div is in place for grid positioning, can be removed-->
                             <div>
                                 <button type="submit" id="go-button">Let's go!</button>
@@ -43,7 +43,7 @@
                                 <!--same idea as #user-image-label-->
                                 <label hidden id="existing-page-label">
                                     Upload an existing page    
-                                    <input type="file" name="existing-page" id="existing-page"/>
+                                    <input required type="file" name="existing-page" id="existing-page"/>
                                 </label>
                             </div>
                         </div>
