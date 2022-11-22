@@ -521,6 +521,10 @@ const deletePost = async (postID) => {
 
         // Remove the html
         const postContainer = document.querySelector(`[data-post-id="${postID}"]`);
+        if(postContainer == null) {
+            res(false);
+            return false;
+        }
         postContainer.remove();
 
         // Remove the post from the db

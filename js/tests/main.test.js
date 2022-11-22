@@ -30,10 +30,15 @@ describe("deletePost tests", () => {
         };
         await main.loadModules();
         await db.dbReady();
-        await db.addPost(post);
+
+        main.addPost(post);
+        var posts = await db.getAllPosts();
+        await populatePosts(posts);
+
         expect(await main.deletePost("0")).toBe(true);
         expect(document.querySelector('[data-post-id="0"]')).toBe(null);
-        const posts = await db.getAllPosts();
+
+        posts = await db.getAllPosts();
         expect(posts.length).toBe(0);
     });
 });
