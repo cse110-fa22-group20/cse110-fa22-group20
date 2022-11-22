@@ -150,7 +150,7 @@ async function init() {
         toggleVisibility(popupBackground);
 
         addPost(post)
-        
+
         state.currentImages = [];
         imageContainer.innerHTML = "";
         
@@ -345,9 +345,14 @@ const addDragAndDeleteToAll = () => {
     Remove the drag and delete side buttons to a post element.
 */
 const removeDragAndDelete = (postObj) => {
-    const text = postObj.querySelector('pre').cloneNode(true);
+    let content;
+
+    if(postObj.querySelector('pre')) content = postObj.querySelector('pre').cloneNode(true);
+    else content = postObj.querySelector(".content");
+
+
     postObj.innerHTML = '';
-    postObj.appendChild(text);
+    postObj.appendChild(content);
 };
 
 /*
