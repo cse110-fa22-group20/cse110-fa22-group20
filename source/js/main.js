@@ -1,302 +1,22 @@
-const testing = false;
-var dbReady = null, addPost = null, getAllPosts = null;
-const loadModules = async () => {
-    return new Promise((res, rej) => {
-        if(!testing) {
-            import('./db.js').then(exports => {
-                dbReady = exports.dbReady;
-                addPost = exports.addPost;
-                getAllPosts = exports.getAllPosts;
-                res();
-                return;
-            });
-        } else {
-            const dbReady = require("./db.js").dbReady;
-            const addPost = require("./db.js").addPost;
-            const getAllPosts = require("./db.js").getAllPosts;
-            res();
-            return;
-        }
-    });
-}
-
-const state = {
-    postIDCounter: 0,
-    posts: [],
-    editMode: false,
-    editingPost: false
-};
-
-window.addEventListener('DOMContentLoaded', init);
-
-/*
-    Input: DOM object
-    If hidden make it visible.
-    If visible make it hidden.
-*/
-const toggleVisibility = (obj) => {
-    if (getComputedStyle(obj).display === 'none') 
-        obj.classList.remove('hidden');
-    else 
-        obj.classList.add('hidden');
-};
-
-
-
-/*
-    Gets text content of the new post.
-    Creates new post object, attempts to add it to the database.
-    Waits for db operation to complete.
-    If attempt is successful, update global counter.
-    state object is passed by reference, so changes will be reflected in 
-    original scope.
-*/
-const textPostFormSubmit = (event, content, state) => {
-    console.log("HERE");
-
-    event.preventDefault(); 
-
-    // removes spaces in the case that someone has entered a single space and tries to submit that
-    content = content.trim();
-
-    // don't submit empty posts
-    if(content.length > 0) {
-        return new Promise(async (res, rej) => {
-            // const newPostID = state.postIDCounter;
-    
-            const newPost = {
-                type: 'text',
-                content: content,
-            };
-
-            console.log(newPost);
-    
-            let successfullyAdded = await addPost(newPost);
-            if (successfullyAdded) {
-                const textPostTextarea = document.querySelector("#text-post-textarea");
-                const textPostPopup = document.querySelector("#text-post-popup");
-                const popupBackground = document.querySelector("#popup-background");
-    
-                textPostTextarea.innerHTML = '';
-                toggleVisibility(textPostPopup);
-                toggleVisibility(popupBackground);
-                state.postIDCounter++;
-                state.posts.push(newPost);
-                res(true);
-            }
-            rej(true);
-        });
-    }
-}
-
-/*
-    Temporary. Don't want to delete the dummy posts from the HTML.
-*/
-const deleteDummyPosts = () => {
-    const postContainer = document.querySelector('#posts-wrapper');
-    while (document.querySelector(".post")) {
-        document.querySelector(".post").remove();
-    }
-};
-
-/*
-    Add the drag and delete side buttons to a post element.
-*/
-const addDragAndDelete = (postObj) => {
-    const drag = document.createElement('div');
-    drag.setAttribute('class', 'drag-icon-container');
-    const del = document.createElement('div');
-    del.setAttribute('class', 'delete-icon-container');
-
-    postObj.appendChild(drag);
-    postObj.appendChild(del);
-};
-
-/*
-    Add the drag and delete side buttons to all post elements.
-*/
-const addDragAndDeleteToAll = () => {
-    return new Promise((res) => {
-        const posts = document.querySelectorAll('.post');
-        for (const post of posts) {
-            addDragAndDelete(post);
-        }
-        res();
-    })
-}
-
-/*
-    Remove the drag and delete side buttons to a post element.
-*/
-const removeDragAndDelete = (postObj) => {
-    const text = postObj.querySelector('pre').cloneNode(true);
-    postObj.innerHTML = '';
-    postObj.appendChild(text);
-    applyEditListener(text);
-};
-
-/*
-    Remove the drag and delete side buttons from all post elements.
-*/
-const removeDragAndDeleteFromAll = () => {
-    return new Promise((res) => {
-        for (let i = 0; i < state.postIDCounter; i++) {
-            const post = document.querySelector(`#p${i}.post`);
-            removeDragAndDelete(post);
-        }
-        res();
-    });
-}
-
-/*
-    Make pre tag switch to contenteditable div on click.
-*/
-const applyEditListener = (innerText) => {
-    innerText.addEventListener('click', (e) => {
-        const post = e.target.parentElement;
-        if (state.editMode && !state.editingPost) {
-            state.editingPost = true;
-            const saveButton = document.querySelector('#save-button');
-            toggleVisibility(saveButton);
-
-            const textBox = document.createElement('div');
-            const submit = document.createElement('button');
-            const id = Number(post.getAttribute('id').substring(1));
-
-            textBox.setAttribute('contenteditable', '');
-            textBox.setAttribute('class', 'editable-text');
-            textBox.innerText = e.target.innerText;
-            textBox.style.fontSize = window.getComputedStyle(document.body)
-                                     .getPropertyValue('font-size');
-
-
-            submit.style.height = textBox.style.height;
-            submit.setAttribute('class', 'submit-button');
-            submit.innerText = "Submit";
-
-            post.appendChild(textBox);
-            post.appendChild(submit);
-            toggleVisibility(e.target);
-            textBox.focus();
-
-            submit.addEventListener('click', () => {
-                const staticText = textBox.innerText;
-                if (staticText.trim() === "") { // no empty posts 
-                    textBox.innerText = 'Posts cannot be empty.';
-                } else { 
-                    e.target.innerText = staticText;
-                    state.posts[id].content = staticText;
-                    toggleVisibility(e.target);
-                    post.removeChild(textBox);
-                    post.removeChild(submit);
-                    state.editingPost = false;
-                    toggleVisibility(saveButton);
-                } 
-            });
-        }
-    });
-};
-
-/*
-    Creates DOM element from a post object with type='text'.
-*/
-const createTextPostObject = (postObj) => {
-    const post = document.createElement('div');
-
-    post.setAttribute('id', "p" + postObj.id);
-    post.setAttribute('class', 'post');
-
-    post.innerHTML = `
-        <pre class="content text-post-content">
-        </pre>
-    `;
-    post.querySelector('pre').innerText = postObj.content;
-
-    applyEditListener(post.querySelector('pre'));
-    return post;
-};
-
-/*
-    TODO: different DOM object returned if type is text vs image
-*/
-const createPostObject = (postObj) => {
-    return postObj.type === 'text'  
-        ? createTextPostObject(postObj) 
-        : createTextPostObject(postObj);
-}
-
-/*
-    Populates DOM with post objects stored in `state`.
-*/
-const populatePosts = (state) => {
-    return new Promise((res) => {
-        const postContainer = document.querySelector('#posts-wrapper');
-        const typeSelector = document.querySelector('#post-type-selector');
-        state.posts.forEach((postObj) => {
-            const post = createPostObject(postObj);
-            postContainer.insertBefore(post, typeSelector);
-        });
-        res();
-    });
-};
-
-/*
-    Insert a new post into the DOM 
-    before the post in the container 
-    specified with `beforeIndex`.
-
-    If the index is invalid, the post will be appended instead.
-*/
-const insertPost = (postObj, beforeIndex) => {
-    const postContainer = document.querySelector('#posts-wrapper');
-    const posts = document.querySelectorAll('.post');
-    let beforeElement = null;
-    if (beforeIndex < 0 || beforeIndex > posts.length-1) {
-        beforeElement = document.querySelector('#post-type-selector');
-    } else {
-        beforeElement = posts[beforeIndex];
-    }
-    postContainer.insertBefore(createPostObject(postObj), beforeElement);
-};
-
-/*
-    Append a new post to the DOM.
-*/
-const appendPost = (postObj) => {
-    insertPost(postObj, -1);
-}
-
-/*
-    Prepend a new post to the DOM.
-    Stub used for making sure insertPost works as expected.
-*/
-const prependPost = (postObj) => {
-    insertPost(postObj, 0);
-}
+import * as db from "./db.js";
 
 // ensures that page as loaded before running anything
 async function init() {
-    await loadModules();
     const editModeButton = document.querySelector('#edit-button');
     const saveButton = document.querySelector('#save-button');
 
     toggleVisibility(saveButton);
 
-    deleteDummyPosts();
-
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
 
-    await dbReady();
-    console.log('db is ready.');
+    await db.dbReady();
 
-    let retrievedPosts = await getAllPosts();
-    state.postIDCounter = retrievedPosts.length;
-    state.posts = retrievedPosts;
+    let retrievedPosts = await db.getAllPosts();
+    // state.posts = retrievedPosts;
+    // console.log(`${JSON.stringify(state)}`);
 
-    //console.log(`${JSON.stringify(state)}`);
-
-    await populatePosts(state);
+    await populatePosts(retrievedPosts);
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -391,28 +111,62 @@ async function init() {
         imageContainer.innerHTML = "";
     }
 
-    textPostForm.addEventListener('submit', async (event) => {
+    textPostForm.onsubmit = async function (event) {
+        event.preventDefault();
+
+        const textPostTextarea = document.querySelector("#text-post-textarea");
         const content = textPostTextarea.innerText;
 
-        await textPostFormSubmit(event, content, state).then((res) => {
-            const index = !state.postIDCounter ? 0: state.postIDCounter-1;
-            appendPost(state.posts[index]);
-            //prependPost(state.posts[index]);
-        });
-    });
+        if(state.editMode) {
+            const id = parseInt(this.getAttribute("data-post-id"));
+
+            const postObj = {
+                type: 'text',
+                content: content,
+                id: id,
+            }
+
+            db.updatePost(postObj);
+            updatePostDOM(id);
+
+            toggleVisibility(imagePostPopup);
+            toggleVisibility(popupBackground);
+        }
+        else {
+            const postObj = {
+                type: 'text',
+                content: content,
+            }
+
+            db.addPost(postObj);
+
+            toggleVisibility(textPostPopup);
+            toggleVisibility(popupBackground);
+
+            populatePosts();
+        }
+
+        textPostTextarea.innerText = '';
+    }
 
     editModeButton.addEventListener('click', async () => {
         await addDragAndDeleteToAll();
         toggleVisibility(saveButton);
         toggleVisibility(addPostButton);
         toggleVisibility(editModeButton);
+
+        const postTypeSelector = document.querySelector('#post-type-selector');
+
+        if(getComputedStyle(postTypeSelector).display !== "none") {
+            toggleVisibility(postTypeSelector);
+        }
+
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
 
     saveButton.addEventListener('click', async () => {
         await removeDragAndDeleteFromAll();
-        console.log(state);
 
         toggleVisibility(editModeButton);
         toggleVisibility(addPostButton);
@@ -420,7 +174,228 @@ async function init() {
         state.editMode = !state.editMode; // toggle edit mode
         console.log(`edit mode: ${state.editMode}`);
     });
+
+    makePostsEditable();
 };
+
+const makePostsEditable = () => {
+    const postDOM = document.querySelectorAll(".post");
+
+    for(const post of postDOM) {
+        if(post.classList.contains("text-post")) {
+            post.onclick = () => {
+                if(state.editMode) propogateTextPopup(post);
+            }
+        }
+    }
+}
+
+const propogateTextPopup = (postDOM) => {
+    const postId = postDOM.getAttribute("data-post-id");
+    const content = postDOM.innerText;
+    const textPostPopup = document.querySelector("#text-post-popup");
+    const popupBackground = document.querySelector("#popup-background");
+    const textPostTextarea = document.querySelector("#text-post-textarea");
+    const textPostForm = document.querySelector("#text-post-form");
+
+    textPostForm.setAttribute("data-post-id", postId);
+
+    toggleVisibility(textPostPopup);
+    toggleVisibility(popupBackground);
+
+    textPostTextarea.innerText = content;
+}
+
+const testing = false;
+
+const state = {
+    postIDCounter: 0,
+    posts: [],
+    editMode: false,
+    editingPost: false
+};
+
+window.addEventListener('DOMContentLoaded', init);
+
+/*
+    Input: DOM object
+    If hidden make it visible.
+    If visible make it hidden.
+*/
+const toggleVisibility = (obj) => {
+    if (getComputedStyle(obj).display === 'none') 
+        obj.classList.remove('hidden');
+    else 
+        obj.classList.add('hidden');
+};
+
+/*
+    Temporary. Don't want to delete the dummy posts from the HTML.
+*/
+const deleteDummyPosts = () => {
+    const postContainer = document.querySelector('#posts-wrapper');
+    while (document.querySelector(".post")) {
+        document.querySelector(".post").remove();
+    }
+};
+
+/*
+    Add the drag and delete side buttons to a post element.
+*/
+const addDragAndDelete = (postObj) => {
+    const drag = document.createElement('div');
+    drag.setAttribute('class', 'drag-icon-container');
+    const del = document.createElement('div');
+    del.setAttribute('class', 'delete-icon-container');
+
+    postObj.appendChild(drag);
+    postObj.appendChild(del);
+};
+
+/*
+    Add the drag and delete side buttons to all post elements.
+*/
+const addDragAndDeleteToAll = () => {
+    return new Promise((res) => {
+        const posts = document.querySelectorAll('.post');
+        for (const post of posts) {
+            addDragAndDelete(post);
+        }
+        res();
+    })
+}
+
+/*
+    Remove the drag and delete side buttons to a post element.
+*/
+const removeDragAndDelete = (postObj) => {
+    const text = postObj.querySelector('pre').cloneNode(true);
+    postObj.innerHTML = '';
+    postObj.appendChild(text);
+};
+
+/*
+    Remove the drag and delete side buttons from all post elements.
+*/
+const removeDragAndDeleteFromAll = () => {
+    return new Promise((res) => {
+        const postDOM = document.querySelectorAll(".post");
+
+        for (const post of postDOM) {
+            removeDragAndDelete(post);
+        }
+        res();
+    });
+}
+
+/*
+    Creates DOM element from a post object with type='text'.
+*/
+const createTextPostObject = (postObj) => {
+    const post = document.createElement('div');
+
+    post.setAttribute('data-post-id', postObj.id);
+    post.setAttribute('class', 'post text-post');
+
+    post.innerHTML = `
+        <pre class="content text-post-content">
+        </pre>
+    `;
+
+    post.querySelector('pre').innerText = postObj.content;
+
+    return post;
+};
+
+/*
+    TODO: different DOM object returned if type is text vs image
+*/
+const createPostObject = (postObj) => {
+    return postObj.type === 'text'  
+        ? createTextPostObject(postObj) 
+        : createTextPostObject(postObj);
+}
+
+/*
+    Populates DOM with post objects stored in `state`.
+*/
+const populatePosts = async () => {
+    const posts = await db.getAllPosts();
+    const postsWrapper = document.querySelector('#posts-wrapper');
+    const typeSelector = document.querySelector('#post-type-selector');
+
+    const currentPosts = document.querySelectorAll('.post');
+
+    for(const currentPost of currentPosts) {
+        currentPost.remove();
+    }
+
+    posts.forEach((postObj) => {
+        const post = createPostObject(postObj);
+        postsWrapper.insertBefore(post, typeSelector);
+    });
+
+    makePostsEditable();
+};
+
+const updatePostDOM = async (id) => {
+    const allPosts = document.querySelectorAll(".post");
+    let postToUpdate;
+
+    for(const post of allPosts) {
+        if(parseInt(post.getAttribute("data-post-id")) === id) {
+            postToUpdate = post;
+            break;
+        }
+    }
+
+    let contentArea;
+
+    for(const child of postToUpdate.children) {
+        if(child.classList.contains("text-post-content")) {
+            contentArea = child;
+            break;
+        }
+    }
+
+    const dbPost = await db.getPost(parseInt(id));
+
+    contentArea.innerText = dbPost.content;
+}
+
+/*
+    Insert a new post into the DOM 
+    before the post in the container 
+    specified with `beforeIndex`.
+
+    If the index is invalid, the post will be appended instead.
+*/
+const insertPost = (postObj, beforeIndex) => {
+    const postContainer = document.querySelector('#posts-wrapper');
+    const posts = document.querySelectorAll('.post');
+    let beforeElement = null;
+    if (beforeIndex < 0 || beforeIndex > posts.length-1) {
+        beforeElement = document.querySelector('#post-type-selector');
+    } else {
+        beforeElement = posts[beforeIndex];
+    }
+    postContainer.insertBefore(createPostObject(postObj), beforeElement);
+};
+
+/*
+    Append a new post to the DOM.
+*/
+const appendPost = (postObj) => {
+    insertPost(postObj, -1);
+}
+
+/*
+    Prepend a new post to the DOM.
+    Stub used for making sure insertPost works as expected.
+*/
+const prependPost = (postObj) => {
+    insertPost(postObj, 0);
+}
 
 /**
  * Class for <add-image-row> element. Contains image upload, caption, and deletion functionality

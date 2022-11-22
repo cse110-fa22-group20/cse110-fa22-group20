@@ -78,26 +78,25 @@ const dbReady = () => {
  * return true if successful, false otherwise
  */
 const addPost = (post) => {
-    return new Promise((res, rej) => {
-        const db = request.result;
-        const transaction = db.transaction("posts", "readwrite");
-        const posts = transaction.objectStore("posts");
+    const db = request.result;
+    const transaction = db.transaction("posts", "readwrite");
+    const posts = transaction.objectStore("posts");
 
-        const query = posts.add(post);
+    let success;
+    const query = posts.add(post);
 
-        console.log(post);
+    query.onsuccess = () => {
+        console.log(); // fill in later
+        success = true;
+    }
 
-        query.onsuccess = () => {
-            console.log(); // fill in later
-            res(true);
-        }
+    query.onerror = (event) => {
+        console.error(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
+        console.error(event);
+        success = false;
+    }
 
-        query.onerror = (event) => {
-            console.log(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
-            console.log(event);
-            rej(false);
-        }
-    });
+    return success;
 }
 
 /** 
@@ -152,23 +151,28 @@ const updatePost = (post) => {
  * return a single post JSON object
  */
 const getPost = (id) => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
-
-    let post = null;
-    let query = posts.get(id);
-
-    query.onsuccess = () => {
-        post = query.result[0];
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-    }
-
-    return post;
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
+    
+        const query = posts.getAll();
+    
+        query.onsuccess = (event) => {
+            for(const post of query.result) {
+                if(post.id === id) {
+                    res(post);
+                    break;
+                }
+            }
+        }
+    
+        query.onerror = (event) => {
+            console.error("An error occured with IndexedDB");
+            console.error(event);
+            rej(null);
+        }
+    });
 }
 
 /** 
@@ -176,7 +180,7 @@ const getPost = (id) => {
  * 
  * return an array of post JSON objects
  */
-const getAllPosts = () => {
+const getAllPosts = async () => {
     return new Promise((res, rej) => {
         const db = request.result;
         const transaction = db.transaction("posts", "readwrite");
