@@ -232,10 +232,10 @@ async function init() {
 };
 
 const makePostsEditable = () => {
-    const postDOM = document.querySelectorAll(".post");
+    const postDOM = document.querySelectorAll(".content");
 
     for(const post of postDOM) {
-        if(post.classList.contains("text-post")) {
+        if(post.parentNode.classList.contains("text-post")) {
             post.onclick = () => {
                 if(state.editMode) propogateTextPopup(post);
             }
