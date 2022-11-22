@@ -124,6 +124,8 @@ const updatePost = (post) => {
     const transaction = db.transaction("posts", "readwrite");
     const posts = transaction.objectStore("posts");
 
+    console.log(post);
+
     let success = false;
     let query = posts.put(post);
 
