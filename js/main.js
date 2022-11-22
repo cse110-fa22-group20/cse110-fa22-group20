@@ -49,7 +49,6 @@ async function init() {
     // console.log(`${JSON.stringify(state)}`);
 
     await populatePosts();
-    await getAllPosts();
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -380,7 +379,7 @@ const createPostObject = (postObj) => {
     Populates DOM with post objects stored in `state`.
 */
 const populatePosts = async () => {
-    const posts = []; // await getAllPosts();
+    const posts = await getAllPosts();
     const postsWrapper = document.querySelector('#posts-wrapper');
     const typeSelector = document.querySelector('#post-type-selector');
 
