@@ -134,14 +134,28 @@ async function init() {
     /**
      * Handles form submission
      */
-    imagePostForm.onsubmit = (event) => {
+    imagePostForm.onsubmit = async function (event) {
         event.preventDefault();
 
-        // hide popup and clear it 
+        const images = state.currentImages.map(image => {
+            if (image != null) return image;
+        })
+
+        const post = {
+            type: 'image',
+            content: images,
+        }
+
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
 
-        imageContainer.innerHTML = "";
+        if(addPost(post)) {
+            state.currentImages = [];
+            imageContainer.innerHTML = "";
+        }
+        
+        const posts = await getAllPosts();
+        await populatePosts(posts);
     }
 
     textPostForm.onsubmit = async function (event) {
@@ -271,6 +285,7 @@ const propogateTextPopup = (postDOM) => {
 
 const state = {
     postIDCounter: 0,
+    currentImages: [],
     posts: [],
     editMode: false,
     editingPost: false
@@ -368,13 +383,41 @@ const createTextPostObject = (postObj) => {
     return post;
 };
 
+const createImagePostObject = (postObj) => {
+    const post = document.createElement('div');
+    const postContent = document.createElement('div');
+
+    const images = postObj.content;
+
+    postContent.setAttribute("class", "content image-post-content");
+    postContent.setAttribute("style", `grid-template-columns: repeat(min(7, ${images.length}), 100px)`)
+
+    post.appendChild(postContent);
+
+    post.setAttribute('data-post-id', postObj.id);
+    post.setAttribute('class', 'post image-post');
+
+    console.log(postObj)
+
+    for(const image of images) {
+        const imageElement = document.createElement("img");
+        imageElement.setAttribute("src", image.image);
+        imageElement.setAttribute("width", "100");
+        imageElement.setAttribute("height", "100");
+
+        postContent.appendChild(imageElement);
+    }
+
+    return post;
+}
+
 /*
     TODO: different DOM object returned if type is text vs image
 */
 const createPostObject = (postObj) => {
     return postObj.type === 'text'  
         ? createTextPostObject(postObj) 
-        : createTextPostObject(postObj);
+        : createImagePostObject(postObj);
 }
 
 /*
@@ -547,6 +590,8 @@ class AddImageRow extends HTMLElement {
         addImageCaption.classList.add("add-image-caption");
         removeImageDiv.classList.add("remove-image");
 
+        addRowDiv.setAttribute("data-image-index", state.currentImages.length);
+
         // set necessary element attributes
         addImageInput.setAttribute("type", "file");
         addImageInput.setAttribute("accept", "image/*");
@@ -561,10 +606,20 @@ class AddImageRow extends HTMLElement {
         addRowDiv.appendChild(removeImageDiv);
         addRowDiv.append(style);
 
+        const currentImage = {
+            image: '',
+            caption: '',
+        }
+
+        state.currentImages.push(currentImage);
+
         /**
          * When remove button is clicked, remove associated row
          */
-        removeImageDiv.onclick = () => {
+        removeImageDiv.onclick = (event) => {
+            const index = parseInt(event.target.parentNode.getAttribute("data-image-index"));
+            state.currentImages[index] = null;
+
             this.remove();
         }
 
@@ -572,6 +627,9 @@ class AddImageRow extends HTMLElement {
          * When image is uploaded, set the background as the image
          */
         addImageInput.onchange = (event) => {
+            const index = parseInt(event.target.parentNode.parentNode.getAttribute("data-image-index"));
+            const currentImage = state.currentImages[index];
+
             const fileReader = new FileReader();
 
             /**
@@ -581,12 +639,23 @@ class AddImageRow extends HTMLElement {
                 const displayImage = fileReader.result;
                 addImageLabel.style.backgroundImage = `url(${displayImage})`;
                 addImageLabel.style.backgroundSize = "100px 100px";
+
+                currentImage.image = displayImage;
             };
 
             /**
              * Read as url to be passed into backgroundImage
              */
             fileReader.readAsDataURL(event.target.files[0]);
+        }
+
+        addImageCaption.onchange = (event) => {
+            const index = parseInt(event.target.parentNode.getAttribute("data-image-index"));
+            const currentImage = state.currentImages[index];
+
+            currentImage.caption = event.target.value;
+
+            console.log(state.currentImages)
         }
 
         /**
