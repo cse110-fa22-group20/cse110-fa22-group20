@@ -24,8 +24,6 @@ request.onerror = (event) => {
 request.onupgradeneeded = () => {
     const db = request.result;
 
-    console.log("HERE");
-
     if(!db.objectStoreNames.contains('posts')) {
         // create a table/collection to store posts
         // keyPath is the primary key and will be auto incremented

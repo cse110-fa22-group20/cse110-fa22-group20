@@ -1,5 +1,7 @@
 import * as db from "./db.js";
 
+const testing = false;
+
 // ensures that page as loaded before running anything
 async function init() {
     await db.dbReady();
@@ -238,8 +240,6 @@ const propogateTextPopup = (postDOM) => {
 
     textPostTextarea.innerText = content;
 }
-
-const testing = false;
 
 const state = {
     postIDCounter: 0,
