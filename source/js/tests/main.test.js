@@ -31,9 +31,9 @@ describe("deletePost tests", () => {
         await main.loadModules();
         await db.dbReady();
 
-        main.addPost(post);
+        db.addPost(post);
         var posts = await db.getAllPosts();
-        await populatePosts(posts);
+        await main.populatePosts(posts);
 
         expect(await main.deletePost("0")).toBe(true);
         expect(document.querySelector('[data-post-id="0"]')).toBe(null);
