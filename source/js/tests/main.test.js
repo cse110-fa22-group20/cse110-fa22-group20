@@ -21,24 +21,4 @@ describe("deletePost tests", () => {
     test("invalid postID(null)", async () => {
         expect(await main.deletePost(null)).toBe(false);
     });
-
-    test("delete one post with valid postID(0)", async () => {
-        const post = {
-            id: 0,
-            type: "text",
-            content: "Test 1"
-        };
-        await main.loadModules();
-        await db.dbReady();
-
-        db.addPost(post);
-        var posts = await db.getAllPosts();
-        await main.populatePosts(posts);
-
-        expect(await main.deletePost("0")).toBe(true);
-        expect(document.querySelector('[data-post-id="0"]')).toBe(null);
-
-        posts = await db.getAllPosts();
-        expect(posts.length).toBe(0);
-    });
 });
