@@ -234,8 +234,6 @@ async function init() {
 const makePostsEditable = () => {
     const postDOM = document.querySelectorAll(".content");
 
-    alert("HERE");
-
     for(const post of postDOM) {
         if(post.parentNode.classList.contains("text-post")) {
             post.onclick = () => {
@@ -355,8 +353,6 @@ const removeDragAndDeleteFromAll = () => {
     Creates DOM element from a post object with type='text'.
 */
 const createTextPostObject = (postObj) => {
-    console.log(postObj)
-
     const post = document.createElement('div');
 
     post.setAttribute('data-post-id', postObj.id);
@@ -413,8 +409,6 @@ const updatePostDOM = async (id) => {
             break;
         }
     }
-
-    console.log(postToUpdate)
 
     let contentArea;
 
