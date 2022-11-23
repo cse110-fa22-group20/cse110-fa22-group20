@@ -623,8 +623,23 @@ class AddImageRow extends HTMLElement {
          */
         removeImageDiv.onclick = (event) => {
             const index = parseInt(event.target.parentNode.getAttribute("data-image-index"));
-            state.currentImages[index] = null;
+            state.currentImages.splice(index, 1);
 
+            const imageRows = document.querySelectorAll("add-image-row");
+
+            for(const imageRow of imageRows) {
+                const shadowRoot = imageRow.shadowRoot;
+                const imageIndexWrapper = shadowRoot.querySelector(".add-image-row");
+
+                let currIndex = parseInt(imageIndexWrapper.getAttribute("data-image-index"));
+
+                if(currIndex > index) {
+                    currIndex--;
+
+                    imageIndexWrapper.setAttribute("data-image-index", currIndex);
+                }
+            }
+ 
             this.remove();
         }
 
