@@ -3,6 +3,7 @@
  */
 require("fake-indexeddb/auto");
 const newUser = require("../new-user.js");
+const db = require("../db.js");
 
 describe("checkProfile tests", () => {
     test("valid profileObj", () => {
@@ -39,5 +40,35 @@ describe("checkProfile tests", () => {
     });
     test("undefined is invalid", () => {
         expect(newUser.checkProfile(undefined)).toBe(false);
+    });
+});
+
+describe("checkUserExist tests", () => {
+    test("no user", async () => {
+        await newUser.loadModules();
+        await db.dbReady();
+        await expect(newUser.checkUserExist()).rejects.toBe(false);
+    });
+
+    test("valid user", async () => {
+        await newUser.loadModules();
+        await db.dbReady();
+        const details = { 
+            name: "string", image: "string", description: "string", 
+            primaryColor: null, secondaryColor: null
+        };
+        await db.addDetails(details)
+        await expect(newUser.checkUserExist()).resolves.toBe(true);
+    });
+
+    test("invalid user", async () => {
+        await newUser.loadModules();
+        await db.dbReady();
+        const details = { 
+            name: "", image: "string", description: "string", 
+            primaryColor: null, secondaryColor: null
+        };
+        await db.addDetails(details)
+        await expect(newUser.checkUserExist()).rejects.toBe(false);
     });
 });

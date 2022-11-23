@@ -208,25 +208,25 @@ const getAllPosts = async () => {
  * 
  * return true if successful, false otherwise
  */
-const deletePost = (id) => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
+const deletePostFromDB = (id) => {
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
 
-    let success = false;
-    let query = posts.delete(id);
+        let success = false;
+        let query = posts.delete(id);
 
-    query.onsuccess = () => {
-        success = true;
-    }
+        query.onsuccess = () => {
+            res(true);
+        }
 
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
+        query.onerror = (event) => {
+            console.log("An error occured with IndexedDB");
+            console.log(event);
+            rej(false);
+        }
+    });
 }
 
 /** 
@@ -356,7 +356,7 @@ if (testing) {
     exports.updatePost = updatePost;
     exports.getPost = getPost;
     exports.getAllPosts = getAllPosts;
-    exports.deletePost = deletePost;
+    exports.deletePostFromDB = deletePostFromDB;
     exports.addDetails = addDetails;
     exports.updateDetails = updateDetails;
     exports.getDetails = getDetails;
@@ -370,7 +370,7 @@ export {
     updatePost, 
     getPost, 
     getAllPosts, 
-    deletePost, 
+    deletePostFromDB, 
     addDetails, 
     updateDetails, 
     getDetails, 
