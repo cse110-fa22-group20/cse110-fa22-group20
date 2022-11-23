@@ -344,8 +344,12 @@ Adding image post styles
 {
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
     height: 205px;
+}
+
+#image-post-form::-webkit-scrollbar {
+    display: none;
 }
 
 #add-image-button 

@@ -622,8 +622,8 @@ class AddImageRow extends HTMLElement {
 
             .add-image-row 
             {
-                display: flex;
-                flex-direction: row;
+                display: grid;
+                grid-template-columns: 100px auto 30px;
                 gap: 10px;
                 margin-bottom: 5px;
             }
