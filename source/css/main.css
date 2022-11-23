@@ -376,6 +376,7 @@ Adding image post styles
 
 #text-post-textarea
 {
+    overflow-wrap: break-word;
     justify-self: center;
     background-color: var(--background-grey);
     width: calc(100% - 10px);
