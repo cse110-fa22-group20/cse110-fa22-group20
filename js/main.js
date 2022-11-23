@@ -83,6 +83,8 @@ async function init() {
     addImagePostButton.onclick = () => {
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
+
+        document.querySelector("#image-container").innerHTML = "";
     }
 
     const addTextPostButton  = document.querySelector('#add-text-post');
@@ -137,21 +139,38 @@ async function init() {
     imagePostForm.onsubmit = async function (event) {
         event.preventDefault();
 
-        const images = state.currentImages.map(image => {
-            if (image != null) return image;
-        })
+        const images = state.currentImages.filter(post => post.image.length > 0);
 
-        const post = {
-            type: 'image',
-            content: images,
+        if(images.length === 0) return;
+
+        state.currentImages = null;
+        state.currentImages = [];
+
+        console.log(images);
+
+        if(!state.editMode) {
+            const post = {
+                type: 'image',
+                content: images,
+            }
+
+            addPost(post);
+        }
+        else {
+            const id = parseInt(document.querySelector("#image-post-form").getAttribute("data-post-id"));
+
+            const post = {
+                type: 'image',
+                content: images,
+                id: id,
+            }
+
+            updatePost(post);
         }
 
         toggleVisibility(imagePostPopup);
         toggleVisibility(popupBackground);
 
-        addPost(post)
-
-        state.currentImages = [];
         imageContainer.innerHTML = "";
         
         const posts = await getAllPosts();
@@ -218,6 +237,8 @@ async function init() {
         }
 
         state.editMode = !state.editMode; // toggle edit mode
+        state.currentImages = null;
+        state.currentImages = [];
         console.log(`edit mode: ${state.editMode}`);
 
         makePostsEditable();
@@ -248,13 +269,22 @@ async function init() {
 const makePostsEditable = () => {
     const postDOM = document.querySelectorAll(".content");
 
+    console.log(state);
+
     for(const post of postDOM) {
         if(post.parentNode.classList.contains("text-post")) {
             post.onclick = () => {
                 if(state.editMode) propogateTextPopup(post.parentNode);
             }
         }
+        else if(post.parentNode.classList.contains("image-post")) {
+            post.onclick = async () => {
+                if(state.editMode) await propogateImagePopup(post.parentNode);
+            }
+        }
     }
+
+    console.log(state);
 }
 
 const setUserDetails = (name, description, image) => {
@@ -281,6 +311,44 @@ const propogateTextPopup = (postDOM) => {
     toggleVisibility(popupBackground);
 
     textPostTextarea.innerText = content;
+}
+
+const propogateImagePopup = async (postDOM) => {
+    const postId = postDOM.getAttribute("data-post-id");
+    const imagePostPopup = document.querySelector("#image-post-popup");
+    const popupBackground = document.querySelector("#popup-background");
+    const imagePostForm = document.querySelector("#image-post-form");
+    const imageContainer = document.querySelector("#image-container");
+
+    imagePostForm.setAttribute("data-post-id", postId);
+
+    const post = await getPost(parseInt(postId));
+
+    state.currentImages = null;
+    state.currentImages = [];
+
+    for(const image of post.content) {
+        state.currentImages.push(image);
+
+        const imageRow = document.createElement("add-image-row");
+        const shadowRoot = imageRow.shadowRoot;
+        const imageLabel = shadowRoot.querySelector(".add-image-label");
+        const imageCaption = shadowRoot.querySelector(".add-image-caption");
+        const imageIndex = parseInt(shadowRoot.querySelector(".add-image-row").getAttribute("data-image-index"));
+        
+        shadowRoot.querySelector(".add-image-row").setAttribute("data-image-index", imageIndex - 1);
+
+        imageLabel.style.backgroundImage = `url(${image.image})`;
+        imageLabel.style.backgroundSize = "100px 100px";
+
+        imageCaption.value = image.caption;
+
+        imageContainer.appendChild(imageRow);
+    }
+
+
+    toggleVisibility(imagePostPopup);
+    toggleVisibility(popupBackground);
 }
 
 const state = {
@@ -443,6 +511,10 @@ const populatePosts = async (postArg) => {
         const post = createPostObject(postObj);
         postsWrapper.insertBefore(post, typeSelector);
     });
+
+    if(state.editMode) {
+        await addDragAndDeleteToAll();
+    }
 
     makePostsEditable();
 };
@@ -672,6 +744,11 @@ class AddImageRow extends HTMLElement {
         addImageCaption.onchange = (event) => {
             const index = parseInt(event.target.parentNode.getAttribute("data-image-index"));
             const currentImage = state.currentImages[index];
+
+            console.log(event.target.parentNode)
+
+            console.log(index);
+            console.log(currentImage);
 
             currentImage.caption = event.target.value;
 
