@@ -324,16 +324,107 @@ const toggleVisibility = (obj) => {
         obj.classList.add('hidden');
 };
 
-/*
-    Temporary. Don't want to delete the dummy posts from the HTML.
-*/
-const deleteDummyPosts = () => {
-    const postContainer = document.querySelector('#posts-wrapper');
-    while (document.querySelector(".post")) {
-        document.querySelector(".post").remove();
-    }
+const getID = (obj) => Number(obj.getAttribute('data-post-id'));
+
+const getVerticalPositions = () => {
+    return new Promise((res) => {
+        const posts = document.querySelectorAll('.post');
+        const positions = [];
+        for (let i = 0; i < posts.length; i++) {
+            let post = posts[i]
+            const offset = post.offsetTop;
+            const height = Number(getComputedStyle(post)
+                .getPropertyValue('height')
+                .slice(0, -2));
+            if (i == 0) {
+                positions.push({
+                    id: getID(post), 
+                    range: [0, offset - height]
+                });
+            } else if (i == posts.length-1) {
+                positions.push({
+                    id: getID(post), 
+                    range: [positions[i - 1].range[1], 99999999999999]
+                });
+            } else {
+                positions.push({
+                    id: getID(post), 
+                    range: [positions[i - 1].range[1], offset - height]
+                });
+            }
+        }
+        res(positions);
+    });
 };
 
+const hoveringOver = (curIDBefore, positions, pos) => {
+    pos -= 20;
+    for (const posObj of positions) {
+        if (pos >= posObj.range[0] && pos <= posObj.range[1]) {
+            if (posObj.id === curIDBefore) {
+                return -42; // don't want to change DOM for no reason.
+            } else if (posObj.range[1] === 99999999999999) {
+                return -43;
+            }
+            return posObj.id;
+        }
+    }
+    return -42;
+};
+
+const makeDraggable = (dragIcon) => {
+    dragIcon.addEventListener('mousedown', async (e) => {
+        const positions = await getVerticalPositions();
+        const parentDiv = e.target.parentElement;
+        parentDiv.style.setProperty('position', 'absolute');
+
+        // create shadow post to show where post would land on mouse up
+        const shadowPost = createPostObject({id: "-42", type: "text", content: "shadow"});
+        shadowPost.setAttribute('class', 'post text-post shadowPost');
+        let curIDBefore = getID(parentDiv);
+        insertPostFromDOMObject(shadowPost, curIDBefore);
+
+        let dragIconWidth = getComputedStyle(e.target)
+            .getPropertyValue('width')
+            .slice(0, -2);
+        let xOffset = dragIconWidth - 30;
+        let yOffset = -10;
+        document.onmousemove = (e) => {
+            let curX = xOffset + e.clientX;
+            let curY = yOffset + e.clientY;
+            parentDiv.style.left = curX + "px";
+            parentDiv.style.top = curY + "px";
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+
+            const idBefore = hoveringOver(
+                curIDBefore, 
+                positions, 
+                curY);
+            if (idBefore !== -42) {
+                shadowPost.remove();
+                insertPostFromDOMObject(shadowPost, idBefore);
+                curIDBefore = idBefore;
+            } else if (idBefore === -43) {
+                shadowPost.remove();
+                insertPostFromDOMObject(shadowPost, -1);
+                curIDBefore = positions[positions.length-1].id;
+            }
+        };
+
+        document.onmouseup = () => {
+            parentDiv.style.setProperty('position', 'relative');
+            parentDiv.style.setProperty('left', '');
+            parentDiv.style.setProperty('top', '');
+            document.onmousemove = null;
+            document.onmouseup = null;
+            shadowPost.remove();
+            parentDiv.remove();
+            insertPostFromDOMObject(parentDiv, curIDBefore);
+        };
+    });
+}
 
 /*
     Add the drag and delete side buttons to a post element.
@@ -346,6 +437,7 @@ const addDragAndDelete = (postObj) => {
 
     postObj.appendChild(drag);
     postObj.appendChild(del);
+    makeDraggable(drag);
 };
 
 /*
@@ -460,6 +552,22 @@ const updatePostDOM = async (id) => {
     contentArea.innerText = dbPost.content;
 }
 
+const insertPostFromDOMObject = (postObj, beforeIndex) => {
+    const postContainer = document.querySelector('#posts-wrapper');
+    const posts = document.querySelectorAll('.post');
+    let beforeElement = null;
+    for (let post of posts) {
+        if (post.getAttribute('data-post-id') == beforeIndex) {
+            beforeElement = post;
+            break;
+        }
+    }
+    if (beforeIndex < 0 || beforeElement === null) {
+        beforeElement = document.querySelector('#post-type-selector');
+    }
+    postContainer.insertBefore(postObj, beforeElement);
+};
+
 /*
     Insert a new post into the DOM 
     before the post in the container 
@@ -471,10 +579,14 @@ const insertPost = (postObj, beforeIndex) => {
     const postContainer = document.querySelector('#posts-wrapper');
     const posts = document.querySelectorAll('.post');
     let beforeElement = null;
-    if (beforeIndex < 0 || beforeIndex > posts.length-1) {
+    for (let post of posts) {
+        if (post.getAttribute('data-post-id') == beforeIndex) {
+            beforeElement = post;
+            break;
+        }
+    }
+    if (beforeIndex < 0 || beforeElement === null) {
         beforeElement = document.querySelector('#post-type-selector');
-    } else {
-        beforeElement = posts[beforeIndex];
     }
     postContainer.insertBefore(createPostObject(postObj), beforeElement);
 };
