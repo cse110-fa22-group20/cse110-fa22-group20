@@ -198,6 +198,11 @@ Adding image post styles
     justify-content: center;
 }
 
+.image-post-content img 
+{
+    border-radius: 5px;
+}
+
 .text-post-content 
 {
     margin-top: 0;
@@ -390,8 +395,12 @@ Adding image post styles
 {
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
     height: 205px;
+}
+
+#image-post-form::-webkit-scrollbar {
+    display: none;
 }
 
 #add-image-button 
@@ -422,6 +431,7 @@ Adding image post styles
 
 #text-post-textarea
 {
+    overflow-wrap: break-word;
     justify-self: center;
     background-color: var(--background-grey);
     width: calc(100% - 10px);
