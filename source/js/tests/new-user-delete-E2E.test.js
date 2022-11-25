@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 var browers, page;
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({headless: false});
         page = await browser.newPage();
         await page.goto('http://127.0.0.1:5500/source/pages/new-user.html');
     });
@@ -46,18 +46,23 @@ describe('New User', () => {
         expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
     }, 1000);
 
-    /*it('Submitting a form with everything', async () => {
-        const name = await page.$('#user-name');
-        name.innerText = "A";
-        const description = await page.$('#user-description');
-        description.innerText = "A";
-        const imageHandler = await page.$('#user-image');
-        await imageHandler.uploadFile('./../../assets/placeholder-profile-pic.png');
-        const [response] = await Promise.all([
-            page.waitForNavigation(), // The promise resolves after navigation has finished
-            page.click('#go-button'), // Clicking the link will indirectly cause a navigation
-        ]); 
-        console.log(respose);
+    it('Submitting a form with everything', async () => {
+        await page.type('#user-name', "BOT");
+        await page.type('#user-description', "Description");
+        const [fileChooser] = await Promise.all([
+            page.waitForFileChooser(),
+            page.click('#user-image-label'), // some button that triggers file selection
+        ]);
+        await fileChooser.accept(['./source/assets/placeholder-profile-pic.png']);
+        const submit = await page.$('#go-button');
+        await submit.click();
+        await page.waitForNavigation();
         expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
-    }, 10000);*/
+    }, 5000);
+
+    /*it('Should be redirected to main instantly', async () => {
+        await page.goto('http://127.0.0.1:5500/source/pages/main.html');
+        await page.waitForTimeout(2000);
+        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
+    });*/
 });
