@@ -326,102 +326,139 @@ const toggleVisibility = (obj) => {
 
 const getID = (obj) => Number(obj.getAttribute('data-post-id'));
 
-const getVerticalPositions = () => {
-    return new Promise((res) => {
-        const posts = document.querySelectorAll('.post');
-        const positions = [];
-        for (let i = 0; i < posts.length; i++) {
-            let post = posts[i]
-            const offset = post.offsetTop;
-            const height = Number(getComputedStyle(post)
-                .getPropertyValue('height')
-                .slice(0, -2));
-            if (i == 0) {
-                positions.push({
-                    id: getID(post), 
-                    range: [0, offset - height]
-                });
-            } else if (i == posts.length-1) {
-                positions.push({
-                    id: getID(post), 
-                    range: [positions[i - 1].range[1], 99999999999999]
-                });
-            } else {
-                positions.push({
-                    id: getID(post), 
-                    range: [positions[i - 1].range[1], offset - height]
-                });
-            }
-        }
-        res(positions);
-    });
+const createShadowPost = (post) => {
+    const shadowPost = post.cloneNode(true);
+    const prevClass = post.getAttribute('class').includes('text') ? 'text-post' : 'image-post';
+    shadowPost.style.setProperty('position', '');
+    shadowPost.setAttribute('data-post-id', '-1');
+    shadowPost.setAttribute('id', 'shadow-post');
+    shadowPost.setAttribute('class', `post ${prevClass} shadowPost`);
+    shadowPost.removeChild(shadowPost.querySelector('.drag-icon-container'));
+    shadowPost.removeChild(shadowPost.querySelector('.delete-icon-container'));
+    return shadowPost;
 };
 
-const hoveringOver = (curIDBefore, positions, pos) => {
-    pos -= 20;
-    for (const posObj of positions) {
-        if (pos >= posObj.range[0] && pos <= posObj.range[1]) {
-            if (posObj.id === curIDBefore) {
-                return -42; // don't want to change DOM for no reason.
-            } else if (posObj.range[1] === 99999999999999) {
-                return -43;
-            }
-            return posObj.id;
+const swapUp = (dragID, shadowPost, prevY) => {
+    const posts = document.querySelectorAll(`.post:not([data-post-id|="${dragID}"])`);
+    let trailing = posts[0];
+    if (getID(trailing) === -1) {
+        return prevY;
+    }
+    let post;
+    for (let i = 1; i < posts.length; i++) {
+        post = posts[i];
+        if (getID(post) === -1) {
+            break;
+        }
+        trailing = post;
+    }
+    shadowPost.remove();
+    insertPostFromDOMObject(shadowPost, getID(trailing));
+
+    let rect = shadowPost.getBoundingClientRect();
+    let yMid = rect['height'] / 2;
+    return rect['y'] + yMid;
+};
+
+const swapDown = (dragID, shadowPost, prevY) => {
+    const posts = document.querySelectorAll(`.post:not([data-post-id|="${dragID}"])`);
+    let last = posts[posts.length-1];
+    if (getID(last) === -1) {
+        return prevY;
+    }
+
+    let post;
+    for (let i = 0;  i < posts.length; i++) {
+        post = posts[i];
+        if (getID(post) === -1) {
+            post = posts[i+1];
+            break;
         }
     }
-    return -42;
+    shadowPost.remove();
+    post.after(shadowPost);
+
+    let rect = shadowPost.getBoundingClientRect();
+    let yMid = rect['height'] / 2;
+    return rect['y'] + yMid;
 };
+
+const getSwapPositions = (dragID) => {
+    const posts = document.querySelectorAll(`.post:not([data-post-id|="${dragID}"])`);
+    if (posts.length == 0) { return [0, 99999999]; }
+    if (getID(posts[0]) === -1) {
+        let rect = posts[1].getBoundingClientRect();
+        return [0, rect['top'] + rect['height'] / 2];
+    } else if (getID(posts[posts.length-1]) === -1) {
+        let rect = posts[posts.length-2].getBoundingClientRect();
+        return [rect['top'] + rect['height'] / 2, 99999999];
+    }
+    let shadowIndex;
+    for (let i = 0; i < posts.length; i++) {
+        if (getID(posts[i]) === -1) {
+            shadowIndex = i;
+            break;
+        }
+    }
+
+    let rectAbove = posts[shadowIndex-1].getBoundingClientRect();
+    let rectBelow = posts[shadowIndex+1].getBoundingClientRect();
+
+    return [
+        rectAbove['top'] + rectAbove['height'] / 2, 
+        rectBelow['top'] + rectBelow['height'] / 2
+    ];
+}
 
 const makeDraggable = (dragIcon) => {
     dragIcon.addEventListener('mousedown', async (e) => {
-        const positions = await getVerticalPositions();
         const parentDiv = e.target.parentElement;
         parentDiv.style.setProperty('position', 'absolute');
 
         // create shadow post to show where post would land on mouse up
-        const shadowPost = createPostObject({id: "-42", type: "text", content: "shadow"});
-        shadowPost.setAttribute('class', 'post text-post shadowPost');
-        let curIDBefore = getID(parentDiv);
-        insertPostFromDOMObject(shadowPost, curIDBefore);
+        const shadowPost = createShadowPost(parentDiv);
+        const dragID = getID(parentDiv);
+        //parentDiv.setAttribute('id', dragID);
+        insertPostFromDOMObject(shadowPost, dragID);
 
-        let dragIconWidth = getComputedStyle(e.target)
-            .getPropertyValue('width')
-            .slice(0, -2);
-        let xOffset = dragIconWidth - 30;
-        let yOffset = -10;
+        let rect = parentDiv.getBoundingClientRect();
+        let yMid = rect['height'] / 2;
+        let yOffset = -1 * yMid;
+        let swapPositions = getSwapPositions();
+        let prevY = yOffset + e.clientY;
+        parentDiv.style.top = prevY + "px";
+        if (window.getSelection) {
+            window.getSelection().removeAllRanges();
+        }
         document.onmousemove = (e) => {
-            let curX = xOffset + e.clientX;
             let curY = yOffset + e.clientY;
-            parentDiv.style.left = curX + "px";
             parentDiv.style.top = curY + "px";
             if (window.getSelection) {
                 window.getSelection().removeAllRanges();
             }
 
-            const idBefore = hoveringOver(
-                curIDBefore, 
-                positions, 
-                curY);
-            if (idBefore !== -42) {
-                shadowPost.remove();
-                insertPostFromDOMObject(shadowPost, idBefore);
-                curIDBefore = idBefore;
-            } else if (idBefore === -43) {
-                shadowPost.remove();
-                insertPostFromDOMObject(shadowPost, -1);
-                curIDBefore = positions[positions.length-1].id;
+            if (curY - yMid < swapPositions[0]) {
+                // swap up
+                console.log(`should swap up: ${curY}, ${swapPositions[0]}`);
+                prevY = swapUp(dragID, shadowPost, prevY);
+                swapPositions = getSwapPositions(dragID);
+            } else if (curY + yMid > swapPositions[1]) {
+                // swap down
+                console.log(`should swap down: ${curY}, ${swapPositions[1]}`);
+                prevY = swapDown(dragID, shadowPost, prevY);
+                swapPositions = getSwapPositions(dragID);
             }
         };
 
         document.onmouseup = () => {
             parentDiv.style.setProperty('position', 'relative');
-            parentDiv.style.setProperty('left', '');
             parentDiv.style.setProperty('top', '');
             document.onmousemove = null;
             document.onmouseup = null;
-            shadowPost.remove();
             parentDiv.remove();
-            insertPostFromDOMObject(parentDiv, curIDBefore);
+            insertPostFromDOMObject(parentDiv, getID(shadowPost.nextElementSibling));
+            shadowPost.remove();
+            //preantDiv.removeAttribute('id');
         };
     });
 }
@@ -552,7 +589,7 @@ const updatePostDOM = async (id) => {
     contentArea.innerText = dbPost.content;
 }
 
-const insertPostFromDOMObject = (postObj, beforeIndex) => {
+const insertPostFromDOMObject = (postObj, beforeIndex, order) => {
     const postContainer = document.querySelector('#posts-wrapper');
     const posts = document.querySelectorAll('.post');
     let beforeElement = null;

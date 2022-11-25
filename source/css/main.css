@@ -443,6 +443,11 @@ pre
     content: attr(data-placeholder);
 }
 
+#shadow-post
+{
+    background-color: black;
+}
+
 .hidden
 {
     display: none !important;
@@ -450,6 +455,13 @@ pre
 
 @media screen and (max-width: 900px) {
     .post
+    {
+        /* 110px accounts for scrollbar and negatively positioned delete/drag*/
+        width: calc(100vw - 110px);
+        justify-self: center;
+    }
+
+    .shadow-post
     {
         /* 110px accounts for scrollbar and negatively positioned delete/drag*/
         width: calc(100vw - 110px);
