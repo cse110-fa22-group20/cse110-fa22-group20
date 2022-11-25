@@ -33,8 +33,8 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install jest
-        run: yarn add --dev jest
-             yarn add -D jest-environment-jsdom
+        run: yarn add --dev jest babel-jest @babel/core @babel/preset-env puppeteer jest-puppeteer
+             yarn add --dev jest-environment-jsdom
              yarn add --dev fake-indexeddb
 
       # Validate HTML/CSS in source/
