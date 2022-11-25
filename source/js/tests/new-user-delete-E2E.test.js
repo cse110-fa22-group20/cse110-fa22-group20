@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 var browers, page;
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({headless: false});
+        browser = await puppeteer.launch();
         page = await browser.newPage();
         await page.goto('http://127.0.0.1:5500/source/pages/new-user.html');
     });
@@ -21,8 +21,8 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         // blank form is not permitted, no redirection
-        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
-    }, 1000);
+        expect(page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
+    });
 
     it('Submitting a form without user name', async () => {
         const description = await page.$('#user-description');
@@ -32,8 +32,8 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         // no name is not permitted, no redirection
-        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
-    }, 1000);
+        expect(page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
+    });
 
     it('Submitting a form without profile picture', async () => {
         const name = await page.$('#user-name');
@@ -43,8 +43,8 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         // no name is not permitted, no redirection
-        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
-    }, 1000);
+        expect(page.url()).toBe('http://127.0.0.1:5500/source/pages/new-user.html');
+    });
 
     it('Submitting a form with everything', async () => {
         await page.type('#user-name', "BOT");
@@ -57,12 +57,11 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         await page.waitForNavigation();
-        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
-    }, 5000);
+        expect(page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
+    });
 
-    /*it('Should be redirected to main instantly', async () => {
-        await page.goto('http://127.0.0.1:5500/source/pages/main.html');
-        await page.waitForTimeout(2000);
-        expect(await page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
-    });*/
+    it('Should be redirected to main instantly', async () => {
+        page.goto('http://127.0.0.1:5500/source/pages/new-user.html');
+        expect(page.url()).toBe('http://127.0.0.1:5500/source/pages/main.html');
+    });
 });
