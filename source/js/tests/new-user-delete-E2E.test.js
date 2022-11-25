@@ -51,11 +51,8 @@ describe('New User', () => {
     it('Submitting a form with everything', async () => {
         await page.type('#user-name', "BOT");
         await page.type('#user-description', "Description");
-        const [fileChooser] = await Promise.all([
-            page.waitForFileChooser(),
-            page.click('#user-image-label'), // some button that triggers file selection
-        ]);
-        await fileChooser.accept(['./source/assets/placeholder-profile-pic.png']);
+        const imageHandle = await page.$('#user-image');
+        await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
         const submit = await page.$('#go-button');
         await submit.click();
         await page.waitForNavigation();
