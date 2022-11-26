@@ -56,7 +56,7 @@ describe('New User', () => {
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
         const submit = await page.$('#go-button');
         await submit.click();
-        await page.waitForNavigation();
+        await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
 
