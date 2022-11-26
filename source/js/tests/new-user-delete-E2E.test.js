@@ -59,4 +59,9 @@ describe('New User', () => {
         await page.waitForNavigation();
         expect(page.url()).toBe(mainUrl);
     });
+    
+    /*it('Should be redirected to main instantly', async () => {
+        page.goto(newUserUrl);
+        expect(page.url()).toBe(mainUrl);
+    });*/
 });
