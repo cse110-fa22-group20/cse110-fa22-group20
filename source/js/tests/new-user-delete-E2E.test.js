@@ -50,14 +50,22 @@ describe('New User', () => {
 
     it('Submitting a form with everything', async () => {
         await page.type('#user-name', "BOT");
+        console.log('name typed');
         await page.type('#user-description', "Description");
+        console.log('description typed');
         const imageHandle = await page.$('#user-image');
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
+        console.log('image uploaded');
         const submit = await page.$('#go-button');
         await submit.click();
+        console.log('submit clicked');
         await page.waitForNavigation();
+        console.log('redirected');
         expect(page.url()).toBe(mainUrl);
-        //page.goto(newUserUrl);
-        //expect(page.url()).toBe(mainUrl);
+    });
+
+    it('Should be redirected to main instantly', async () => {
+        page.goto(newUserUrl);
+        expect(page.url()).toBe(mainUrl);
     });
 });
