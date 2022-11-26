@@ -121,12 +121,18 @@ const uploadProfile = async () => {
     const form = document.querySelector("form.user-form");
 
     const profileObj = await getFormData(form);
-    if(checkProfile(profileObj) === false) return false;
+    if(checkProfile(profileObj) === false) {
+        console.log("invalid form data");
+        return false;
+    }
 
     const successAdd = await addDetails(profileObj);
-    if(successAdd === false) return false;
+    if(successAdd === false) {
+        console.log("adding details failed");
+        return false;
+    }
     console.log("redirecting...");
-    
+
     // redirect to main.html
     window.location.href = "./main.html";
     return true;
