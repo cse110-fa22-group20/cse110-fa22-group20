@@ -36,6 +36,6 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          cd ./source/scripts
-          ./testPrep.sh
+          # cd ./source/scripts
+          # ./testPrep.sh
           npm test new-user-delete-E2E.test.js
