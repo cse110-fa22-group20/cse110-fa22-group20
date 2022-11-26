@@ -17,25 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # Use cache to speed up
-
-      - name: Cache node modules
-        id: cache-yarn
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.yarn` on Linux/macOS
-          path: ~/.yarn
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Install jest
-        run: yarn add --dev jest babel-jest @babel/core @babel/preset-env puppeteer jest-puppeteer
-             yarn add --dev jest-environment-jsdom
-             yarn add --dev fake-indexeddb
+        run: npm install --save-dev jest babel-jest @babel/core @babel/preset-env puppeteer jest-puppeteer
+             npm install --save-dev jest-environment-jsdom
+             npm install --save-dev fake-indexeddb
 
       # Validate HTML/CSS in source/
       - name: HTMLCheck
@@ -51,4 +36,4 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          yarn test new-user-delete-E2E.test.js
+          npm test new-user-delete-E2E.test.js
