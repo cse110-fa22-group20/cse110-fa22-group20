@@ -54,13 +54,12 @@ describe('New User', () => {
         await page.type('#user-description', "Description");
         const imageHandle = await page.$('#user-image');
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
-        console.log(fs.existsSync('./source/assets/placeholder-profile-pic.png'));
         const submit = await page.$('#go-button');
         await submit.click();
         await page.waitForNavigation();
         expect(page.url()).toBe(mainUrl);
-    }, 6000);
-
+    });
+    
     /*it('Should be redirected to main instantly', async () => {
         page.goto(newUserUrl);
         expect(page.url()).toBe(mainUrl);
