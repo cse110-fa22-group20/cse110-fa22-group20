@@ -59,7 +59,8 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         console.log('submit clicked');
-        await page.waitForNavigation();
+        //await page.waitForNavigation();
+        await page.waitForTimeout(1000);
         console.log('redirected');
         expect(page.url()).toBe(mainUrl);
     });
