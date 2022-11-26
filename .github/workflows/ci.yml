@@ -51,4 +51,4 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          yarn test
+          yarn test new-user-delete-E2E.test.js
