@@ -5,7 +5,7 @@ const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pa
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({headless: false});
         page = await browser.newPage();
         await page.goto(newUserUrl);
     });
@@ -50,6 +50,7 @@ describe('New User', () => {
     });
 
     it('Submitting a form with everything', async () => {
+        expect(page.url()).toBe(newUserUrl);
         await page.type('#user-name', "BOT");
         await page.type('#user-description', "Description");
         const imageHandle = await page.$('#user-image');
