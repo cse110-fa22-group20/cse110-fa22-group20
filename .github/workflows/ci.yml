@@ -51,6 +51,4 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          cd ./source/scripts
-          ./testPrep.sh
           yarn test
