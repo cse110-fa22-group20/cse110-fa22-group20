@@ -4,7 +4,7 @@ name: HTML/CSS Validate & JS Unit Test
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ "main" ]
+    branches: [ "main", "new-user&delete-post-E2E" ]
   pull_request:
     branches: [ "main" ]
 
@@ -36,4 +36,6 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          npm test new-user-delete-E2E.test.js
+          cd ./source/scripts
+          ./testPrep.sh
+          npm test
