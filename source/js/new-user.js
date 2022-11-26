@@ -125,7 +125,8 @@ const uploadProfile = async () => {
 
     const successAdd = await addDetails(profileObj);
     if(successAdd === false) return false;
-
+    console.log("redirecting...");
+    
     // redirect to main.html
     window.location.href = "./main.html";
     return true;
