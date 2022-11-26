@@ -1,5 +1,5 @@
 const testing = false;
-var dbReady = null, addPost = null, getAllPosts = null, getPost = null, getDetails = null, updatePost = null, deletePostFromDB = null;
+var dbReady = null, addPost = null, getAllPosts = null, getPost = null, getDetails = null, updatePost = null, deletePostFromDB = null, getPostOrder = null, updatePostOrder = null, addPostOrder = null;
 const loadModules = async () => {
     return new Promise((res, rej) => {
         if(!testing) {
@@ -11,6 +11,9 @@ const loadModules = async () => {
                 getDetails = exports.getDetails;
                 updatePost = exports.updatePost;
                 deletePostFromDB = exports.deletePostFromDB;
+                getPostOrder = exports.getPostOrder;
+                updatePostOrder = exports.updatePostOrder;
+                addPostOrder = exports.addPostOrder;
                 res();
                 return;
             });
@@ -22,6 +25,9 @@ const loadModules = async () => {
             getDetails = require("./db.js").getDetails;
             updatePost = require("./db.js").updatePost;
             deletePostFromDB = require("./db.js").deletePostFromDB;
+            getPostOrder = require("./db.js").getPostOrder;
+            updatePostOrder = require("./db.js").updatePostOrder;
+            addPostOrder = require("./db.js").addPostOrder;
             res();
             return;
         }
@@ -50,8 +56,11 @@ async function init() {
     // state.posts = retrievedPosts;
     // console.log(`${JSON.stringify(state)}`);
 
+    const postOrder = await getPostOrder();
+    console.log('postOrder from db:', postOrder);
     const posts = await getAllPosts();
-    await populatePosts(posts);
+    await populatePosts(posts, postOrder);
+    console.log(state);
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -175,7 +184,7 @@ async function init() {
             addPost(postObj);
 
             const posts = await getAllPosts();
-            await populatePosts(posts);
+            await populatePosts(posts, postOrder);
         }
 
         toggleVisibility(textPostPopup);
@@ -306,6 +315,7 @@ const propogateTextPopup = (postDOM) => {
 const state = {
     postIDCounter: 0,
     posts: [],
+    order: [],
     editMode: false,
     editingPost: false
 };
@@ -326,13 +336,25 @@ const toggleVisibility = (obj) => {
 
 const getID = (obj) => Number(obj.getAttribute('data-post-id'));
 
+const syncPostOrderWithState = () => {
+    const posts = document.querySelectorAll('.post');
+    const ids = [];
+    for (let post of posts) {
+        ids.push(post.getAttribute('data-post-id'));
+    }
+    console.log(ids);
+    console.log(state.posts);
+};
+
 const createShadowPost = (post) => {
     const shadowPost = post.cloneNode(true);
     const prevClass = post.getAttribute('class').includes('text') ? 'text-post' : 'image-post';
     shadowPost.style.setProperty('position', '');
+    shadowPost.style.setProperty('z-index', '-1');
     shadowPost.setAttribute('data-post-id', '-1');
     shadowPost.setAttribute('id', 'shadow-post');
-    shadowPost.setAttribute('class', `post ${prevClass} shadowPost`);
+    shadowPost.setAttribute('class', `post ${prevClass} shadow-post`);
+    //shadowPost.removeChild(shadowPost.querySelector('.drag-icon-outer-container'));
     shadowPost.removeChild(shadowPost.querySelector('.drag-icon-container'));
     shadowPost.removeChild(shadowPost.querySelector('.delete-icon-container'));
     return shadowPost;
@@ -412,8 +434,10 @@ const getSwapPositions = (dragID) => {
 
 const makeDraggable = (dragIcon) => {
     dragIcon.addEventListener('mousedown', async (e) => {
-        const parentDiv = e.target.parentElement;
+        const parentDiv = e.target.parentElement.parentElement;
+        //console.log(parentDiv);
         parentDiv.style.setProperty('position', 'absolute');
+        parentDiv.style.setProperty('z-index', '2');
 
         // create shadow post to show where post would land on mouse up
         const shadowPost = createShadowPost(parentDiv);
@@ -430,6 +454,12 @@ const makeDraggable = (dragIcon) => {
         if (window.getSelection) {
             window.getSelection().removeAllRanges();
         }
+        const delay = (ms) => {
+            return new Promise((res) => {
+                setTimeout(res, ms);
+            });
+        };
+        await delay(300);
         document.onmousemove = (e) => {
             let curY = yOffset + e.clientY;
             parentDiv.style.top = curY + "px";
@@ -453,12 +483,13 @@ const makeDraggable = (dragIcon) => {
         document.onmouseup = () => {
             parentDiv.style.setProperty('position', 'relative');
             parentDiv.style.setProperty('top', '');
+            parentDiv.style.setProperty('z-index', '');
             document.onmousemove = null;
             document.onmouseup = null;
             parentDiv.remove();
             insertPostFromDOMObject(parentDiv, getID(shadowPost.nextElementSibling));
             shadowPost.remove();
-            //preantDiv.removeAttribute('id');
+            syncPostOrderWithState();
         };
     });
 }
@@ -467,14 +498,17 @@ const makeDraggable = (dragIcon) => {
     Add the drag and delete side buttons to a post element.
 */
 const addDragAndDelete = (postObj) => {
-    const drag = document.createElement('div');
-    drag.setAttribute('class', 'drag-icon-container');
+    const dragOuter = document.createElement('div');
+    const dragInner = document.createElement('div');
+    dragOuter.appendChild(dragInner);
+    dragOuter.setAttribute('class', 'drag-icon-container');
+    dragInner.setAttribute('class', 'drag-icon-inner-container');
     const del = document.createElement('div');
     del.setAttribute('class', 'delete-icon-container');
 
-    postObj.appendChild(drag);
+    postObj.appendChild(dragOuter);
     postObj.appendChild(del);
-    makeDraggable(drag);
+    makeDraggable(dragInner);
 };
 
 /*
@@ -545,7 +579,7 @@ const createPostObject = (postObj) => {
 /*
     Populates DOM with post objects stored in `state`.
 */
-const populatePosts = async (postArg) => {
+const populatePosts = async (postArg, order) => {
     const posts = postArg;
     const postsWrapper = document.querySelector('#posts-wrapper');
     const typeSelector = document.querySelector('#post-type-selector');
@@ -556,10 +590,24 @@ const populatePosts = async (postArg) => {
         currentPost.remove();
     }
 
-    posts.forEach((postObj) => {
-        const post = createPostObject(postObj);
-        postsWrapper.insertBefore(post, typeSelector);
-    });
+    if (!order.length) {
+        posts.forEach((postObj) => {
+            const post = createPostObject(postObj);
+            postsWrapper.insertBefore(post, typeSelector);
+            state.order.push(postObj.id);
+        });
+        await updatePostOrder(state.order);
+    } else {
+        const retrievedPostOrder = await getPostOrder();
+        for (let id of retrievedPostOrder) {
+            state.order.push(id);
+        }
+        // TODO: insert posts according to order
+        posts.forEach((postObj) => {
+            const post = createPostObject(postObj);
+            postsWrapper.insertBefore(post, typeSelector);
+        });
+    }
 
     makePostsEditable();
 };

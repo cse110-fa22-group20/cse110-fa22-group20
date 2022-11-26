@@ -13,7 +13,7 @@ const indexedDB =
 
 // integer is the version number for the database
 // changing it will trigger onupgradeneeded
-const request = indexedDB.open("UnpluggdDatabase", 2);
+const request = indexedDB.open("UnpluggdDatabase", 3);
 
 request.onerror = (event) => {
     console.error("An error occurred with IndexedDB");
@@ -28,6 +28,13 @@ request.onupgradeneeded = () => {
         // create a table/collection to store posts
         // keyPath is the primary key and will be auto incremented
         const posts = db.createObjectStore("posts", {keyPath: "id", autoIncrement: true});
+    }
+
+    if(!db.objectStoreNames.contains('post-order')) {
+        // create a table/collection to store posts
+        // keyPath is the primary key and will be auto incremented
+        const postOrder = db.createObjectStore("post-order");
+        postOrder.put([], 'post-order');
     }
 
     if(!db.objectStoreNames.contains('details')) {
@@ -229,6 +236,51 @@ const deletePostFromDB = (id) => {
     });
 }
 
+const getPostOrder = () => {
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("post-order", "readwrite");
+        const postOrder = transaction.objectStore("post-order");
+    
+        const query = postOrder.getAll();
+    
+        query.onsuccess = (event) => {
+            if (query.result.length) {
+                res(query.result[0]);
+            }
+            res(query.result);
+        }
+    
+        query.onerror = (event) => {
+            console.error("An error occured with IndexedDB");
+            console.error(event);
+            rej(null);
+        }
+    });
+}
+
+const updatePostOrder = (orderArray) => {
+    const db = request.result;
+    const transaction = db.transaction("post-order", "readwrite");
+    const postOrder = transaction.objectStore("post-order");
+
+    let success = false;
+    let query = postOrder.put(orderArray, 'post-order');
+
+    query.onsuccess = () => {
+        console.log(); // fill in later
+        success = true;
+    }
+
+    query.onerror = (event) => {
+        console.log("An error occured with IndexedDB");
+        console.log(event);
+        success = false;
+    }
+
+    return success;
+}
+
 /** 
  * Adds user details to the details table.
  * 
@@ -363,7 +415,7 @@ if (testing) {
     exports.deleteDetails = deleteDetails;
 }
 
-// 12 lines
+// 13 lines
 export { 
     dbReady,
     addPost, 
@@ -371,6 +423,8 @@ export {
     getPost, 
     getAllPosts, 
     deletePostFromDB, 
+    getPostOrder,
+    updatePostOrder,
     addDetails, 
     updateDetails, 
     getDetails, 

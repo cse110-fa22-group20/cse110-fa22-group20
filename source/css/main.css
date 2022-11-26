@@ -204,6 +204,22 @@ Adding image post styles
     margin-bottom: 0;
 }
 
+.shadow-post 
+{
+    opacity: 30%;
+}
+
+.drag-icon-inner-container 
+{
+    height: 1.5em;
+    width: 1.5em;
+}
+
+/* change cursor to grab when hovering over the drag icon */
+.drag-icon-inner-container:hover 
+{
+    cursor: move;
+}
 
 .drag-icon-container 
 {
@@ -224,12 +240,6 @@ Adding image post styles
     align-items: center;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-}
-
-/* change cursor to grab when hovering over the drag icon */
-.drag-icon-container:hover 
-{
-    cursor: move;
 }
 
 .delete-icon-container
