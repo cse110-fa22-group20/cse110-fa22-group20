@@ -59,11 +59,12 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         console.log('submit clicked');
+        console.log('Directory: ' + process.cwd());
         //await page.waitForNavigation();
-        await page.waitForTimeout(1000);
+        await page.waitForTimeout(3000);
         console.log('redirected');
         expect(page.url()).toBe(mainUrl);
-    });
+    }, 6000);
 
     /*it('Should be redirected to main instantly', async () => {
         page.goto(newUserUrl);
