@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const fs = require("fs");
 var browers, page;
 const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/new-user.html';
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
@@ -50,19 +51,13 @@ describe('New User', () => {
 
     it('Submitting a form with everything', async () => {
         await page.type('#user-name', "BOT");
-        console.log('name typed');
         await page.type('#user-description', "Description");
-        console.log('description typed');
         const imageHandle = await page.$('#user-image');
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
-        console.log('image uploaded');
+        console.log(fs.existsSync('./source/assets/placeholder-profile-pic.png'));
         const submit = await page.$('#go-button');
         await submit.click();
-        console.log('submit clicked');
-        console.log('Directory: ' + process.cwd());
-        //await page.waitForNavigation();
-        await page.waitForTimeout(3000);
-        console.log('redirected');
+        await page.waitForNavigation();
         expect(page.url()).toBe(mainUrl);
     }, 6000);
 
