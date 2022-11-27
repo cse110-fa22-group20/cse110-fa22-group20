@@ -1,11 +1,10 @@
 const puppeteer = require('puppeteer');
-const fs = require("fs");
 var browers, page;
 const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/new-user.html';
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({headless: false});
+        browser = await puppeteer.launch();
         page = await browser.newPage();
         await page.goto(newUserUrl);
     });
@@ -57,6 +56,8 @@ describe('New User', () => {
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
         const submit = await page.$('#go-button');
         await submit.click();
+        const name = await page.$('#user-name');
+        console.log(name.innerHTML);
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
