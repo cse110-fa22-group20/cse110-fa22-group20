@@ -57,7 +57,8 @@ describe('New User', () => {
         const submit = await page.$('#go-button');
         await submit.click();
         const name = await page.$('#user-name');
-        console.log(name.innerHTML);
+        console.log(name);
+        console.log(name.value);
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
