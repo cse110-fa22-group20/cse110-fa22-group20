@@ -60,11 +60,4 @@ describe('New User', () => {
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
-
-    it('Should be redirected to main instantly', async () => {
-        page = await browser.newPage();
-        await page.goto(newUserUrl);
-        await page.waitForTimeout(1500);
-        expect(page.url()).toBe(mainUrl);
-    });
 });
