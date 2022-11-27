@@ -181,10 +181,11 @@ async function init() {
                 content: content,
             }
 
-            addPost(postObj);
-
+            const id = await addPost(postObj);
+            state.order.push(id);
             const posts = await getAllPosts();
-            await populatePosts(posts, postOrder);
+            await updatePostOrder(state.order);
+            await populatePosts(posts);
         }
 
         toggleVisibility(textPostPopup);
@@ -254,6 +255,7 @@ async function init() {
 
     saveButton.addEventListener('click', async () => {
         await removeDragAndDeleteFromAll();
+        syncPostOrder();
 
         toggleVisibility(editModeButton);
         toggleVisibility(addPostButton);
@@ -336,14 +338,14 @@ const toggleVisibility = (obj) => {
 
 const getID = (obj) => Number(obj.getAttribute('data-post-id'));
 
-const syncPostOrderWithState = () => {
+const syncPostOrder = async () => {
     const posts = document.querySelectorAll('.post');
     const ids = [];
     for (let post of posts) {
-        ids.push(post.getAttribute('data-post-id'));
+        ids.push(getID(post));
     }
-    console.log(ids);
-    console.log(state.posts);
+    state.order = ids;
+    await updatePostOrder(ids);
 };
 
 const createShadowPost = (post) => {
@@ -489,7 +491,8 @@ const makeDraggable = (dragIcon) => {
             parentDiv.remove();
             insertPostFromDOMObject(parentDiv, getID(shadowPost.nextElementSibling));
             shadowPost.remove();
-            syncPostOrderWithState();
+            // put syncPostOrder here if you want to save ordering on mouseup.
+            // right now ordering is saved when you click save.
         };
     });
 }
@@ -590,23 +593,18 @@ const populatePosts = async (postArg, order) => {
         currentPost.remove();
     }
 
-    if (!order.length) {
-        posts.forEach((postObj) => {
-            const post = createPostObject(postObj);
-            postsWrapper.insertBefore(post, typeSelector);
-            state.order.push(postObj.id);
-        });
-        await updatePostOrder(state.order);
-    } else {
-        const retrievedPostOrder = await getPostOrder();
-        for (let id of retrievedPostOrder) {
-            state.order.push(id);
+    // insert posts in accordance with retrieved order
+    state.order = await getPostOrder();
+    for (let i = 0; i < state.order.length; i++) { // O(n!)?
+        const cur = state.order[i];
+        for (let j = 0; j < posts.length; j++) {
+            if (posts[j].id === cur) {
+                postsWrapper.insertBefore(
+                    createPostObject(posts[j]), 
+                    typeSelector
+                );
+            }
         }
-        // TODO: insert posts according to order
-        posts.forEach((postObj) => {
-            const post = createPostObject(postObj);
-            postsWrapper.insertBefore(post, typeSelector);
-        });
     }
 
     makePostsEditable();
@@ -705,13 +703,13 @@ const deletePost = async (postID) => {
             res(false);
             return false;
         }
-        const postIDint = parseInt(postID);
+        const postIDInt = parseInt(postID);
         // reject nan, float, and < 0
-        if(isNaN(postIDint) || Number(postID) != postIDint) {
+        if(isNaN(postIDInt) || Number(postID) != postIDInt) {
             res(false);
             return false;
         }
-        if(postIDint < 0) {
+        if(postIDInt < 0) {
             res(false);
             return false;
         }
@@ -725,7 +723,7 @@ const deletePost = async (postID) => {
         postContainer.remove();
 
         // Remove the post from the db
-        const deleteSuccess = await deletePostFromDB(postIDint);
+        const deleteSuccess = await deletePostFromDB(postIDInt);
         if(!deleteSuccess) {
             res(false);
             return false;
@@ -734,11 +732,23 @@ const deletePost = async (postID) => {
         // Update state
         state.postIDCounter--;
         let postIndex = 0;
-        for(let i = 0; i < state.postIDCounter; i++) if(state.posts[i].id == postIDint) {
+        for(let i = 0; i < state.postIDCounter; i++) if(state.posts[i].id == postIDInt) {
             postIndex = i;
             break;
         }
         state.posts.splice(postIndex, 1);
+        // The looping + splicing above is now redundant.
+        // Looks like we are now inserting then fetching from the db 
+        // everytime a post is updated to avoid having to keep track of ids manually.
+
+        // update order
+        for (let i = 0; i < state.order.length; i++) {
+            if (state.order[i] === postIDInt) {
+                state.order.splice(i, 1);
+                break;
+            }
+        }
+        await updatePostOrder(state.order);
         res(true);
         return true;
     });

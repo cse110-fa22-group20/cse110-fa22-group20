@@ -83,26 +83,27 @@ const dbReady = () => {
  * return true if successful, false otherwise
  */
 const addPost = (post) => {
-    const db = request.result;
-    const transaction = db.transaction("posts", "readwrite");
-    const posts = transaction.objectStore("posts");
+    return new Promise((res, rej) => {
+        const db = request.result;
+        const transaction = db.transaction("posts", "readwrite");
+        const posts = transaction.objectStore("posts");
 
-    let success;
-    const query = posts.add(post);
+        let success;
+        const query = posts.add(post);
 
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
+        query.onsuccess = (e) => {
+            // this returns the ID assigned to the new obj.
+            // used for tracking the order of posts when new posts are added
+            res(e.target.result); 
+        }
 
-    query.onerror = (event) => {
-        console.error(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
-        console.error(event);
-        success = false;
-    }
-
-    return success;
-}
+        query.onerror = (event) => {
+            console.error(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
+            console.error(event);
+            rej(false);
+        }
+    });
+};
 
 /** 
  * Update post in the posts table.
@@ -415,7 +416,7 @@ if (testing) {
     exports.deleteDetails = deleteDetails;
 }
 
-// 13 lines
+// 14 lines
 export { 
     dbReady,
     addPost, 
