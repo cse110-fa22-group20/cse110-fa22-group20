@@ -4,7 +4,7 @@ const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pa
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch({headless:false});
+        browser = await puppeteer.launch();
         page = await browser.newPage();
         await page.goto(newUserUrl);
     });
