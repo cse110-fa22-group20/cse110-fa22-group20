@@ -50,15 +50,14 @@ describe('New User', () => {
 
     it('Submitting a form with everything', async () => {
         expect(page.url()).toBe(newUserUrl);
-        await page.type('#user-name', "BOT");
-        await page.type('#user-description', "Description");
+        await page.type('#user-name', "BOT", {delay: 100});
+        await page.type('#user-description', "Description", {delay: 100});
         const imageHandle = await page.$('#user-image');
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
         const submit = await page.$('#go-button');
         await submit.click();
         const name = await page.$('#user-name');
         console.log(name);
-        console.log(name.value);
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
