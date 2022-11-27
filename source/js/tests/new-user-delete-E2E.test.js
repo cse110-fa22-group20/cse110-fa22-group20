@@ -56,9 +56,9 @@ describe('New User', () => {
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
         const submit = await page.$('#go-button');
         await submit.click();
-        /*const name = await page.$('#user-name');
+        const name = await page.$('#user-name');
         console.log(name);
-        console.log(name.value);*/
+        console.log(name.value);
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
