@@ -17,11 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install jest
-        run: npm install --save-dev jest babel-jest @babel/core @babel/preset-env puppeteer jest-puppeteer
-             npm install --save-dev jest-environment-jsdom
-             npm install --save-dev fake-indexeddb
+      
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/npm.lock') }}
 
+      - name: Install dependencies
+        run: |
+          npm install
+          cd ./node_modules/puppeteer
+           npm install
+        
       # Validate HTML/CSS in source/
       - name: HTMLCheck
         run: uname -a
