@@ -4,7 +4,7 @@ const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pa
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
 describe('New User', () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({headless:false});
         page = await browser.newPage();
         await page.goto(newUserUrl);
     });
@@ -62,7 +62,9 @@ describe('New User', () => {
     });
 
     it('Should be redirected to main instantly', async () => {
-        page.goto(newUserUrl);
+        page = await browser.newPage();
+        await page.goto(newUserUrl);
+        await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
 });
