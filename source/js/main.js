@@ -165,7 +165,8 @@ async function init() {
                 content: images,
             }
 
-            addPost(post);
+            const id = await addPost(post);
+            state.order.push(id);
         }
         else {
             const id = parseInt(document.querySelector("#image-post-form").getAttribute("data-post-id"));
@@ -185,6 +186,7 @@ async function init() {
         imageContainer.innerHTML = "";
         
         const posts = await getAllPosts();
+        await updatePostOrder(state.order);
         await populatePosts(posts);
     }
 
@@ -539,12 +541,14 @@ const makeDraggable = (dragIcon) => {
         if (window.getSelection) {
             window.getSelection().removeAllRanges();
         }
+        /*
         const delay = (ms) => {
             return new Promise((res) => {
                 setTimeout(res, ms);
             });
         };
         await delay(300);
+        */
         document.onmousemove = (e) => {
             let curY = yOffset + e.clientY;
             parentDiv.style.top = curY + "px";
