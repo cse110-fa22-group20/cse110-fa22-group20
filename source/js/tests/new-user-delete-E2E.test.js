@@ -54,10 +54,9 @@ describe('New User', () => {
         await page.type('#user-description', "Description", {delay: 100});
         const imageHandle = await page.$('#user-image');
         await imageHandle.uploadFile('./source/assets/placeholder-profile-pic.png');
+        await page.waitForTimeout(1500);
         const submit = await page.$('#go-button');
         await submit.click();
-        const name = await page.$('#user-name');
-        console.log(name);
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
