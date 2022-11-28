@@ -78,6 +78,7 @@ describe('New User/Delete Posts', () => {
         let submit = await page.$('#post-text');
         await submit.click();
 
+        //checking for visibility of delete button
         let deleteIsVisible = await page.evaluate(() => {
             const deleteButton = document.querySelector('.delete-icon-container');
             if (!deleteButton)
@@ -86,6 +87,7 @@ describe('New User/Delete Posts', () => {
             return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';    
         });
 
+        //checking for visibility of save button
         let saveIsVisible = await page.evaluate(() => {
             const saveButton = document.querySelector('#save-button');
             if (!saveButton)
@@ -99,6 +101,7 @@ describe('New User/Delete Posts', () => {
         expect(saveIsVisible).toBe(false);
     });
 
+    //Checking that delete/save become options when in edit mode
     it('Check that delete/save button is there when edit mode is toggled', async ()=>{
         //Simulating dummy text post to delete
         const editButton = await page.$('#edit-button');
@@ -125,25 +128,7 @@ describe('New User/Delete Posts', () => {
         expect(saveIsVisible).toBe(true);
     });
 
-    /* Test trying to check indexedDB storage
-    it('Checking if content in IndexedDB storage is correct', async ()=>{
-        let result = await page.evaluate(()=>{
-            let request = indexedDB.open('UnpluggdDatabase', 2);
-            request.onerror = (event) => {
-                console.error("An error occurred with IndexedDB");
-                console.error(event);
-            };
-            request.onsuccess= () =>{
-                const db = request.result;
-                db.transaction("posts").objectStore("posts").get("1").onsuccess = (event) => {
-                    return '${event.target.result.content}';
-                };
-            };
-        });
-
-        expect(result).toBe('Dummy text post');
-    });*/
-
+    //After saving, edit mode should end and delete/save options should be gone
     it('Check that delete/save button is not there when save is clicked', async ()=>{
         //clicks save button to end edit mode
         let saveButton = await page.$('#save-button');
