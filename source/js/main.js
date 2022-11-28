@@ -292,7 +292,7 @@ async function init() {
 
     saveButton.addEventListener('click', async () => {
         await removeDragAndDeleteFromAll();
-        syncPostOrder();
+        //syncPostOrder();
 
         toggleVisibility(editModeButton);
         toggleVisibility(addPostButton);
@@ -579,7 +579,7 @@ const makeDraggable = (dragIcon) => {
             insertPostFromDOMObject(parentDiv, getID(shadowPost.nextElementSibling));
             shadowPost.remove();
             // put syncPostOrder here if you want to save ordering on mouseup.
-            // right now ordering is saved when you click save.
+            syncPostOrder();
         };
     });
 }
