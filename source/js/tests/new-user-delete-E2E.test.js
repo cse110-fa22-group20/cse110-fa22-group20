@@ -1,8 +1,8 @@
 const puppeteer = require('puppeteer');
-var browers, page;
+var browser, page;
 const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/new-user.html';
 const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
-describe('New User', () => {
+describe('New User/Delete Posts', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
@@ -60,4 +60,114 @@ describe('New User', () => {
         await page.waitForTimeout(1500);
         expect(page.url()).toBe(mainUrl);
     });
+
+    //Checking that our only page options are edit and add upon page load
+    it('Check that edit/add buttons are there', async ()=>{
+        expect(await page.$('#edit-button')).not.toBe(null);
+        expect(await page.$('#add-button')).not.toBe(null);
+    });
+
+    //Checking that delete/save is not an option yet when posts exist, as edit mode is not toggled
+    it('Check that delete/save button is not there yet', async ()=>{
+        //Simulating dummy text post to delete
+        const addButton = await page.$('#add-button');
+        await addButton.click();
+        const addTextPostButton = await page.$('#add-text-post');
+        await addTextPostButton.click();
+        await page.type('#text-post-textarea', 'Dummy text post');
+        let submit = await page.$('#post-text');
+        await submit.click();
+
+        let deleteIsVisible = await page.evaluate(() => {
+            const deleteButton = document.querySelector('.delete-icon-container');
+            if (!deleteButton)
+               return false;
+            const style = window.getComputedStyle(deleteButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';    
+        });
+
+        let saveIsVisible = await page.evaluate(() => {
+            const saveButton = document.querySelector('#save-button');
+            if (!saveButton)
+               return false;
+            const style = window.getComputedStyle(saveButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+        });
+
+        //should not exist or be visible yet
+        expect(deleteIsVisible).toBe(false);
+        expect(saveIsVisible).toBe(false);
+    });
+
+    it('Check that delete/save button is there when edit mode is toggled', async ()=>{
+        //Simulating dummy text post to delete
+        const editButton = await page.$('#edit-button');
+        await editButton.click();
+
+        let deleteIsVisible = await page.evaluate(() => {
+            const deleteButton = document.querySelector('.delete-icon-container');
+            if (!deleteButton)
+               return false;
+            const style = window.getComputedStyle(deleteButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+        });
+
+        let saveIsVisible = await page.evaluate(() => {
+            const saveButton = document.querySelector('#save-button');
+            if (!saveButton)
+               return false;
+            const style = window.getComputedStyle(saveButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+        });
+
+        //should both exist and be visible
+        expect(deleteIsVisible).toBe(true);
+        expect(saveIsVisible).toBe(true);
+    });
+
+    /* Test trying to check indexedDB storage
+    it('Checking if content in IndexedDB storage is correct', async ()=>{
+        let result = await page.evaluate(()=>{
+            let request = indexedDB.open('UnpluggdDatabase', 2);
+            request.onerror = (event) => {
+                console.error("An error occurred with IndexedDB");
+                console.error(event);
+            };
+            request.onsuccess= () =>{
+                const db = request.result;
+                db.transaction("posts").objectStore("posts").get("1").onsuccess = (event) => {
+                    return '${event.target.result.content}';
+                };
+            };
+        });
+
+        expect(result).toBe('Dummy text post');
+    });*/
+
+    it('Check that delete/save button is not there when save is clicked', async ()=>{
+        //clicks save button to end edit mode
+        let saveButton = await page.$('#save-button');
+        await saveButton.click();
+
+        let deleteIsVisible = await page.evaluate(() => {
+            const deleteButton = document.querySelector('.delete-icon-container');
+            if (!deleteButton)
+               return false;
+            const style = window.getComputedStyle(deleteButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';    
+        });
+
+        let saveIsVisible = await page.evaluate(() => {
+            saveButton = document.querySelector('#save-button');
+            if (!saveButton)
+               return false;
+            const style = window.getComputedStyle(saveButton);
+            return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+        });
+
+        //should not exist or be visible anymore
+        expect(deleteIsVisible).toBe(false);
+        expect(saveIsVisible).toBe(false);
+    });
+
 });
