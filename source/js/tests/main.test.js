@@ -5,6 +5,7 @@ require("fake-indexeddb/auto");
 const main =  require('../main');
 const db = require('../db');
 
+/*
 describe("populatePosts tests", () => {
     test("zero posts.", () => {
         const state = {
@@ -23,20 +24,20 @@ describe("populatePosts tests", () => {
         expect(postContainer.childElementCount).toBe(1);
     });
 
-    test("five posts.", () => {
-        const state = {
-            postIDCounter: 0,
-            posts: [],
-        };
+    test("five posts.", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        //jest.spyOn(db, 'getPostOrder').mockImplementation(() => [0, 1, 2, 3, 4]);
+        //db.updatePostOrder([0, 1, 2, 3, 4]);
+        const posts = [];
     
         for (let i = 0; i < 5; i++) {
             const newPost = {
                 id: i,
                 type: 'text',
-                content: 'dummy text',
+                content: 'dummy text'
             };
-            state.posts.push(newPost);
-            state.postIDCounter++;
+            posts.push(newPost);
         }
     
         const postContainer = document.createElement('section');
@@ -48,10 +49,11 @@ describe("populatePosts tests", () => {
         document.body.innerHTML = '<div id="root"></div>'
         document.querySelector('#root').appendChild(postContainer);
     
-        main.populatePosts(state.posts);
+        main.populatePosts(posts);
         expect(postContainer.childElementCount).toBe(6);
     });
 });
+*/
 
 
 test("Test 'createTextPostObject'", () => {

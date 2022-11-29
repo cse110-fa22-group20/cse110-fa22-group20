@@ -17,7 +17,7 @@ cat new-user.js | sed -z 's/false/true/' > temp
 mv temp new-user.js
 
 # number of lines that take up the export block at the bottom of db.js
-EXPORT_LINES=12
+EXPORT_LINES=14
 
 cat db.js | head -n -"$EXPORT_LINES" | sed -z 's/false/true/' > temp
 mv temp db.js
