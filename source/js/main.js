@@ -1,5 +1,5 @@
 const testing = false;
-var dbReady = null, addPost = null, getAllPosts = null, getPost = null, getDetails = null, updatePost = null, deletePostFromDB = null, getPostOrder = null, updatePostOrder = null, addPostOrder = null;
+var dbReady = null, addPost = null, getAllPosts = null, getPost = null, getDetails = null, updatePost = null, deletePostFromDB = null, getPostOrder = null, updatePostOrder = null;
 const loadModules = async () => {
     return new Promise((res, rej) => {
         if(!testing) {
@@ -13,7 +13,6 @@ const loadModules = async () => {
                 deletePostFromDB = exports.deletePostFromDB;
                 getPostOrder = exports.getPostOrder;
                 updatePostOrder = exports.updatePostOrder;
-                addPostOrder = exports.addPostOrder;
                 res();
                 return;
             });
@@ -27,7 +26,6 @@ const loadModules = async () => {
             deletePostFromDB = require("./db.js").deletePostFromDB;
             getPostOrder = require("./db.js").getPostOrder;
             updatePostOrder = require("./db.js").updatePostOrder;
-            addPostOrder = require("./db.js").addPostOrder;
             res();
             return;
         }
@@ -715,7 +713,7 @@ const populatePosts = async (postArg, order) => {
 
     // insert posts in accordance with retrieved order
     state.order = await getPostOrder();
-    for (let i = 0; i < state.order.length; i++) { // O(n!)?
+    for (let i = 0; i < state.order.length; i++) { 
         const cur = state.order[i];
         for (let j = 0; j < posts.length; j++) {
             if (posts[j].id === cur) {

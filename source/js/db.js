@@ -31,8 +31,7 @@ request.onupgradeneeded = () => {
     }
 
     if(!db.objectStoreNames.contains('post-order')) {
-        // create a table/collection to store posts
-        // keyPath is the primary key and will be auto incremented
+        // create a table/collection to store the order of posts
         const postOrder = db.createObjectStore("post-order");
         postOrder.put([], 'post-order');
     }
@@ -409,6 +408,8 @@ if (testing) {
     exports.updatePost = updatePost;
     exports.getPost = getPost;
     exports.getAllPosts = getAllPosts;
+    exports.getPostOrder = getPostOrder;
+    exports.updatePostOrder = updatePostOrder;
     exports.deletePostFromDB = deletePostFromDB;
     exports.addDetails = addDetails;
     exports.updateDetails = updateDetails;
