@@ -60,6 +60,84 @@ async function init() {
     await populatePosts(posts, postOrder);
     console.log(state);
 
+    if(!state.editMode || !state.editingPost) {
+        const postDOM = document.querySelectorAll(".content");
+        for(const post of postDOM) {
+            //console.log(post)
+            if(post.parentNode.classList.contains("image-post")) {
+                for(const image of post.childNodes) {
+                    image.onclick = async () => {
+                        // for(const st of image.childNodes) {
+                        //     console.log(st)
+                        // }
+                        var postId = post.parentNode.getAttribute("data-post-id");
+                        await fullview(image);
+                    }
+                }
+            }
+        }
+    }
+
+    const fullview = async (image) => {
+        const imagePostPopup = document.querySelector("#full-view");
+        const popupBackground = document.querySelector("#popup-background");
+        var modal = document.getElementById("myModal");
+        var img = document.getElementById("myImg");
+        var modalImg = document.getElementById("img01");
+        //var captionText = document.getElementById("caption");
+        //console.log(captionText)
+
+        modal.style.display = "block";
+        //image.src = this.src;
+        modalImg.src = image.src;
+        //captionText.innerHTML = this.alt;
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() { 
+        modal.style.display = "none";
+        }
+
+    }
+
+// var modal = document.getElementById("myModal");
+// var img = document.getElementById("myImg");
+// var modalImg = document.getElementById("img01");
+// var captionText = document.getElementById("caption");
+// console.log(modal)
+// console.log(img)
+// console.log(modalImg)
+// console.log(captionText)
+// img.onclick = function(){
+//   modal.style.display = "block";
+//   modalImg.src = this.src;
+//   captionText.innerHTML = this.alt;
+// }
+
+// // Get the <span> element that closes the modal
+// var span = document.getElementsByClassName("close")[0];
+
+// // When the user clicks on <span> (x), close the modal
+// span.onclick = function() { 
+//   modal.style.display = "none";
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const addPostButton = document.querySelector('#add-button');
 
     addPostButton.onclick = () => {
