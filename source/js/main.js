@@ -73,10 +73,11 @@ async function init() {
         }
     }
 
+    //fullview popup
     const fullview = async (image) => {
         if(state.editMode == false) {
             var modal = document.getElementById("myModal");
-            var modalImg = document.getElementById("img01");
+            var modalImg = document.getElementById("modal-img");
             var captionText = document.getElementById("caption");
             const postId = image.parentNode.parentNode.getAttribute("data-post-id");
             const post = await getPost(parseInt(postId));
@@ -97,20 +98,6 @@ async function init() {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     const addPostButton = document.querySelector('#add-button');
 
