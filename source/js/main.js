@@ -67,10 +67,9 @@ async function init() {
             if(post.parentNode.classList.contains("image-post")) {
                 for(const image of post.childNodes) {
                     image.onclick = async () => {
-                        // for(const st of image.childNodes) {
-                        //     console.log(st)
-                        // }
-                        var postId = post.parentNode.getAttribute("data-post-id");
+                        // const postId = post.parentNode.getAttribute("data-post-id");
+                        // const post = await getPost(parseInt(postId));
+                        // const store = post.content[]
                         await fullview(image);
                     }
                 }
@@ -78,11 +77,31 @@ async function init() {
         }
     }
 
+    
+
+    // for(const i of postObj) {
+    //     console.log(i);
+    // }
+
     const fullview = async (image) => {
-        const imagePostPopup = document.querySelector("#full-view");
-        const popupBackground = document.querySelector("#popup-background");
+        const postId = image.parentNode.parentNode.getAttribute("data-post-id");
+        const post = await getPost(parseInt(postId));
+        for (var i of post.content) {
+            // console.log(i.image)
+            // console.log(image.src)
+            if (i.image == image.src) {
+                console.log("abc")
+            }
+        }
+        //console.log(post.content[0]);
+        //console.log(post.)
+        
+
+
+        // const imagePostPopup = document.querySelector("#full-view");
+        // const popupBackground = document.querySelector("#popup-background");
         var modal = document.getElementById("myModal");
-        var img = document.getElementById("myImg");
+        //var img = document.getElementById("myImg");
         var modalImg = document.getElementById("img01");
         //var captionText = document.getElementById("caption");
         //console.log(captionText)
@@ -101,28 +120,6 @@ async function init() {
         }
 
     }
-
-// var modal = document.getElementById("myModal");
-// var img = document.getElementById("myImg");
-// var modalImg = document.getElementById("img01");
-// var captionText = document.getElementById("caption");
-// console.log(modal)
-// console.log(img)
-// console.log(modalImg)
-// console.log(captionText)
-// img.onclick = function(){
-//   modal.style.display = "block";
-//   modalImg.src = this.src;
-//   captionText.innerHTML = this.alt;
-// }
-
-// // Get the <span> element that closes the modal
-// var span = document.getElementsByClassName("close")[0];
-
-// // When the user clicks on <span> (x), close the modal
-// span.onclick = function() { 
-//   modal.style.display = "none";
-// }
 
 
 

@@ -522,7 +522,8 @@ pre
 .modal-content {
   margin: auto;
   display: block;
-  width: 80%;
+  width: 50%;
+  /* transform: scale(0.1); */
   max-width: 700px;
 }
 
@@ -574,12 +575,6 @@ pre
   cursor: pointer;
 }
 
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
-  .modal-content {
-    width: 100%;
-  }
-}
 
 
 
@@ -624,4 +619,8 @@ pre
     {
         width: calc(100% - 40px);
     }
+    
+    .modal-content {
+        width: 100%;
+      }
   }
