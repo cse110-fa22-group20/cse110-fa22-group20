@@ -60,65 +60,42 @@ async function init() {
     await populatePosts(posts, postOrder);
     console.log(state);
 
-    if(!state.editMode || !state.editingPost) {
-        const postDOM = document.querySelectorAll(".content");
-        for(const post of postDOM) {
-            //console.log(post)
-            if(post.parentNode.classList.contains("image-post")) {
-                for(const image of post.childNodes) {
-                    image.onclick = async () => {
-                        // const postId = post.parentNode.getAttribute("data-post-id");
-                        // const post = await getPost(parseInt(postId));
-                        // const store = post.content[]
-                        await fullview(image);
-                    }
+    console.log(`edit mode: ${state.editMode}`);
+   
+    const postDOM = document.querySelectorAll(".content");
+    for(const post of postDOM) {
+        if(post.parentNode.classList.contains("image-post")) {
+            for(const image of post.childNodes) {
+                image.onclick = async () => {
+                    await fullview(image);
                 }
             }
         }
     }
 
-    
-
-    // for(const i of postObj) {
-    //     console.log(i);
-    // }
-
     const fullview = async (image) => {
-        const postId = image.parentNode.parentNode.getAttribute("data-post-id");
-        const post = await getPost(parseInt(postId));
-        for (var i of post.content) {
-            // console.log(i.image)
-            // console.log(image.src)
-            if (i.image == image.src) {
-                console.log("abc")
+        if(state.editMode == false) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            const postId = image.parentNode.parentNode.getAttribute("data-post-id");
+            const post = await getPost(parseInt(postId));
+            
+            for (const i of post.content) {
+                if (i.image == image.src) {
+                    captionText.innerHTML = i.caption;
+                }
+            }
+
+            modal.style.display = "block";
+            modalImg.src = image.src;
+            
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function() { 
+                modal.style.display = "none";
             }
         }
-        //console.log(post.content[0]);
-        //console.log(post.)
-        
-
-
-        // const imagePostPopup = document.querySelector("#full-view");
-        // const popupBackground = document.querySelector("#popup-background");
-        var modal = document.getElementById("myModal");
-        //var img = document.getElementById("myImg");
-        var modalImg = document.getElementById("img01");
-        //var captionText = document.getElementById("caption");
-        //console.log(captionText)
-
-        modal.style.display = "block";
-        //image.src = this.src;
-        modalImg.src = image.src;
-        //captionText.innerHTML = this.alt;
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() { 
-        modal.style.display = "none";
-        }
-
     }
 
 
