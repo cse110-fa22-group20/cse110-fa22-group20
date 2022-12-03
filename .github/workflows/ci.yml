@@ -36,9 +36,6 @@ jobs:
         run: yarn add --dev jest
              yarn add -D jest-environment-jsdom
              yarn add --dev fake-indexeddb
-             
-      - name: Install jsdoc
-        run: yarn add --dev jsdoc
 
       # Validate HTML/CSS in source/
       - name: HTMLCheck
@@ -60,6 +57,10 @@ jobs:
           
       # Once tests pass, create jsdoc documentation
       - name: Build JSDoc Documentation
-        # Must pass other tests before building documentation
-        run: |
-          yarn jsdoc
+        uses: andstor/jsdoc-action@v1
+        with:
+            source_dir: ./js
+            output_dir: ./out
+            recurse: true
+            config_file: jsdoc.json
+            front_page: README.md
