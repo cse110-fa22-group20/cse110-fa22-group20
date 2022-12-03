@@ -1,4 +1,4 @@
-name: HTML/CSS Validate & JS Unit Test
+name: HTML/CSS Validate/JS Unit Test/Build JSDoc Documentation
 
 # Controls when the workflow will run
 on:
