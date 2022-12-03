@@ -60,7 +60,7 @@ jobs:
         uses: andstor/jsdoc-action@v1
         with:
             source_dir: ./js
-            output_dir: ./out
+            output_dir: ./documentation
             recurse: true
             config_file: jsdoc.json
             front_page: README.md
