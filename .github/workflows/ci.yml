@@ -67,6 +67,5 @@ jobs:
 
       - name: Deploy the JSDoc Documentation
         uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        with:     
           publish_dir: ./documentation
