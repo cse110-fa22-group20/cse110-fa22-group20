@@ -68,6 +68,19 @@ async function init() {
         window.scrollTo(0, document.body.scrollHeight);
     }
 
+    const downloadButton = document.querySelector('#download-button');
+    downloadButton.onclick = async () => {
+        var jsonURL = `data:text/plain;filename=test.json,${JSON.stringify(await dbToJson())}`;
+        //window.location = "data:text/plain;filename=test.text,Test";
+        var a = document.createElement('a');
+        a.href = jsonURL;
+        a.download = 'testing.json';
+        a.style = 'display: none';
+        downloadButton.parentNode.appendChild(a);
+        a.click();
+        a.remove();
+    };
+
     const addImagePostButton = document.querySelector("#add-image-post")
     const popupBackground = document.querySelector("#popup-background")
     const imagePostPopup = document.querySelector("#image-post-popup")
@@ -1060,6 +1073,17 @@ class AddImageRow extends HTMLElement {
         shadowElement.appendChild(addRowDiv);
     }
 }
+
+const dbToJson = () => {
+    return new Promise(async (res) => {
+        const dbObj = {
+            posts: await getAllPosts(),
+            postOrder: await getPostOrder(),
+            userDetails: await getDetails()
+        };
+        res(dbObj);
+    });
+};
 
 if (testing) {
     exports.createTextPostObject = createTextPostObject;

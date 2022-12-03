@@ -3,7 +3,7 @@
  * Also redirect to main.html if an user object already exists in db
  */
 const testing = false;
-var addDetails = null, dbReady = null, getDetails = null;
+var addDetails = null, dbReady = null, getDetails = null, addPost = null, updatePostOrder = null;
 const loadModules = async () => {
     return new Promise((res, rej) => {
         if(!testing) {
@@ -11,6 +11,8 @@ const loadModules = async () => {
                 addDetails = exports.addDetails;
                 dbReady = exports.dbReady;
                 getDetails = exports.getDetails;
+                addPost = exports.addPost;
+                updatePostOrder = exports.updatePostOrder;
                 res();
                 return;
             });
@@ -18,6 +20,8 @@ const loadModules = async () => {
             addDetails = require("./db.js").addDetails;
             dbReady = require("./db.js").dbReady;
             getDetails = require("./db.js").getDetails;
+            addPost = require("./db.js").addPost;
+            updatePostOrder = require("./db.js").updatePostOrder;
             res();
             return;
         }
@@ -42,6 +46,9 @@ async function init() {
 
     const submitButton = document.querySelector("#go-button");
     submitButton.addEventListener("click", uploadProfile);
+
+    const uploadButton = document.querySelector('#existing-page');
+    uploadButton.addEventListener('change', useJSON);
 }
  
 /**
@@ -167,6 +174,29 @@ const getFormData = async (form) => {
         reader.readAsDataURL(image);
     });
 }
+
+const useJSON = async (e) => {
+    const delay = () => new Promise(res => setTimeout(res, 5000));
+    const uploaded = e.target.files[0];
+    let reader = new FileReader();
+
+    try {
+        reader.readAsText(uploaded);
+        reader.onload = async () => {
+            const obj = JSON.parse(reader.result);
+            await addDetails(obj['userDetails']);
+            await updatePostOrder(obj['postOrder']);
+            for (const post of obj['posts']) {
+                await addPost(post);
+            }
+            window.location.href = "./main.html";
+        };
+    } catch (e) {
+        console.log(e);
+        await delay();
+        window.location.href = "./new-user.html";
+    }
+};
 
 if(testing) {
     exports.loadModules = loadModules;
