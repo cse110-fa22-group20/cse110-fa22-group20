@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 var browser, page;
-const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/new-user.html';
-const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/pages/main.html';
+const newUserUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/source/pages/new-user.html';
+const mainUrl = 'https://cse110-fa22-group20.github.io/cse110-fa22-group20/source/pages/main.html';
 describe('New User/Delete Posts', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
