@@ -32,6 +32,63 @@ const loadModules = async () => {
     });
 }
 
+/**
+ * Bind it so that when images are clicked, a popup w/ caption is shown
+ */
+const makeImagesClickable = () => {
+    const postDOM = document.querySelectorAll(".content");
+    for(const post of postDOM) {
+        if(post.parentNode.classList.contains("image-post")) {
+            for(const image of post.childNodes) {
+                image.onclick = async () => {
+                    await fullview(image);
+                }
+            }
+        }
+    }
+
+    //fullview popup
+    const fullview = async (image) => {
+        if(state.editMode == false) {
+            var modal = document.getElementById("myModal");
+            var modalImg = document.getElementById("modal-img");
+            var captionText = document.getElementById("caption");
+
+            const form = document.getElementById("full-view-form");
+            const postId = image.parentNode.parentNode.getAttribute("data-post-id");
+            const post = await getPost(parseInt(postId));
+            
+            for (const i of post.content) {
+                if (i.image == image.src) {
+                    if(i.caption.length !== 0) {
+                        captionText.style.display = "block";
+                        captionText.innerHTML = i.caption;
+                        form.style.gridTemplateColumns = "1fr 1fr";
+                    }
+                    else {
+                        captionText.style.display = "none";
+                        form.style.gridTemplateColumns = "1fr";
+                    }
+
+                    // skip unnecessary loops
+                    break;
+                }
+            }
+
+            modal.style.display = "grid";
+            modalImg.src = image.src;
+
+            captionText.style.maxHeight = (modalImg.height - 40) + "px";
+            
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function() { 
+                modal.style.display = "none";
+            }
+        }
+    }
+}
+
 // ensures that page as loaded before running anything
 async function init() {
     await loadModules();
@@ -62,54 +119,7 @@ async function init() {
 
     console.log(`edit mode: ${state.editMode}`);
    
-    const postDOM = document.querySelectorAll(".content");
-    for(const post of postDOM) {
-        if(post.parentNode.classList.contains("image-post")) {
-            for(const image of post.childNodes) {
-                image.onclick = async () => {
-                    await fullview(image);
-                }
-            }
-        }
-    }
-
-    //fullview popup
-    const fullview = async (image) => {
-        if(state.editMode == false) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementById("modal-img");
-            var captionText = document.getElementById("caption");
-
-            const form = document.getElementById("full-view-form");
-            const postId = image.parentNode.parentNode.getAttribute("data-post-id");
-            const post = await getPost(parseInt(postId));
-            
-            for (const i of post.content) {
-                if (i.image == image.src) {
-                    console.log(caption.length);
-
-                    if(i.caption.length !== 0) {
-                        captionText.style.display = "block";
-                        captionText.innerHTML = i.caption;
-                        form.style.gridTemplateColumns = "1fr 1fr";
-                    }
-                    else {
-                        captionText.style.display = "none";
-                        form.style.gridTemplateColumns = "1fr";
-                    }
-                }
-            }
-
-            modal.style.display = "grid";
-            modalImg.src = image.src;
-            
-            var span = document.getElementsByClassName("close")[0];
-
-            span.onclick = function() { 
-                modal.style.display = "none";
-            }
-        }
-    }
+    makeImagesClickable();
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -237,6 +247,8 @@ async function init() {
         const posts = await getAllPosts();
         await updatePostOrder(state.order);
         await populatePosts(posts);
+
+        makeImagesClickable();
     }
 
     textPostForm.onsubmit = async function (event) {
@@ -276,6 +288,8 @@ async function init() {
         toggleVisibility(popupBackground);
 
         textPostTextarea.innerText = '';
+
+        makeImagesClickable();
     }
   
     // delete popup and its buttons are static, no need to query every time
@@ -358,14 +372,11 @@ async function init() {
         textPopupTitle.innerText = "Add text post";
 
         state.editMode = !state.editMode; // toggle edit mode
-        console.log(`edit mode: ${state.editMode}`);
     });
 };
 
 const makePostsEditable = () => {
     const postDOM = document.querySelectorAll(".content");
-
-    console.log(state);
 
     for(const post of postDOM) {
         if(post.parentNode.classList.contains("text-post")) {
@@ -379,8 +390,6 @@ const makePostsEditable = () => {
             }
         }
     }
-
-    console.log(state);
 }
 
 const setUserDetails = (name, description, image) => {
