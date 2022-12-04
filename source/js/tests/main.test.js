@@ -83,6 +83,20 @@ test("Test 'createTextPostObject'", () => {
     expect(post.querySelector('pre').innerText).toBe('dummy text');
 });
 
+test("Test 'createTextPostObject with no text'", () => {
+    const newPost = {
+        id: 23,
+        type: 'text',
+        content: 'a',
+    };
+
+    const post = main.createTextPostObject(newPost);
+    expect(post.tagName).toBe('DIV');
+    expect(post.getAttribute('data-post-id')).toBe('23');
+    expect(post.getAttribute('class')).toBe('post text-post');
+    expect(post.querySelector('pre').innerText).toBe('a');
+});
+
 describe("appendPost tests", () => {
     test("one time.", () => {
         const newPost = {
