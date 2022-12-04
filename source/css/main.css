@@ -553,7 +553,7 @@ pre
     margin: auto;
     background-color: var(--background-grey);
     border-radius: 5px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 .hidden
