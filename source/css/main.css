@@ -478,7 +478,7 @@ pre
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow-y: auto; /* Enable scroll if needed */
+  /* overflow-y: auto; */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
 }
@@ -494,17 +494,15 @@ pre
 
 /* Caption of Modal Image */
 #caption {
-  word-break: break-all;
   white-space: normal;
-  margin-right: 15px;
-  margin-bottom: 15px;
   display: block;
+  margin: auto;
   text-align: left;
   color: black;
-  padding: 10px 0;
+  /* padding: 12px 12px ; */
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 100%;
+  width: 90%;
 }
 
 /* Add Animation */
@@ -547,9 +545,11 @@ pre
 {
     overflow-x: hidden;
     display: grid;
-    gap: 15px;
-    max-width: 700px;
-    min-width: 500px;
+    /* gap: 15px; */
+    /* max-width: 700px;
+    min-width: 500px; */
+    max-width: 70%;
+    min-width: 40%;
     margin: auto;
     background-color: var(--background-grey);
     border-radius: 5px;
