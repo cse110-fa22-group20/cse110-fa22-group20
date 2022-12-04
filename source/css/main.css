@@ -19,6 +19,7 @@ body
 #user-details img 
 {
     border-radius: 60px;
+    object-fit: cover;
 }
 
 #user-details div 
@@ -32,6 +33,7 @@ body
 #user-details div > h2, p
 {
     margin: 0;
+    word-break: break-all;
 }
 
 #posts-wrapper
@@ -176,6 +178,8 @@ Adding image post styles
     border-radius: 10px;
 
     padding: 10px;
+
+    overflow-wrap: break-word;
 }
 
 .content 
@@ -201,6 +205,7 @@ Adding image post styles
 .image-post-content img 
 {
     border-radius: 5px;
+    object-fit: cover;
 }
 
 .text-post-content 
