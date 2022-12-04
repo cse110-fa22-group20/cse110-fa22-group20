@@ -130,19 +130,16 @@ const updatePost = (post) => {
     const transaction = db.transaction("posts", "readwrite");
     const posts = transaction.objectStore("posts");
 
-    console.log(post);
-
     let success = false;
     let query = posts.put(post);
 
     query.onsuccess = () => {
-        console.log(); // fill in later
         success = true;
     }
 
     query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
+        console.error("An error occured with IndexedDB");
+        console.error(event);
         success = false;
     }
 
@@ -195,13 +192,12 @@ const getAllPosts = async () => {
         let query = posts.getAll();
 
         query.onsuccess = () => {
-            console.log("Successfully retrieved all posts from db.");
             res(query.result);
         }
 
         query.onerror = (event) => {
-            console.log("An error occured with IndexedDB");
-            console.log(event);
+            console.error("An error occured with IndexedDB");
+            console.error(event);
             rej([]);
         }
     });
@@ -248,8 +244,8 @@ const deletePostFromDB = (id) => {
         }
 
         query.onerror = (event) => {
-            console.log("An error occured with IndexedDB");
-            console.log(event);
+            console.error("An error occured with IndexedDB");
+            console.error(event);
             rej(false);
         }
     });
@@ -297,8 +293,8 @@ const updatePostOrder = (orderArray) => {
     }
 
     query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
+        console.error("An error occured with IndexedDB");
+        console.error(event);
         success = false;
     }
 
@@ -327,13 +323,12 @@ const updatePostOrder = (orderArray) => {
         let query = details.add(detailsObj);
 
         query.onsuccess = () => {
-            console.log(); // fill in later
             res(true);
         }
 
         query.onerror = (event) => {
-            console.log("An error occured with IndexedDB");
-            console.log(event);
+            console.error("An error occured with IndexedDB");
+            console.error(event);
             rej(false);
         }
     });
@@ -358,8 +353,8 @@ const getDetails = () => {
         }
 
         query.onerror = (event) => {
-            console.log("An error occured with IndexedDB");
-            console.log(event);
+            console.error("An error occured with IndexedDB");
+            console.error(event);
             rej(null);
         }
     });

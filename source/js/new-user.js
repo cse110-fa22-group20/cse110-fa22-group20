@@ -95,6 +95,12 @@ const checkProfile = (profileObj) => {
         }
     }
 
+    // name must be at most 20 characters
+    if(profileObj["name"].length > 20) {
+        alert("The maximum length of name is 20 characters!");
+        return false;
+    }
+
     // name must have a positive length
     if(profileObj["name"].length <= 0) {
         alert("Please enter your name!");

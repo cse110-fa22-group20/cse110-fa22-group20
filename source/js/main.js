@@ -380,7 +380,6 @@ const propogateImagePopup = async (postDOM) => {
         shadowRoot.querySelector(".add-image-row").setAttribute("data-image-index", imageIndex - 1);
 
         imageLabel.style.backgroundImage = `url(${image.image})`;
-        imageLabel.style.backgroundSize = "100px 100px";
 
         imageCaption.value = image.caption;
 
@@ -957,6 +956,7 @@ class AddImageRow extends HTMLElement {
                 background-repeat: no-repeat;
                 background-position: center;
                 border-radius: 5px;
+                background-size: contain;
             }
 
             .add-image-label:hover 
@@ -1040,7 +1040,6 @@ class AddImageRow extends HTMLElement {
             fileReader.onload = () => {
                 const displayImage = fileReader.result;
                 addImageLabel.style.backgroundImage = `url(${displayImage})`;
-                addImageLabel.style.backgroundSize = "100px 100px";
 
                 currentImage.image = displayImage;
             };
