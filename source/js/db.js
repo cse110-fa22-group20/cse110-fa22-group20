@@ -376,9 +376,10 @@ if (testing) {
     exports.deletePostFromDB = deletePostFromDB;
     exports.addDetails = addDetails;
     exports.getDetails = getDetails;
+    exports.clearAllPosts = clearAllPosts;
 }
 
-module.exports =  { 
+export { 
     dbReady,
     addPost, 
     updatePost, 
