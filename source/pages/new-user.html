@@ -35,10 +35,10 @@
                         </label>
                         <div id="user-inputs">
                             <input required type="text" name="user-name" id="user-name" placeholder="Name (personal, company, etc.)" minlength=1>
-                            <textarea name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
+                            <textarea required name="user-description" id="user-description" cols="30" rows="3" placeholder="Description"></textarea>
                             <!--this div is in place for grid positioning, can be removed-->
                             <div>
-                                <button type="button" id="go-button">Let's go!</button>
+                                <button type="submit" id="go-button">Let's go!</button>
                                 <p hidden>Or</p>
                                 <!--same idea as #user-image-label-->
                                 <label hidden id="existing-page-label">

@@ -51,9 +51,14 @@ async function init() {
     // create <add-image-row> element
     customElements.define("add-image-row", AddImageRow);
 
+    // state.posts = retrievedPosts;
+    // console.log(`${JSON.stringify(state)}`);
+
     const postOrder = await getPostOrder();
+    console.log('postOrder from db:', postOrder);
     const posts = await getAllPosts();
     await populatePosts(posts, postOrder);
+    console.log(state);
 
     const addPostButton = document.querySelector('#add-button');
 
@@ -149,6 +154,8 @@ async function init() {
 
         state.currentImages = null;
         state.currentImages = [];
+
+        console.log(images);
 
         if(!state.editMode) {
             const post = {
@@ -262,6 +269,7 @@ async function init() {
         state.editMode = !state.editMode; // toggle edit mode
         state.currentImages = null;
         state.currentImages = [];
+        console.log(`edit mode: ${state.editMode}`);
 
         makePostsEditable();
         // find the delete buttons and add event listeners after they're populated
@@ -299,14 +307,14 @@ async function init() {
         textPopupTitle.innerText = "Add text post";
 
         state.editMode = !state.editMode; // toggle edit mode
+        console.log(`edit mode: ${state.editMode}`);
     });
 };
 
-/**
- * Make all the posts in the page editable
- */
 const makePostsEditable = () => {
     const postDOM = document.querySelectorAll(".content");
+
+    console.log(state);
 
     for(const post of postDOM) {
         if(post.parentNode.classList.contains("text-post")) {
@@ -320,14 +328,10 @@ const makePostsEditable = () => {
             }
         }
     }
+
+    console.log(state);
 }
 
-/**
- * Sets the content of the HTML element to the given input
- * @param {string} name - name of the user
- * @param {string} description - description of the user
- * @param {string} image - profile picture of the user
- */
 const setUserDetails = (name, description, image) => {
     const userImage = document.querySelector("#user-image");
     const userName = document.querySelector("#user-name");
@@ -380,6 +384,7 @@ const propogateImagePopup = async (postDOM) => {
         shadowRoot.querySelector(".add-image-row").setAttribute("data-image-index", imageIndex - 1);
 
         imageLabel.style.backgroundImage = `url(${image.image})`;
+        imageLabel.style.backgroundSize = "100px 100px";
 
         imageCaption.value = image.caption;
 
@@ -402,11 +407,11 @@ const state = {
 
 window.addEventListener('DOMContentLoaded', init);
 
-/**
- * If hidden make it visible.
- * If visible make it hidden.
- * @param {object} obj - the DOM element to be toggled
- */
+/*
+    Input: DOM object
+    If hidden make it visible.
+    If visible make it hidden.
+*/
 const toggleVisibility = (obj) => {
     if (getComputedStyle(obj).display === 'none') 
         obj.classList.remove('hidden');
@@ -416,9 +421,6 @@ const toggleVisibility = (obj) => {
 
 const getID = (obj) => Number(obj.getAttribute('data-post-id'));
 
-/**
- * Synchronizes the order of posts on the page to the database
- */
 const syncPostOrder = async () => {
     const posts = document.querySelectorAll('.post');
     const ids = [];
@@ -429,11 +431,6 @@ const syncPostOrder = async () => {
     await updatePostOrder(ids);
 };
 
-/**
- * Creates a "shadow" post DOM element from the given post
- * @param {object} post - the post to be cloned from
- * @returns the "shadow" post DOM element
- */
 const createShadowPost = (post) => {
     const shadowPost = post.cloneNode(true);
     const prevClass = post.getAttribute('class').includes('text') ? 'text-post' : 'image-post';
@@ -442,6 +439,7 @@ const createShadowPost = (post) => {
     shadowPost.setAttribute('data-post-id', '-1');
     shadowPost.setAttribute('id', 'shadow-post');
     shadowPost.setAttribute('class', `post ${prevClass} shadow-post`);
+    //shadowPost.removeChild(shadowPost.querySelector('.drag-icon-outer-container'));
     shadowPost.removeChild(shadowPost.querySelector('.drag-icon-container'));
     shadowPost.removeChild(shadowPost.querySelector('.delete-icon-container'));
     return shadowPost;
@@ -522,12 +520,14 @@ const getSwapPositions = (dragID) => {
 const makeDraggable = (dragIcon) => {
     dragIcon.addEventListener('mousedown', async (e) => {
         const parentDiv = e.target.parentElement.parentElement;
+        //console.log(parentDiv);
         parentDiv.style.setProperty('position', 'absolute');
         parentDiv.style.setProperty('z-index', '2');
 
         // create shadow post to show where post would land on mouse up
         const shadowPost = createShadowPost(parentDiv);
         const dragID = getID(parentDiv);
+        //parentDiv.setAttribute('id', dragID);
         insertPostFromDOMObject(shadowPost, dragID);
 
         let rect = parentDiv.getBoundingClientRect();
@@ -556,10 +556,12 @@ const makeDraggable = (dragIcon) => {
 
             if (curY - yMid < swapPositions[0]) {
                 // swap up
+                console.log(`should swap up: ${curY}, ${swapPositions[0]}`);
                 prevY = swapUp(dragID, shadowPost, prevY);
                 swapPositions = getSwapPositions(dragID);
             } else if (curY + yMid > swapPositions[1]) {
                 // swap down
+                console.log(`should swap down: ${curY}, ${swapPositions[1]}`);
                 prevY = swapDown(dragID, shadowPost, prevY);
                 swapPositions = getSwapPositions(dragID);
             }
@@ -580,10 +582,9 @@ const makeDraggable = (dragIcon) => {
     });
 }
 
-/**
- * Add the drag and delete side buttons to a post element
- * @param {object} postObj - the element to add drag and delete buttons
- */
+/*
+    Add the drag and delete side buttons to a post element.
+*/
 const addDragAndDelete = (postObj) => {
     const dragOuter = document.createElement('div');
     const dragInner = document.createElement('div');
@@ -598,9 +599,9 @@ const addDragAndDelete = (postObj) => {
     makeDraggable(dragInner);
 };
 
-/**
- * Add the drag and delete side buttons to all post elements
- */
+/*
+    Add the drag and delete side buttons to all post elements.
+*/
 const addDragAndDeleteToAll = () => {
     return new Promise((res) => {
         const posts = document.querySelectorAll('.post');
@@ -611,10 +612,9 @@ const addDragAndDeleteToAll = () => {
     })
 }
 
-/**
- * Remove the drag and delete side buttons to a post element
- * @param {object} postObj - the element to remove drag and delete buttons
- */
+/*
+    Remove the drag and delete side buttons to a post element.
+*/
 const removeDragAndDelete = (postObj) => {
     let content;
 
@@ -626,9 +626,9 @@ const removeDragAndDelete = (postObj) => {
     postObj.appendChild(content);
 };
 
-/**
- * Remove the drag and delete side buttons from all post elements.
- */
+/*
+    Remove the drag and delete side buttons from all post elements.
+*/
 const removeDragAndDeleteFromAll = () => {
     return new Promise((res) => {
         const postDOM = document.querySelectorAll(".post");
@@ -641,11 +641,9 @@ const removeDragAndDeleteFromAll = () => {
 }
 
 
-/**
- * Creates DOM element from a post object with type='text'
- * @param {object} postObj - creates DOM element from this post object
- * @return DOM element created from the input
- */
+/*
+    Creates DOM element from a post object with type='text'.
+*/
 const createTextPostObject = (postObj) => {
     const post = document.createElement('div');
 
@@ -662,11 +660,6 @@ const createTextPostObject = (postObj) => {
     return post;
 };
 
-/**
- * Creates DOM element from a post object with type='image'
- * @param {object} postObj - creates DOM element from this post object
- * @return DOM element created from the input
- */
 const createImagePostObject = (postObj) => {
     const post = document.createElement('div');
     const postContent = document.createElement('div');
@@ -681,6 +674,8 @@ const createImagePostObject = (postObj) => {
     post.setAttribute('data-post-id', postObj.id);
     post.setAttribute('class', 'post image-post');
 
+    console.log(postObj)
+
     for(const image of images) {
         const imageElement = document.createElement("img");
         imageElement.setAttribute("src", image.image);
@@ -693,20 +688,18 @@ const createImagePostObject = (postObj) => {
     return post;
 }
 
-/**
- * Creates DOM object based on the type of post of the given input (text or image)
- * @param {object} postObj - creates DOM element from this post object
- * @return DOM element created from the input
- */
+/*
+    TODO: different DOM object returned if type is text vs image
+*/
 const createPostObject = (postObj) => {
     return postObj.type === 'text'  
         ? createTextPostObject(postObj) 
         : createImagePostObject(postObj);
 }
 
-/**
- * Populates DOM with post objects stored in `state`.
- */
+/*
+    Populates DOM with post objects stored in `state`.
+*/
 const populatePosts = async (postArg, order) => {
     const posts = postArg;
     const postsWrapper = document.querySelector('#posts-wrapper');
@@ -780,12 +773,12 @@ const insertPostFromDOMObject = (postObj, beforeIndex, order) => {
     postContainer.insertBefore(postObj, beforeElement);
 };
 
-/**
- * Insert a new post into the DOM 
- * before the post in the container 
- * specified with `beforeIndex`
- *
- * If the index is invalid, the post will be appended instead
+/*
+    Insert a new post into the DOM 
+    before the post in the container 
+    specified with `beforeIndex`.
+
+    If the index is invalid, the post will be appended instead.
 */
 const insertPost = (postObj, beforeIndex) => {
     const postContainer = document.querySelector('#posts-wrapper');
@@ -803,30 +796,27 @@ const insertPost = (postObj, beforeIndex) => {
     postContainer.insertBefore(createPostObject(postObj), beforeElement);
 };
 
-/**
- * Append a new post to the DOM
- * @param {object} postObj - post object to be appended
- */
+/*
+    Append a new post to the DOM.
+*/
 const appendPost = (postObj) => {
     insertPost(postObj, -1);
 }
 
-/**
- * Prepend a new post to the DOM.
- * Stub used for making sure insertPost works as expected
- * @param {object} postObj - post object to be prepended
- */
+/*
+    Prepend a new post to the DOM.
+    Stub used for making sure insertPost works as expected.
+*/
 const prependPost = (postObj) => {
     insertPost(postObj, 0);
 }
 
-/**
+/*
  * Delete the post given its id in the string format (...) 
  * where the ... is an integer >= 0
  *     - Remove the html
  *     - Remove the post from the db
- * @param {string} postID - id of the post to be deleted
- * @return whether the deletion was successful
+ * Return whether the deletion was successful
  */
 const deletePost = async (postID) => {
     return new Promise(async (res, rej) => {
@@ -956,7 +946,6 @@ class AddImageRow extends HTMLElement {
                 background-repeat: no-repeat;
                 background-position: center;
                 border-radius: 5px;
-                background-size: contain;
             }
 
             .add-image-label:hover 
@@ -1040,6 +1029,7 @@ class AddImageRow extends HTMLElement {
             fileReader.onload = () => {
                 const displayImage = fileReader.result;
                 addImageLabel.style.backgroundImage = `url(${displayImage})`;
+                addImageLabel.style.backgroundSize = "100px 100px";
 
                 currentImage.image = displayImage;
             };
@@ -1054,7 +1044,14 @@ class AddImageRow extends HTMLElement {
             const index = parseInt(event.target.parentNode.getAttribute("data-image-index"));
             const currentImage = state.currentImages[index];
 
+            console.log(event.target.parentNode)
+
+            console.log(index);
+            console.log(currentImage);
+
             currentImage.caption = event.target.value;
+
+            console.log(state.currentImages)
         }
 
         /**
@@ -1071,5 +1068,4 @@ if (testing) {
     exports.insertPost = insertPost;
     exports.deletePost = deletePost;
     exports.loadModules = loadModules;
-    exports.syncPostOrder = syncPostOrder;
 }
