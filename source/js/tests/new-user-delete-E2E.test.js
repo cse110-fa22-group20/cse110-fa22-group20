@@ -174,40 +174,4 @@ describe('New User/Delete Posts', () => {
         posts = await page.$$(".post text-post");
         expect(posts.length).toBe(0);
     });
-
-    // add 10 posts and delete them
-    it('Add 10 posts and delete them', async()=>{
-        //Simulating dummy text post to delete
-        for(let i = 0; i < 10; i++) {
-            expect(await page.$('#edit-button')).not.toBe(null);
-            expect(await page.$('#add-button')).not.toBe(null);
-            const addButton = await page.$('#add-button');
-            await addButton.click();
-            await page.click('#add-text-post');
-            //const addTextPostButton = await page.$('#add-text-post');
-            //await addTextPostButton.click();
-            await page.type('#text-post-textarea', 'Dummy text post');
-            let submit = await page.$('#post-text');
-            await submit.click();
-        }
-
-        for(let i = 0; i < 10; i++) {
-            // try to delete them
-            const editButton = await page.$('#edit-button');
-            await editButton.click();
-            const deleteButton = await page.$("#posts-wrapper > div.post.text-post > div.delete-icon-container");
-            await deleteButton.click();
-            const confirmDeleteButton = await page.$("#confirm-delete-button");
-            await confirmDeleteButton.click();
-        }
-        
-        // check it's gone
-        posts = await page.$$(".post text-post");
-        expect(posts.length).toBe(0);
-
-        // refresh the page and check it's really gone
-        await page.goto(mainUrl);
-        posts = await page.$$(".post text-post");
-        expect(posts.length).toBe(0);
-    }, 10000);
 });
