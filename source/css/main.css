@@ -505,6 +505,10 @@ pre
   width: 90%;
 }
 
+#caption::-webkit-scrollbar {
+    width: 0px;
+}
+
 /* Add Animation */
 .modal-content, #caption {  
   -webkit-animation-name: zoom;

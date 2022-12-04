@@ -32,6 +32,13 @@ const loadModules = async () => {
     });
 }
 
+window.onresize = () => {
+    var modalImg = document.getElementById("modal-img");
+    var captionText = document.getElementById("caption");
+
+    captionText.style.maxHeight = (modalImg.height - 40) + "px";
+}
+
 /**
  * Bind it so that when images are clicked, a popup w/ caption is shown
  */
