@@ -5,9 +5,11 @@ require("fake-indexeddb/auto");
 const main =  require('../main');
 const db = require('../db');
 
-/*
 describe("populatePosts tests", () => {
-    test("zero posts.", () => {
+    test("zero posts.", async () => {
+        await main.loadModules();
+        await db.dbReady();
+
         const state = {
             postIDCounter: 0,
             posts: [],
@@ -30,6 +32,7 @@ describe("populatePosts tests", () => {
         //jest.spyOn(db, 'getPostOrder').mockImplementation(() => [0, 1, 2, 3, 4]);
         //db.updatePostOrder([0, 1, 2, 3, 4]);
         const posts = [];
+        const order = [];
     
         for (let i = 0; i < 5; i++) {
             const newPost = {
@@ -38,9 +41,11 @@ describe("populatePosts tests", () => {
                 content: 'dummy text'
             };
             posts.push(newPost);
+            order.push(i);
         }
     
         const postContainer = document.createElement('section');
+        postContainer.setAttribute('class', 'hello');
         postContainer.setAttribute('id', 'posts-wrapper');
         const typeSelector = document.createElement('div');
         typeSelector.setAttribute('id', 'post-type-selector');
@@ -49,11 +54,19 @@ describe("populatePosts tests", () => {
         document.body.innerHTML = '<div id="root"></div>'
         document.querySelector('#root').appendChild(postContainer);
     
+        db.updatePostOrder(order);
         main.populatePosts(posts);
+
+        const delay = (ms) => {
+            return new Promise((res) => {
+                setTimeout(res, ms);
+            });
+        };
+        await delay(100);
+
         expect(postContainer.childElementCount).toBe(6);
     });
 });
-*/
 
 
 test("Test 'createTextPostObject'", () => {
@@ -68,6 +81,20 @@ test("Test 'createTextPostObject'", () => {
     expect(post.getAttribute('data-post-id')).toBe('20');
     expect(post.getAttribute('class')).toBe('post text-post');
     expect(post.querySelector('pre').innerText).toBe('dummy text');
+});
+
+test("Test 'createTextPostObject with no text'", () => {
+    const newPost = {
+        id: 23,
+        type: 'text',
+        content: 'a',
+    };
+
+    const post = main.createTextPostObject(newPost);
+    expect(post.tagName).toBe('DIV');
+    expect(post.getAttribute('data-post-id')).toBe('23');
+    expect(post.getAttribute('class')).toBe('post text-post');
+    expect(post.querySelector('pre').innerText).toBe('a');
 });
 
 describe("appendPost tests", () => {
@@ -248,5 +275,181 @@ describe("deletePost tests", () => {
         expect(document.querySelector('[data-post-id="2"]')).not.toBe(null);
         const posts = await db.getAllPosts();
         expect(posts.length).toBe(2);
+    });
+});
+
+describe("syncPostOrder tests", () => {
+    test("two posts 0, 1", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        const newPost1 = {
+            id: 0,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const newPost2 = {
+            id: 1,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const postContainer = document.createElement('section');
+        postContainer.setAttribute('id', 'posts-wrapper');
+        const typeSelector = document.createElement('div');
+        typeSelector.setAttribute('id', 'post-type-selector');
+        typeSelector.setAttribute('class', 'hidden');
+        postContainer.appendChild(typeSelector);
+        document.body.innerHTML = '<div id="root"></div>'
+        document.querySelector('#root').appendChild(postContainer);
+    
+        main.appendPost(newPost1);
+        main.appendPost(newPost2);
+        await main.syncPostOrder();
+        const order = await db.getPostOrder();
+        console.log(order);
+        expect(order).toEqual([0, 1]);
+    });
+
+    test("two posts 1, 0", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        const newPost1 = {
+            id: 0,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const newPost2 = {
+            id: 1,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const postContainer = document.createElement('section');
+        postContainer.setAttribute('id', 'posts-wrapper');
+        const typeSelector = document.createElement('div');
+        typeSelector.setAttribute('id', 'post-type-selector');
+        typeSelector.setAttribute('class', 'hidden');
+        postContainer.appendChild(typeSelector);
+        document.body.innerHTML = '<div id="root"></div>'
+        document.querySelector('#root').appendChild(postContainer);
+    
+        main.appendPost(newPost2);
+        main.appendPost(newPost1);
+        await main.syncPostOrder();
+        const order = await db.getPostOrder();
+        console.log(order);
+        expect(order).toEqual([1, 0]);
+    });
+
+    test("three posts 10, 17, 21", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        const newPost1 = {
+            id: 10,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const newPost2 = {
+            id: 17,
+            type: 'text',
+            content: 'dummy text',
+        };
+
+        const newPost3 = {
+            id: 21,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const postContainer = document.createElement('section');
+        postContainer.setAttribute('id', 'posts-wrapper');
+        const typeSelector = document.createElement('div');
+        typeSelector.setAttribute('id', 'post-type-selector');
+        typeSelector.setAttribute('class', 'hidden');
+        postContainer.appendChild(typeSelector);
+        document.body.innerHTML = '<div id="root"></div>'
+        document.querySelector('#root').appendChild(postContainer);
+    
+        main.appendPost(newPost1);
+        main.appendPost(newPost2);
+        main.appendPost(newPost3);
+        await main.syncPostOrder();
+        const order = await db.getPostOrder();
+        console.log(order);
+        expect(order).toEqual([10, 17, 21]);
+    });
+
+    test("three posts 21, 10, 17", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        const newPost1 = {
+            id: 21,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const newPost2 = {
+            id: 10,
+            type: 'text',
+            content: 'dummy text',
+        };
+
+        const newPost3 = {
+            id: 17,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const postContainer = document.createElement('section');
+        postContainer.setAttribute('id', 'posts-wrapper');
+        const typeSelector = document.createElement('div');
+        typeSelector.setAttribute('id', 'post-type-selector');
+        typeSelector.setAttribute('class', 'hidden');
+        postContainer.appendChild(typeSelector);
+        document.body.innerHTML = '<div id="root"></div>'
+        document.querySelector('#root').appendChild(postContainer);
+    
+        main.appendPost(newPost1);
+        main.appendPost(newPost2);
+        main.appendPost(newPost3);
+        await main.syncPostOrder();
+        const order = await db.getPostOrder();
+        console.log(order);
+        expect(order).toEqual([21, 10, 17]);
+    });
+
+    test("zero posts", async () => {
+        await main.loadModules();
+        await db.dbReady();
+        const newPost1 = {
+            id: 0,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const newPost2 = {
+            id: 1,
+            type: 'text',
+            content: 'dummy text',
+        };
+    
+        const postContainer = document.createElement('section');
+        postContainer.setAttribute('id', 'posts-wrapper');
+        const typeSelector = document.createElement('div');
+        typeSelector.setAttribute('id', 'post-type-selector');
+        typeSelector.setAttribute('class', 'hidden');
+        postContainer.appendChild(typeSelector);
+        document.body.innerHTML = '<div id="root"></div>'
+        document.querySelector('#root').appendChild(postContainer);
+    
+        //main.appendPost(newPost1);
+        //main.appendPost(newPost2);
+        await main.syncPostOrder();
+        const order = await db.getPostOrder();
+        console.log(order);
+        expect(order).toEqual([]);
     });
 });

@@ -1068,4 +1068,5 @@ if (testing) {
     exports.insertPost = insertPost;
     exports.deletePost = deletePost;
     exports.loadModules = loadModules;
+    exports.syncPostOrder = syncPostOrder;
 }
