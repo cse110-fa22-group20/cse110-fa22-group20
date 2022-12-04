@@ -87,7 +87,6 @@ const addPost = (post) => {
         const transaction = db.transaction("posts", "readwrite");
         const posts = transaction.objectStore("posts");
 
-        let success;
         const query = posts.add(post);
 
         query.onsuccess = (e) => {
@@ -99,7 +98,7 @@ const addPost = (post) => {
         query.onerror = (event) => {
             console.error(`An error occured with IndexedDB: (post)\n${JSON.stringify(post)}`);
             console.error(event);
-            rej(false);
+            rej(null);
         }
     });
 };
@@ -208,6 +207,26 @@ const getAllPosts = async () => {
     });
 }
 
+/**
+ * Clears all posts, used for testing purposes
+ */
+const clearAllPosts = () => {
+    
+    const db = request.result;
+    const transaction = db.transaction("posts", "readwrite");
+    const posts = transaction.objectStore("posts");
+
+    const query = posts.clear();
+
+    query.onsuccess = () => {
+        return true;
+    }
+
+    query.onerror = () => {
+        return false;
+    }
+}
+
 /** 
  * Delete post with the given id from the posts table.
  * 
@@ -236,6 +255,9 @@ const deletePostFromDB = (id) => {
     });
 }
 
+/**
+ * Gets the current post order in the db
+ */
 const getPostOrder = () => {
     return new Promise((res, rej) => {
         const db = request.result;
@@ -259,6 +281,9 @@ const getPostOrder = () => {
     });
 }
 
+/**
+ * Updates the post order
+ */
 const updatePostOrder = (orderArray) => {
     const db = request.result;
     const transaction = db.transaction("post-order", "readwrite");
@@ -268,7 +293,6 @@ const updatePostOrder = (orderArray) => {
     let query = postOrder.put(orderArray, 'post-order');
 
     query.onsuccess = () => {
-        console.log(); // fill in later
         success = true;
     }
 
@@ -316,41 +340,6 @@ const updatePostOrder = (orderArray) => {
 }
 
 /** 
- * Update user details in the details table.
- * 
- * details = {
- *     name: string,
- *     image: string,
- *     description: string,
- *     primaryColor: string,
- *     secondaryColor: string,
- * }
- * 
- * return true if successful, false otherwise
- */
-const updateDetails = (detailsObj) => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
-
-    let success = false;
-    let query = details.put(detailsObj);
-
-    query.onsuccess = () => {
-        console.log(); // fill in later
-        success = true;
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
-}
-
-/** 
  * Get user details from the details table.
  * 
  * return a single details JSON object
@@ -365,7 +354,7 @@ const getDetails = () => {
         let query = details.getAll();
 
         query.onsuccess = () => {
-            res(query.result[0]);
+            query.result[0] == undefined ? res(null) : res(query.result[0]);
         }
 
         query.onerror = (event) => {
@@ -374,32 +363,6 @@ const getDetails = () => {
             rej(null);
         }
     });
-}
-
-/** 
- * Delete users details from details table.
- * 
- * return true if successful, false otherwise
- */
-const deleteDetails = () => {
-    const db = request.result;
-    const transaction = db.transaction("details", "readwrite");
-    const details = transaction.objectStore("details");
-
-    let success = false;
-    let query = details.clear();
-
-    query.onsuccess = () => {
-        success = true;
-    }
-
-    query.onerror = (event) => {
-        console.log("An error occured with IndexedDB");
-        console.log(event);
-        success = false;
-    }
-
-    return success;
 }
 
 if (testing) {
@@ -412,13 +375,10 @@ if (testing) {
     exports.updatePostOrder = updatePostOrder;
     exports.deletePostFromDB = deletePostFromDB;
     exports.addDetails = addDetails;
-    exports.updateDetails = updateDetails;
     exports.getDetails = getDetails;
-    exports.deleteDetails = deleteDetails;
 }
 
-// 14 lines
-export { 
+module.exports =  { 
     dbReady,
     addPost, 
     updatePost, 
@@ -428,7 +388,6 @@ export {
     getPostOrder,
     updatePostOrder,
     addDetails, 
-    updateDetails, 
     getDetails, 
-    deleteDetails,
+    clearAllPosts
 };
