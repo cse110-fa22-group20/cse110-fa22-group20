@@ -79,16 +79,28 @@ async function init() {
             var modal = document.getElementById("myModal");
             var modalImg = document.getElementById("modal-img");
             var captionText = document.getElementById("caption");
+
+            const form = document.getElementById("full-view-form");
             const postId = image.parentNode.parentNode.getAttribute("data-post-id");
             const post = await getPost(parseInt(postId));
             
             for (const i of post.content) {
                 if (i.image == image.src) {
-                    captionText.innerHTML = i.caption;
+                    console.log(caption.length);
+
+                    if(i.caption.length !== 0) {
+                        captionText.style.display = "block";
+                        captionText.innerHTML = i.caption;
+                        form.style.gridTemplateColumns = "1fr 1fr";
+                    }
+                    else {
+                        captionText.style.display = "none";
+                        form.style.gridTemplateColumns = "1fr";
+                    }
                 }
             }
 
-            modal.style.display = "block";
+            modal.style.display = "grid";
             modalImg.src = image.src;
             
             var span = document.getElementsByClassName("close")[0];
