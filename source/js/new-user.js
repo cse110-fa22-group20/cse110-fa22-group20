@@ -34,7 +34,7 @@ async function init() {
         // redirect to main.html if an user object exists
         window.location.href = "./main.html";
     }).catch(userExist => {
-        console.log("new user");
+        
     });
 
     const imageInput = document.querySelector("#user-image");
@@ -95,7 +95,10 @@ const checkProfile = (profileObj) => {
     }
 
     // name must have a positive length
-    if(profileObj["name"].length <= 0) return false;
+    if(profileObj["name"].length <= 0) {
+        alert("Please enter your name!");
+        return false;
+    }
 
     return true;
 }
@@ -109,6 +112,7 @@ const updateImage = () => {
 
     // update profile picture
     const image = imageInput.files[0];
+    if(!image) return;
     imageArea.style.backgroundImage = `url(${URL.createObjectURL(image)})`;
 }
 
@@ -122,16 +126,13 @@ const uploadProfile = async () => {
 
     const profileObj = await getFormData(form);
     if(checkProfile(profileObj) === false) {
-        console.log("invalid form data");
         return false;
     }
 
     const successAdd = await addDetails(profileObj);
     if(successAdd === false) {
-        console.log("adding details failed");
         return false;
     }
-    console.log("redirecting...");
 
     // redirect to main.html
     window.location.href = "./main.html";
@@ -140,7 +141,7 @@ const uploadProfile = async () => {
 
 /**
  * Gets data gathered from the form
- * Returns an object of the form
+ * Returns an object of the form or null if the profile picture does not exist
  * profileObj = {
  *     name: string,
  *     image: string,
@@ -148,7 +149,6 @@ const uploadProfile = async () => {
  *     primaryColor: string,
  *     secondaryColor: string
  * }
- * !No error checking!
  */
 const getFormData = async (form) => {
     return new Promise((res, rej) => {
@@ -171,6 +171,11 @@ const getFormData = async (form) => {
             return profileObj;
         });
 
+        if(!image) {
+            alert("Please upload a profile picture!");
+            res(null);
+            return null;
+        }
         reader.readAsDataURL(image);
     });
 }

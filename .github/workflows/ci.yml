@@ -24,10 +24,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/npm.lock') }}
 
       - name: Install dependencies
-        run: |
-          npm install
-          cd ./node_modules/puppeteer
-           npm install
+        run: npm install
         
       # Validate HTML/CSS in source/
       - name: HTMLCheck
