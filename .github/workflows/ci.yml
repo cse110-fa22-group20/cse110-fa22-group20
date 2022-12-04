@@ -40,6 +40,6 @@ jobs:
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
-          cd ./source/scripts
-          ./testPrep.sh
-          npm test
+          #cd ./source/scripts
+          #./testPrep.sh
+          npm test db.test.js
