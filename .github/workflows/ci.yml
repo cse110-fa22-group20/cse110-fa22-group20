@@ -1,4 +1,4 @@
-name: HTML/CSS Validate/JS Unit Test/Build JSDoc Documentation
+name: HTML/CSS Validate & JS Unit Test & JSDoc
 
 # Controls when the workflow will run
 on:
@@ -17,26 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # Use cache to speed up
-
-      - name: Cache node modules
-        id: cache-yarn
-        uses: actions/cache@v3
-        env:
-          cache-name: cache-node-modules
+      
+      - uses: actions/cache@v2
         with:
-          # npm cache files are stored in `~/.yarn` on Linux/macOS
-          path: ~/.yarn
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install jest
-        run: yarn add --dev jest
-             yarn add -D jest-environment-jsdom
-             yarn add --dev fake-indexeddb
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/npm.lock') }}
 
+      - name: Install dependencies
+        run: npm install
+        
       # Validate HTML/CSS in source/
       - name: HTMLCheck
         run: uname -a
@@ -46,26 +35,26 @@ jobs:
             root: source/
             log_level: INFO
             css: true
-
+      
       # Run unit tests with jest
       - name: JSCheck
         # Must pass HTMLCheck before testing js
         run: |
           cd ./source/scripts
           ./testPrep.sh
-          yarn test
-          
-      # Once tests pass, create jsdoc documentation
-      - name: Build JSDoc Documentation
-        uses: andstor/jsdoc-action@v1
+          npm test
+  
+      - name: Build JSDoc
+        uses: andstor/jsdoc-action@v1.2.1
         with:
-            source_dir: ./source/js
-            output_dir: ./documentation
-            recurse: true
-            config_file: jsdoc.json
-            front_page: README.md
-
-      - name: Deploy the JSDoc Documentation
+          source_dir: ./source/js
+          output_dir: ./out
+          front_page: README.md
+          
+      - name: Deploy JSDoc
         uses: peaceiris/actions-gh-pages@v3
-        with:     
-          publish_dir: ./documentation
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./out
+          destination_dir: ./JSDoc
+          publish_branch: add-jsdocs-to-pipeline
