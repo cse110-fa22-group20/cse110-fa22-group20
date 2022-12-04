@@ -4,7 +4,7 @@ name: HTML/CSS Validate & JS Unit Test
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ "main", "new-user&delete-post-E2E" ]
+    branches: [ "main", "finalize-testing" ]
   pull_request:
     branches: [ "main" ]
 
