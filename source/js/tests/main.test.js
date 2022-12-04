@@ -29,8 +29,6 @@ describe("populatePosts tests", () => {
     test("five posts.", async () => {
         await main.loadModules();
         await db.dbReady();
-        //jest.spyOn(db, 'getPostOrder').mockImplementation(() => [0, 1, 2, 3, 4]);
-        //db.updatePostOrder([0, 1, 2, 3, 4]);
         const posts = [];
         const order = [];
     
@@ -445,8 +443,6 @@ describe("syncPostOrder tests", () => {
         document.body.innerHTML = '<div id="root"></div>'
         document.querySelector('#root').appendChild(postContainer);
     
-        //main.appendPost(newPost1);
-        //main.appendPost(newPost2);
         await main.syncPostOrder();
         const order = await db.getPostOrder();
         console.log(order);

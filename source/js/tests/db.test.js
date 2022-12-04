@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 require("fake-indexeddb/auto");
-//const main = require("../main");
 const db =  require('../db');
 
 test("Test 'createTextPostObject'", async () => {

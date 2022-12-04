@@ -34,7 +34,7 @@ async function init() {
         // redirect to main.html if an user object exists
         window.location.href = "./main.html";
     }).catch(userExist => {
-        
+        // new user
     });
 
     const imageInput = document.querySelector("#user-image");
