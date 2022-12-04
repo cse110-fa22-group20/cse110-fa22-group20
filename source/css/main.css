@@ -176,6 +176,8 @@ Adding image post styles
     border-radius: 10px;
 
     padding: 10px;
+
+    overflow-wrap: break-word;
 }
 
 .content 
