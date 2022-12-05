@@ -35,7 +35,7 @@ const loadModules = async () => {
 window.onresize = () => {
     var modalImg = document.getElementById("modal-img");
     var captionText = document.getElementById("caption");
-
+    // modalImg.style.maxHeight = 
     captionText.style.maxHeight = (modalImg.height - 40) + "px";
 }
 
