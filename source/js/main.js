@@ -1028,7 +1028,7 @@ class AddImageRow extends HTMLElement {
                 background-repeat: no-repeat;
                 background-position: center;
                 border-radius: 5px;
-                background-size: contain;
+                background-size: cover;
             }
 
             .add-image-label:hover 
