@@ -305,7 +305,6 @@ describe("syncPostOrder tests", () => {
         main.appendPost(newPost2);
         await main.syncPostOrder();
         const order = await db.getPostOrder();
-        console.log(order);
         expect(order).toEqual([0, 1]);
     });
 
@@ -337,7 +336,6 @@ describe("syncPostOrder tests", () => {
         main.appendPost(newPost1);
         await main.syncPostOrder();
         const order = await db.getPostOrder();
-        console.log(order);
         expect(order).toEqual([1, 0]);
     });
 
@@ -376,7 +374,6 @@ describe("syncPostOrder tests", () => {
         main.appendPost(newPost3);
         await main.syncPostOrder();
         const order = await db.getPostOrder();
-        console.log(order);
         expect(order).toEqual([10, 17, 21]);
     });
 
@@ -415,7 +412,6 @@ describe("syncPostOrder tests", () => {
         main.appendPost(newPost3);
         await main.syncPostOrder();
         const order = await db.getPostOrder();
-        console.log(order);
         expect(order).toEqual([21, 10, 17]);
     });
 
@@ -445,7 +441,6 @@ describe("syncPostOrder tests", () => {
     
         await main.syncPostOrder();
         const order = await db.getPostOrder();
-        console.log(order);
         expect(order).toEqual([]);
     });
 });

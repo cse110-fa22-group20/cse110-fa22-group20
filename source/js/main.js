@@ -64,12 +64,28 @@ const makeImagesClickable = () => {
             const form = document.getElementById("full-view-form");
             const postId = image.parentNode.parentNode.getAttribute("data-post-id");
             const post = await getPost(parseInt(postId));
+
+            const postImages = image.parentNode.parentNode.querySelectorAll("img");
+
+            // this checks to make sure the right image is selected to display the right caption
+            // since we're comparing image source, multiple of the same image will render the same caption even if they're supposed to be different
+            // as such, we get the position of the image in the array, and only set the capion if it matches the current loop of the image;
+            let imagePosition = 0;
+
+            for(const postImage of postImages) {
+                if(image === postImage) break;
+
+                imagePosition++;
+            }
             
-            for (const i of post.content) {
-                if (i.image == image.src) {
-                    if(i.caption.length !== 0) {
+            for (let i = 0; i < post.content.length; i++) {
+                const postImage = post.content[i];
+
+                if (postImage.image == image.src && i == imagePosition) {
+
+                    if(postImage.caption.length !== 0) {
                         captionText.style.display = "block";
-                        captionText.innerHTML = i.caption;
+                        captionText.innerHTML = postImage.caption;
                         form.style.gridTemplateColumns = "1fr 1fr";
                     }
                     else {
@@ -118,8 +134,6 @@ async function init() {
     const postOrder = await getPostOrder();
     const posts = await getAllPosts();
     await populatePosts(posts, postOrder);
-
-    console.log(`edit mode: ${state.editMode}`);
    
     makeImagesClickable();
 
